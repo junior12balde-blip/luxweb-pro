@@ -71,6 +71,8 @@ export const routing = defineRouting({
     "/templates/restaurante": "/templates/restaurante",
     "/templates/loja": "/templates/loja",
     "/templates/construcao": "/templates/construcao",
+    "/templates/barbearia": "/templates/barbearia",
+    "/templates/oficina-automovel": "/templates/oficina-automovel",
 
     "/precos": {
       // "praisser" (no diaeresis) — accented characters in URL slugs cause

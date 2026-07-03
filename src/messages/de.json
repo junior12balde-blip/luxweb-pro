@@ -389,6 +389,58 @@
       ],
       "ctaEmergency": "Projekt besprechen",
       "ctaQuote": "Angebot anfragen"
+    },
+    "barbershop": {
+      "badge": "Vorlage — Friseur",
+      "name": "Barbier Royal",
+      "tagline": "Traditionelle Rasur und moderne Haarschnitte",
+      "servicesTitle": "Unsere Leistungen",
+      "services": [
+        "Haarschnitt",
+        "Bartpflege & -styling",
+        "Kinderhaarschnitt",
+        "Styling-Produkte"
+      ],
+      "testimonials": [
+        {
+          "quote": "Der beste Barbier in Luxemburg — immer präzise und gute Atmosphäre.",
+          "author": "Kevin M.",
+          "role": "Kunde, Luxemburg-Stadt"
+        },
+        {
+          "quote": "Termin online gebucht, keine Wartezeit, top Arbeit.",
+          "author": "Rui F.",
+          "role": "Kunde, Esch-sur-Alzette"
+        }
+      ],
+      "ctaEmergency": "Termin online buchen",
+      "ctaQuote": "Angebot anfragen"
+    },
+    "carRepair": {
+      "badge": "Vorlage — Werkstatt",
+      "name": "Garage Muller",
+      "tagline": "Zuverlässige Reparaturen für alle Automarken",
+      "servicesTitle": "Unsere Leistungen",
+      "services": [
+        "Reparatur & Wartung",
+        "Reifenwechsel",
+        "Pannendienst 24/7",
+        "Diagnose & Kontrollen"
+      ],
+      "testimonials": [
+        {
+          "quote": "Schnelle, ehrliche Diagnose, keine versteckten Kosten.",
+          "author": "Marc D.",
+          "role": "Kunde, Düdelingen"
+        },
+        {
+          "quote": "Der Pannendienst war in weniger als 30 Minuten da. Top!",
+          "author": "Sofia P.",
+          "role": "Kundin, Ettelbrück"
+        }
+      ],
+      "ctaEmergency": "Pannendienst anfragen",
+      "ctaQuote": "Angebot anfragen"
     }
   },
   "pricing": {

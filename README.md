@@ -48,7 +48,7 @@ src/
     sitemap.ts / robots.ts     → SEO técnico
   components/                  → Header, Footer, ContactForm, GoogleMap, WhatsAppButton, LanguageSwitcher, Logo
   components/client/           → Header/Footer/LanguageSwitcher específicos dos sites de cliente
-  templates/BusinessTemplate.tsx → template reutilizável (7 setores — ver Fase 2 abaixo)
+  templates/BusinessTemplate.tsx → template reutilizável (9 setores — ver Fase 2 abaixo)
   i18n/                        → routing, navigation, request config (next-intl)
   messages/{lu,fr,de,en,pt}.json → traduções do site institucional + dos 7 templates
   lib/constants.ts             → dados da própria LuxWeb Pro (morada, telefone, WhatsApp, mapa)
@@ -85,12 +85,12 @@ coordenadas GPS, redes sociais) em [`src/lib/constants.ts`](src/lib/constants.ts
 — isto é a própria agência, não os clientes (para clientes, ver a secção
 seguinte).
 
-## Templates comerciais (7 setores)
+## Templates comerciais (9 setores)
 
 [`src/templates/BusinessTemplate.tsx`](src/templates/BusinessTemplate.tsx)
 gera um site one-page completo — **Home, Serviços, Galeria, Testemunhos e
 Contacto** (com Google Maps + WhatsApp + formulário) — para qualquer um dos
-7 tipos de negócio suportados:
+9 tipos de negócio suportados:
 
 | Tipo | Demo |
 |---|---|
@@ -101,6 +101,8 @@ Contacto** (com Google Maps + WhatsApp + formulário) — para qualquer um dos
 | Restaurante | `/templates/restaurante` |
 | Loja | `/templates/loja` |
 | Construção civil | `/templates/construcao` |
+| Barbearia | `/templates/barbearia` |
+| Oficina automóvel | `/templates/oficina-automovel` |
 
 Cada tipo define, em `THEMES` (dentro de `BusinessTemplate.tsx`): gradiente
 de cor, ícones e o tipo `schema.org` certo para o JSON-LD de SEO local

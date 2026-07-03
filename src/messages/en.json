@@ -389,6 +389,58 @@
       ],
       "ctaEmergency": "Discuss Your Project",
       "ctaQuote": "Request a Quote"
+    },
+    "barbershop": {
+      "badge": "Template — Barbershop",
+      "name": "Barbier Royal",
+      "tagline": "Traditional shaves and modern haircuts",
+      "servicesTitle": "Our Services",
+      "services": [
+        "Haircuts",
+        "Beard trim & styling",
+        "Kids' haircuts",
+        "Styling products"
+      ],
+      "testimonials": [
+        {
+          "quote": "The best barbershop in Luxembourg — always precise and great atmosphere.",
+          "author": "Kevin M.",
+          "role": "Client, Luxembourg City"
+        },
+        {
+          "quote": "Booked online, no wait, flawless work.",
+          "author": "Rui F.",
+          "role": "Client, Esch-sur-Alzette"
+        }
+      ],
+      "ctaEmergency": "Book Online",
+      "ctaQuote": "Request a Quote"
+    },
+    "carRepair": {
+      "badge": "Template — Garage",
+      "name": "Garage Muller",
+      "tagline": "Reliable repairs for every car make",
+      "servicesTitle": "Our Services",
+      "services": [
+        "Repair & maintenance",
+        "Tyre change",
+        "24/7 breakdown service",
+        "Diagnostics & inspections"
+      ],
+      "testimonials": [
+        {
+          "quote": "Fast, honest diagnostics, no hidden costs.",
+          "author": "Marc D.",
+          "role": "Client, Dudelange"
+        },
+        {
+          "quote": "Breakdown assistance arrived in under 30 minutes. Great service!",
+          "author": "Sofia P.",
+          "role": "Client, Ettelbruck"
+        }
+      ],
+      "ctaEmergency": "Request Breakdown Service",
+      "ctaQuote": "Request a Quote"
     }
   },
   "pricing": {

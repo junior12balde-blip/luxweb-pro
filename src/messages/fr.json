@@ -389,6 +389,58 @@
       ],
       "ctaEmergency": "Discuter du projet",
       "ctaQuote": "Demander un devis"
+    },
+    "barbershop": {
+      "badge": "Template — Coiffeur",
+      "name": "Barbier Royal",
+      "tagline": "Rasage traditionnel et coupes modernes",
+      "servicesTitle": "Nos services",
+      "services": [
+        "Coupe de cheveux",
+        "Taille & soin de barbe",
+        "Coupe enfant",
+        "Produits de coiffage"
+      ],
+      "testimonials": [
+        {
+          "quote": "Le meilleur coiffeur du Luxembourg — toujours précis et bonne ambiance.",
+          "author": "Kevin M.",
+          "role": "Client, Luxembourg-Ville"
+        },
+        {
+          "quote": "Rendez-vous pris en ligne, aucune attente, travail impeccable.",
+          "author": "Rui F.",
+          "role": "Client, Esch-sur-Alzette"
+        }
+      ],
+      "ctaEmergency": "Prendre rendez-vous en ligne",
+      "ctaQuote": "Demander un devis"
+    },
+    "carRepair": {
+      "badge": "Template — Garage",
+      "name": "Garage Muller",
+      "tagline": "Réparations fiables pour toutes les marques",
+      "servicesTitle": "Nos services",
+      "services": [
+        "Réparation & entretien",
+        "Changement de pneus",
+        "Dépannage 24/7",
+        "Diagnostic & contrôles"
+      ],
+      "testimonials": [
+        {
+          "quote": "Diagnostic rapide et honnête, aucun coût caché.",
+          "author": "Marc D.",
+          "role": "Client, Dudelange"
+        },
+        {
+          "quote": "Le dépannage est arrivé en moins de 30 minutes. Top !",
+          "author": "Sofia P.",
+          "role": "Cliente, Ettelbruck"
+        }
+      ],
+      "ctaEmergency": "Demander un dépannage",
+      "ctaQuote": "Demander un devis"
     }
   },
   "pricing": {

@@ -389,6 +389,58 @@
       ],
       "ctaEmergency": "Discutir o projeto",
       "ctaQuote": "Pedir orçamento"
+    },
+    "barbershop": {
+      "badge": "Template — Barbearia",
+      "name": "Barbier Royal",
+      "tagline": "Barbear tradicional e cortes modernos",
+      "servicesTitle": "Os nossos serviços",
+      "services": [
+        "Corte de cabelo",
+        "Barba & styling",
+        "Corte infantil",
+        "Produtos de styling"
+      ],
+      "testimonials": [
+        {
+          "quote": "A melhor barbearia do Luxemburgo — sempre precisa e com ótimo ambiente.",
+          "author": "Kevin M.",
+          "role": "Cliente, Cidade do Luxemburgo"
+        },
+        {
+          "quote": "Marquei online, sem espera nenhuma, trabalho impecável.",
+          "author": "Rui F.",
+          "role": "Cliente, Esch-sur-Alzette"
+        }
+      ],
+      "ctaEmergency": "Marcar online",
+      "ctaQuote": "Pedir orçamento"
+    },
+    "carRepair": {
+      "badge": "Template — Oficina",
+      "name": "Garage Muller",
+      "tagline": "Reparações fiáveis para todas as marcas",
+      "servicesTitle": "Os nossos serviços",
+      "services": [
+        "Reparação & manutenção",
+        "Mudança de pneus",
+        "Assistência 24/7",
+        "Diagnóstico & inspeções"
+      ],
+      "testimonials": [
+        {
+          "quote": "Diagnóstico rápido e honesto, sem custos escondidos.",
+          "author": "Marc D.",
+          "role": "Cliente, Dudelange"
+        },
+        {
+          "quote": "A assistência chegou em menos de 30 minutos. Excelente!",
+          "author": "Sofia P.",
+          "role": "Cliente, Ettelbruck"
+        }
+      ],
+      "ctaEmergency": "Pedir assistência",
+      "ctaQuote": "Pedir orçamento"
     }
   },
   "pricing": {

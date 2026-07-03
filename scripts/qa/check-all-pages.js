@@ -39,6 +39,8 @@ const PATHNAMES = {
   "/templates/restaurante": "/templates/restaurante",
   "/templates/loja": "/templates/loja",
   "/templates/construcao": "/templates/construcao",
+  "/templates/barbearia": "/templates/barbearia",
+  "/templates/oficina-automovel": "/templates/oficina-automovel",
   "/precos": { lu: "/praisser", fr: "/tarifs", de: "/preise", en: "/pricing", pt: "/precos" },
   "/porque-nos-escolher": { lu: "/firwat-mir", fr: "/pourquoi-nous", de: "/warum-wir", en: "/why-us", pt: "/porque-nos-escolher" },
   "/orcamento": { lu: "/devisufro", fr: "/devis", de: "/angebot-anfragen", en: "/quote", pt: "/orcamento" },

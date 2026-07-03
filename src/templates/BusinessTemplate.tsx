@@ -17,7 +17,9 @@ export type BusinessType =
   | "gardener"
   | "restaurant"
   | "shop"
-  | "construction";
+  | "construction"
+  | "barbershop"
+  | "carRepair";
 
 type BusinessTheme = {
   gradient: string;
@@ -77,6 +79,20 @@ const THEMES: Record<BusinessType, BusinessTheme> = {
     serviceIcons: ["🏠", "🔨", "📐", "📋"],
     galleryIcons: ["🏗️", "🏠", "🔨", "📐", "🧱", "🚧"],
     schemaType: "GeneralContractor",
+  },
+  barbershop: {
+    gradient: "linear-gradient(135deg, #18181B 0%, #B45309 100%)",
+    icon: "💈",
+    serviceIcons: ["✂️", "🪒", "🧔", "💇"],
+    galleryIcons: ["💈", "✂️", "🪒", "🧔", "💇", "🧴"],
+    schemaType: "HairSalon",
+  },
+  carRepair: {
+    gradient: "linear-gradient(135deg, #1E293B 0%, #DC2626 100%)",
+    icon: "🚗",
+    serviceIcons: ["🔧", "🛞", "🛢️", "🔋"],
+    galleryIcons: ["🚗", "🔧", "🛞", "🛢️", "🔋", "🧰"],
+    schemaType: "AutoRepair",
   },
 };
 

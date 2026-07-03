@@ -14,6 +14,8 @@ const TEMPLATE_LINKS = [
   { type: "restaurant", href: "/templates/restaurante", icon: "🍽️" },
   { type: "shop", href: "/templates/loja", icon: "🛍️" },
   { type: "construction", href: "/templates/construcao", icon: "🏗️" },
+  { type: "barbershop", href: "/templates/barbearia", icon: "💈" },
+  { type: "carRepair", href: "/templates/oficina-automovel", icon: "🚗" },
 ] as const satisfies { type: BusinessType; href: string; icon: string }[];
 
 export async function generateMetadata({

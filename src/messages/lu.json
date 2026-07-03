@@ -389,6 +389,58 @@
       ],
       "ctaEmergency": "Projet bespriechen",
       "ctaQuote": "Devis ufroen"
+    },
+    "barbershop": {
+      "badge": "Template — Coiffeur",
+      "name": "Barbier Royal",
+      "tagline": "Traditionell Rasur a modernen Haarschnëtt",
+      "servicesTitle": "Eis Servicer",
+      "services": [
+        "Haarschnëtt",
+        "Baartraséiere & -stylen",
+        "Kannerhaarschnëtt",
+        "Stylprodukter"
+      ],
+      "testimonials": [
+        {
+          "quote": "Beschte Coiffeur zu Lëtzebuerg — ëmmer präzis a mat gudder Ambiance.",
+          "author": "Kevin M.",
+          "role": "Client, Lëtzebuerg-Stad"
+        },
+        {
+          "quote": "Rendez-vous online geholl, keng Waardezäit, top Aarbecht.",
+          "author": "Rui F.",
+          "role": "Client, Esch-sur-Alzette"
+        }
+      ],
+      "ctaEmergency": "Rendez-vous online",
+      "ctaQuote": "Devis ufroen"
+    },
+    "carRepair": {
+      "badge": "Template — Garage",
+      "name": "Garage Muller",
+      "tagline": "Zouverlässeg Reparaturen fir all Automarken",
+      "servicesTitle": "Eis Servicer",
+      "services": [
+        "Reparatur & Entretien",
+        "Reifewiessel",
+        "Pannendéngscht 24/7",
+        "Diagnostik & Kontrollen"
+      ],
+      "testimonials": [
+        {
+          "quote": "Séier a faire Diagnostik, keng versteckte Käschten.",
+          "author": "Marc D.",
+          "role": "Client, Diddeleng"
+        },
+        {
+          "quote": "Pannendéngscht war a manner wéi 30 Minutten do. Top!",
+          "author": "Sofia P.",
+          "role": "Clientin, Ettelbréck"
+        }
+      ],
+      "ctaEmergency": "Pannendéngscht ufroen",
+      "ctaQuote": "Devis ufroen"
     }
   },
   "pricing": {

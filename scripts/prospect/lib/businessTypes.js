@@ -35,6 +35,18 @@ const SECTOR_TO_BUSINESS_TYPE = {
   construcao: "construction",
   construction: "construction",
   bau: "construction",
+
+  barbearia: "barbershop",
+  coiffeur: "barbershop",
+  friseur: "barbershop",
+  barbershop: "barbershop",
+  barbier: "barbershop",
+
+  oficina: "carRepair",
+  "oficina-automovel": "carRepair",
+  garage: "carRepair",
+  werkstatt: "carRepair",
+  carrepair: "carRepair",
 };
 
 // Mirrors THEMES[type].gradient in src/templates/BusinessTemplate.tsx —
@@ -48,6 +60,8 @@ const GRADIENTS = {
   restaurant: "linear-gradient(135deg, #7C2D12 0%, #EA580C 100%)",
   shop: "linear-gradient(135deg, #6D28D9 0%, #EC4899 100%)",
   construction: "linear-gradient(135deg, #78350F 0%, #F59E0B 100%)",
+  barbershop: "linear-gradient(135deg, #18181B 0%, #B45309 100%)",
+  carRepair: "linear-gradient(135deg, #1E293B 0%, #DC2626 100%)",
 };
 
 function normalizeSector(sector) {

@@ -28,6 +28,8 @@ const STATIC_ROUTES: { pathname: Parameters<typeof getPathname>[0]["href"]; prio
   { pathname: "/templates/restaurante", priority: 0.5, changeFrequency: "monthly" },
   { pathname: "/templates/loja", priority: 0.5, changeFrequency: "monthly" },
   { pathname: "/templates/construcao", priority: 0.5, changeFrequency: "monthly" },
+  { pathname: "/templates/barbearia", priority: 0.5, changeFrequency: "monthly" },
+  { pathname: "/templates/oficina-automovel", priority: 0.5, changeFrequency: "monthly" },
 ];
 
 function buildEntry(
