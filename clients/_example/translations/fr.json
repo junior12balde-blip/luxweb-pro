@@ -1,0 +1,8 @@
+{
+  "tagline": "Courte description de l'entreprise en français",
+  "services": ["Service 1", "Service 2", "Service 3", "Service 4"],
+  "testimonials": [
+    { "quote": "Citation d'un vrai client.", "author": "Nom", "role": "Rôle, Ville" },
+    { "quote": "Encore une citation.", "author": "Nom", "role": "Rôle, Ville" }
+  ]
+}

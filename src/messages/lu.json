@@ -1,0 +1,696 @@
+{
+  "meta": {
+    "siteName": "LuxWeb Pro",
+    "slogan": "Är Firma online. Modern. Lokal. Séier.",
+    "title": "LuxWeb Pro — Modern Websäiten fir Betriber zu Lëtzebuerg",
+    "description": "LuxWeb Pro kreéiert modern, séier a méisproocheg Websäiten fir kleng an mëttel Betriber zu Lëtzebuerg. Design, SEO lokal, Wartung an Hosting aus enger Hand."
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Servicer",
+    "portfolio": "Portfolio",
+    "contact": "Kontakt",
+    "cta": "Gratis Devis",
+    "templates": "Templates",
+    "pricing": "Präisser"
+  },
+  "hero": {
+    "badge": "🇱🇺 Digital Agence zu Lëtzebuerg",
+    "title": "Är Firma online.",
+    "titleHighlight": "Modern. Lokal. Séier.",
+    "subtitle": "Mir kreéieren modern, séier a méisproocheg Websäiten fir kleng a mëttel Betriber zu Lëtzebuerg — vum Design bis zum Online-Goen.",
+    "cta1": "Gratis Devis ufroen",
+    "cta2": "Eis Aarbechten kucken",
+    "trustLine": "Vertraut vu Handwierker, Botteker a Restaurateuren am ganze Land"
+  },
+  "stats": {
+    "projects": "Realiséiert Websäiten",
+    "languages": "Ënnerstëtzte Sproochen",
+    "responsive": "Responsive Design",
+    "speed": "Google PageSpeed Score"
+  },
+  "services": {
+    "badge": "Eis Servicer",
+    "title": "Alles fir Är digital Präsenz",
+    "subtitle": "Vun der éischter Skizz bis zur Online-Publikatioun — mir këmmeren eis ëm alles.",
+    "items": [
+      {
+        "title": "Websäit Design & Entwécklung",
+        "description": "Moderne, séier a mobil-optiméiert Websäiten, gebaut mat Next.js fir Top-Performance."
+      },
+      {
+        "title": "Méisproocheg Websäiten",
+        "description": "Är Säit op Lëtzebuergesch, Franséisch, Däitsch, Englesch a Portugisesch — perfekt fir de Lëtzebuerger Maart."
+      },
+      {
+        "title": "Lokal SEO fir Lëtzebuerg",
+        "description": "Sichtbarkeet op Google Maps a Sichresultater fir Kunden aus Ärer Regioun ze fannen."
+      },
+      {
+        "title": "Kontaktformular & WhatsApp",
+        "description": "Einfach Kontaktméiglechkeeten fir Är Kunden — Formular, Telefon, E-Mail an direkt WhatsApp-Chat."
+      },
+      {
+        "title": "Wartung & Hosting",
+        "description": "Zouverlässegt Hosting op Vercel, automatesch Updates a Sécherheet ouni datt Dir Iech dorëms këmmere musst."
+      },
+      {
+        "title": "Branding & Logo",
+        "description": "Modern visuell Identitéit déi zu Ärer Firma an zum Lëtzebuerger Publikum passt."
+      }
+    ]
+  },
+  "process": {
+    "badge": "Eis Method",
+    "title": "Vun der Iddi bis zur Online-Websäit",
+    "steps": [
+      {
+        "title": "Gespréich",
+        "description": "Mir léieren Är Firma a Ären Zilpublikum kennen."
+      },
+      {
+        "title": "Design",
+        "description": "Mir kreéieren e modernt Design ugepasst un Är Branche."
+      },
+      {
+        "title": "Entwécklung",
+        "description": "Ëmsetzung mat Next.js, séier a sécher, op alle Geräter."
+      },
+      {
+        "title": "Online-Goen",
+        "description": "Publikatioun, SEO-Setup an Ausbildung fir Är Equipe."
+      }
+    ]
+  },
+  "testimonials": {
+    "badge": "Kundestëmmen",
+    "title": "Betriber déi eis vertrauen",
+    "items": [
+      {
+        "quote": "Eis nei Websäit huet eis Ufroe verduebelt. Séier, professionell an op Lëtzebuergesch — genau wat mir gebraucht hunn.",
+        "author": "Nadia S.",
+        "role": "Botteksbesëtzerin, Lëtzebuerg-Stad"
+      },
+      {
+        "quote": "Endlech eng Agence déi versteet wéi de lëtzebuergeschen Maart funktionéiert. Top Aarbecht!",
+        "author": "Marco R.",
+        "role": "Elektriker, Diddeleng"
+      },
+      {
+        "quote": "Vum éischte Kontakt bis zum Online-Goen war alles séier a professionell.",
+        "author": "Sophie L.",
+        "role": "Restaurant-Besëtzerin, Iechternach"
+      }
+    ]
+  },
+  "portfolio": {
+    "badge": "Eis Realisatiounen",
+    "title": "E puer vun eise Projeten",
+    "subtitle": "Beispiller vu Websäiten déi mir fir lokal Betriber realiséiert hunn.",
+    "viewProject": "Projet kucken",
+    "categories": {
+      "all": "Alles",
+      "electrician": "Elektriker",
+      "cleaning": "Botteker",
+      "restaurant": "Restauranten",
+      "other": "Aner"
+    },
+    "items": [
+      {
+        "title": "Elektro Muller",
+        "category": "electrician",
+        "description": "Websäit fir e lëtzebuergesche Elektriker-Betrib mat Online-Devisufro."
+      },
+      {
+        "title": "CleanLux Botteker",
+        "category": "cleaning",
+        "description": "Modern Präsenz fir eng Botteksfirma mat Service-Iwwersiicht a Buchungsformular."
+      },
+      {
+        "title": "Restaurant Al Dente",
+        "category": "restaurant",
+        "description": "Appetitlech Websäit mat Menü, Reservatioun a Fotogalerie."
+      },
+      {
+        "title": "Fräie Handwierker Pro",
+        "category": "electrician",
+        "description": "One-Page Websäit mat Portfolio a Kontaktformular fir e Selbststänneger."
+      },
+      {
+        "title": "Sauber & Prope",
+        "category": "cleaning",
+        "description": "Méisproocheg Websäit fir eng Botteksequipe déi am ganze Land schafft."
+      },
+      {
+        "title": "Chez Marie Bistro",
+        "category": "restaurant",
+        "description": "Elegant Bistro-Websäit mat digitalem Menü a Google Maps Integratioun."
+      }
+    ]
+  },
+  "contact": {
+    "badge": "Kontakt",
+    "title": "Loosst eis Äert Projet bespriechen",
+    "subtitle": "Schreift eis oder rufft eis un — mir äntweren normalerweis bannent engem Werkdag.",
+    "form": {
+      "name": "Numm",
+      "namePlaceholder": "Äre Numm",
+      "email": "E-Mail",
+      "emailPlaceholder": "iech@beispill.lu",
+      "phone": "Telefon",
+      "phonePlaceholder": "+352 621 123 456",
+      "company": "Firma (optional)",
+      "companyPlaceholder": "Numm vun Ärer Firma",
+      "service": "Wéi eng Servicer interesséieren Iech?",
+      "servicePlaceholder": "Wielt eng Optioun",
+      "message": "Ären Message",
+      "messagePlaceholder": "Erzielt eis kuerz vun Ärem Projet...",
+      "submit": "Message schécken",
+      "submitting": "Gëtt geschéckt...",
+      "success": "Merci! Mir mellen eis séier bei Iech.",
+      "error": "Et ass eppes schif gaangen. Probéiert w.e.g. nach eng Kéier."
+    },
+    "info": {
+      "addressTitle": "Adress",
+      "address": "12 Rue de la Poste, L-2346 Lëtzebuerg",
+      "phoneTitle": "Telefon",
+      "emailTitle": "E-Mail",
+      "hoursTitle": "Openingszäiten",
+      "hours": "Méindeg – Freideg: 9:00 – 18:00"
+    },
+    "whatsappCta": "Direkt op WhatsApp schreiwen"
+  },
+  "footer": {
+    "description": "LuxWeb Pro ass Är lokal digital Agence zu Lëtzebuerg. Mir bauen modern, séier a méisproocheg Websäiten fir kleng a mëttel Betriber.",
+    "quickLinks": "Séier Linken",
+    "services": "Servicer",
+    "contact": "Kontakt",
+    "rights": "All Rechter reservéiert.",
+    "madeIn": "Mat ❤️ gemaach zu Lëtzebuerg",
+    "whyUs": "Firwat mir",
+    "testimonials": "Kritiken",
+    "portugueseCommunity": "Portugisesch Communautéit",
+    "locations": "Regiounen",
+    "pricing": "Präisser",
+    "templates": "Templates"
+  },
+  "whatsapp": {
+    "message": "Moien! Ech hätt gär méi Informatiounen iwwer Är Servicer."
+  },
+  "notFound": {
+    "title": "Säit net fonnt",
+    "description": "D'Säit déi Dir sicht existéiert net.",
+    "cta": "Zréck op d'Home"
+  },
+  "templatesShared": {
+    "galleryTitle": "Eis Aarbechten",
+    "gallerySubtitle": "E puer Impressiounen aus eisen rezente Projeten.",
+    "testimonialsTitle": "Wat eis Kunden soen"
+  },
+  "templates": {
+    "electrician": {
+      "badge": "Template — Elektriker",
+      "name": "Elektro Pro Lëtzebuerg",
+      "tagline": "Elektresch Installatiounen mat Sécherheet a Präzisioun",
+      "servicesTitle": "Eis Servicer",
+      "services": [
+        "Elektresch Installatioun",
+        "Depannage 24/7",
+        "Sécherheetskontrollen",
+        "Domotik / Smart Home"
+      ],
+      "testimonials": [
+        {
+          "quote": "Séier Depannage, transparent Präisser. Ganz zefridden!",
+          "author": "Paul K.",
+          "role": "Wunnengsbesëtzer, Esch-sur-Alzette"
+        },
+        {
+          "quote": "Professionell Installatioun vun eiser Smart-Home-Léisung.",
+          "author": "Anne D.",
+          "role": "Firmenkonditrice, Lëtzebuerg-Stad"
+        }
+      ],
+      "ctaEmergency": "Noutfall? Rufft eis un",
+      "ctaQuote": "Devis ufroen"
+    },
+    "cleaning": {
+      "badge": "Template — Botteker",
+      "name": "CleanLux Services",
+      "tagline": "Professionell Botteker fir Büroen a Wunnengen",
+      "servicesTitle": "Eis Servicer",
+      "services": [
+        "Büro-Botteker",
+        "Wunnengs-Botteker",
+        "Fënster-Botteker",
+        "Botteker no Bauaarbechten"
+      ],
+      "testimonials": [
+        {
+          "quote": "Ëmmer pénktlech, grëndlech a frëndlech. Kann ech nëmmen empfeelen.",
+          "author": "Georges M.",
+          "role": "Büroadministratioun, Lëtzebuerg"
+        },
+        {
+          "quote": "Endlech eng Botteksfirma op déi ee sech verloosse kann.",
+          "author": "Julie F.",
+          "role": "Immobiliëverwaltung, Diddeleng"
+        }
+      ],
+      "ctaEmergency": "Gratis Besichtigung",
+      "ctaQuote": "Devis ufroen"
+    },
+    "plumber": {
+      "badge": "Template — Canalisateur",
+      "name": "Aqua Fix Lëtzebuerg",
+      "tagline": "Zouverlässeg Sanitär- a Rouereparaturen",
+      "servicesTitle": "Eis Servicer",
+      "services": [
+        "Rouerreparaturen",
+        "Depannage 24/7",
+        "Buedzëmmer-Installatioun",
+        "Waasserleck-Detektioun"
+      ],
+      "testimonials": [
+        {
+          "quote": "Waasserschued séier a professionell behoben — Merci!",
+          "author": "Michel W.",
+          "role": "Hausbesëtzer, Ettelbréck"
+        },
+        {
+          "quote": "Neit Buedzëmmer perfekt installéiert, top Aarbecht.",
+          "author": "Claire B.",
+          "role": "Wunnengsbesëtzerin, Esch-sur-Alzette"
+        }
+      ],
+      "ctaEmergency": "Noutfall? Rufft eis un",
+      "ctaQuote": "Devis ufroen"
+    },
+    "gardener": {
+      "badge": "Template — Jardinier",
+      "name": "GreenLux Gaardenaarbechten",
+      "tagline": "Är Gaart, ëmmer op sengem Bescht",
+      "servicesTitle": "Eis Servicer",
+      "services": [
+        "Rasenspflee",
+        "Bam- a Heckeschnëtt",
+        "Gaardegestaltung",
+        "Wanterdéngscht"
+      ],
+      "testimonials": [
+        {
+          "quote": "Eis Gaart gesäit elo aus wéi an engem Magazin!",
+          "author": "Tom S.",
+          "role": "Wunnengsbesëtzer, Mamer"
+        },
+        {
+          "quote": "Zouverlässege Wanterdéngscht, ni verpasst e Rendezvous.",
+          "author": "Isabelle R.",
+          "role": "Firmegebai-Verwalterin, Sandweiler"
+        }
+      ],
+      "ctaEmergency": "Gratis Besichtigung",
+      "ctaQuote": "Devis ufroen"
+    },
+    "restaurant": {
+      "badge": "Template — Restaurant",
+      "name": "Le Bon Goût",
+      "tagline": "Traditionell Kichen mat engem modernen Touch",
+      "servicesTitle": "Eis Kaart",
+      "services": [
+        "Mëttegiessen",
+        "Owesiessen",
+        "Catering",
+        "Privat Evenementer"
+      ],
+      "testimonials": [
+        {
+          "quote": "Excellent Iessen an häerzlechen Accueil — mir kommen zréck!",
+          "author": "Laurent D.",
+          "role": "Client, Iechternach"
+        },
+        {
+          "quote": "Perfekt fir eist Firmenevenement organiséiert.",
+          "author": "Céline V.",
+          "role": "Event-Organisatrice, Lëtzebuerg-Stad"
+        }
+      ],
+      "ctaEmergency": "Elo reservéieren",
+      "ctaQuote": "Menü kucken"
+    },
+    "shop": {
+      "badge": "Template — Botteker",
+      "name": "La Belle Boutique",
+      "tagline": "Qualitativ Wueren, perséinlech Berodung",
+      "servicesTitle": "Eist Uebot",
+      "services": [
+        "Kleedung & Accessoiren",
+        "Geschenkartikelen",
+        "Perséinlech Berodung",
+        "Click & Collect"
+      ],
+      "testimonials": [
+        {
+          "quote": "Perséinlech Berodung a super Auswiel — mäi Liblingslued!",
+          "author": "Sarah L.",
+          "role": "Client, Lëtzebuerg-Stad"
+        },
+        {
+          "quote": "Ëmmer nei Kollektiounen a frëndlechen Service.",
+          "author": "Marc T.",
+          "role": "Client, Esch-sur-Alzette"
+        }
+      ],
+      "ctaEmergency": "Openingszäiten",
+      "ctaQuote": "Butik entdecken"
+    },
+    "construction": {
+      "badge": "Template — Bau",
+      "name": "BauFest Lëtzebuerg",
+      "tagline": "Vum Fundament bis zum Daach",
+      "servicesTitle": "Eis Servicer",
+      "services": [
+        "Neibau",
+        "Renovatioun",
+        "Ëmbau & Extensioun",
+        "Projetleedung"
+      ],
+      "testimonials": [
+        {
+          "quote": "Vum éischten Devis bis zur Schlësselübergab alles top organiséiert.",
+          "author": "Nicolas H.",
+          "role": "Bauhär, Bertrange"
+        },
+        {
+          "quote": "Renovatioun an der vereinbarter Zäit an am Budget ofgeschloss.",
+          "author": "Élodie P.",
+          "role": "Wunnengsbesëtzerin, Strassen"
+        }
+      ],
+      "ctaEmergency": "Projet bespriechen",
+      "ctaQuote": "Devis ufroen"
+    }
+  },
+  "pricing": {
+    "badge": "Präisser",
+    "title": "Kloer a transparent Präisser",
+    "subtitle": "Keng verstoppte Käschten — wielt de Pak deen zu Ärer Firma passt.",
+    "billingNote": "All Präisser ouni TVA. Domain a Basis-Hosting op Vercel am éischte Joer abegraff.",
+    "plans": [
+      {
+        "id": "starter",
+        "name": "Starter",
+        "price": "990 €",
+        "priceNote": "eemoleg Bezuelung",
+        "description": "Perfekt fir Selbststänneger a kleng Betriber déi séier online wëlle goen.",
+        "features": [
+          "One-Page Websäit (Home, Servicer, Kontakt)",
+          "Bis zu 2 Sproochen",
+          "Kontaktformular & WhatsApp-Knäppchen",
+          "Google Maps Integratioun",
+          "Responsive Design fir all Geräter",
+          "Basis SEO Setup"
+        ],
+        "cta": "Starter ufroen",
+        "highlight": false
+      },
+      {
+        "id": "business",
+        "name": "Business",
+        "price": "1 490 €",
+        "priceNote": "eemoleg Bezuelung",
+        "badge": "Am beléifsten",
+        "description": "Fir Betriber déi hir digital Präsenz eescht huele wëllen.",
+        "features": [
+          "Alles vum Starter",
+          "Bis zu 4 Sproochen",
+          "Galerie & Kunde-Referenzen",
+          "Erweidert lokal SEO (JSON-LD, Sitemap)",
+          "Personaliséiert Design & Branding",
+          "Prioritär Ënnerstëtzung bei der Online-Goen"
+        ],
+        "cta": "Business ufroen",
+        "highlight": true
+      },
+      {
+        "id": "premiumMultilingual",
+        "name": "Premium Multilíngue",
+        "price": "1 990 €",
+        "priceNote": "eemoleg Bezuelung",
+        "description": "D'komplett Léisung fir Betriber déi hir ganz Clientèle op hirer Sprooch erreeche wëllen.",
+        "features": [
+          "Alles vum Business",
+          "All 5 Sproochen (Lëtzebuergesch, Franséisch, Däitsch, Englesch, Portugisesch)",
+          "Eege lokal SEO-Säit fir Är Stad",
+          "Dedikéiert Testemunhos-Säit",
+          "Perséinlecht Onboarding-Gespréich",
+          "3 Méint gratis kleng Updates abegraff"
+        ],
+        "cta": "Premium Multilíngue ufroen",
+        "highlight": false
+      }
+    ],
+    "maintenanceAddon": {
+      "title": "Optional Add-on",
+      "name": "Manutenção Mensal",
+      "price": "79 €",
+      "priceNote": "/Mount",
+      "description": "Fir datt Är Websäit ëmmer aktuell, séier a sécher bleift — dobäisetzbar zu all Pak.",
+      "features": [
+        "Hosting & technesch Wartung",
+        "Text- an Foto-Updates (bis zu 2/Mount)",
+        "Sécherheets- a Performance-Iwwerwaachung",
+        "E-Mail Ënnerstëtzung"
+      ],
+      "cta": "Manutenção derbäisetzen"
+    },
+    "faq": {
+      "title": "Dacks gestallte Froen",
+      "items": [
+        {
+          "q": "Wat ass am Präis abegraff?",
+          "a": "Design, Entwécklung, Iwwersetzung an d'Sproochen déi Dir wielt, Kontaktformular, Google Maps, WhatsApp-Integratioun an Online-Goen. Hosting op Vercel ass am éischte Joer abegraff."
+        },
+        {
+          "q": "Wéi laang dauert et bis meng Websäit online ass?",
+          "a": "Fir all eis Pakete normalerweis manner wéi 24 Stonnen nodeems mir all Är Informatiounen hunn (Text, Fotoen, Logo)."
+        },
+        {
+          "q": "Muss ech d'Manutenção derbäisetzen?",
+          "a": "Neen, d'Manutenção ass en optionalen Add-on. Mir recommandéieren en awer fir Sécherheets-Updates an Ännerungen ouni datt Dir Iech muss ëm den technesche Volet këmmeren."
+        },
+        {
+          "q": "Kann ech spéider eng Sprooch dobäisetzen oder de Pak wiesselen?",
+          "a": "Jo, jidderzäit — mir passen Är Websäit un, wa Är Firma wiisst."
+        }
+      ]
+    }
+  },
+  "whyUs": {
+    "badge": "Firwat mir",
+    "title": "Firwat LuxWeb Pro wielen?",
+    "subtitle": "Mir sinn eng lokal Agence déi versteet wat kleng Betriber zu Lëtzebuerg wierklech brauchen.",
+    "reasons": [
+      {
+        "icon": "🇱🇺",
+        "title": "100% Lokal Expertise",
+        "description": "Mir kennen de Lëtzebuerger Maart, seng Sproochen a seng Kunden — well mir selwer hei schaffen."
+      },
+      {
+        "icon": "🌍",
+        "title": "Méisproocheg vun Ufank un",
+        "description": "All Websäit gëtt op Lëtzebuergesch, Franséisch, Däitsch, Englesch a Portugisesch gebaut — net als Nodroen."
+      },
+      {
+        "icon": "⚡",
+        "title": "Online an ënner 24 Stonnen",
+        "description": "Dank eise Ready-to-go Templates gëtt Är Websäit séier a professionell realiséiert."
+      },
+      {
+        "icon": "💶",
+        "title": "Transparent Präisser",
+        "description": "Kloer Pak-Präisser, keng verstoppte Käschten a keng laangfristeg Bindung ouni Grond."
+      },
+      {
+        "icon": "🚀",
+        "title": "Modern Technologie",
+        "description": "Next.js, séier Luedzäiten an Top Google PageSpeed Scores — kee alen WordPress-Theme."
+      },
+      {
+        "icon": "💬",
+        "title": "Direkt Ënnerstëtzung",
+        "description": "Rufft eis un oder schreift eis op WhatsApp — mir äntweren séier, ouni ëmständlecht Support-Ticket-System."
+      }
+    ],
+    "ctaTitle": "Bereet fir unzefänken?",
+    "ctaSubtitle": "Froe gratis en Devis un a kritt eng perséinlech Maquette bannent 24h.",
+    "ctaButton": "Gratis Devis ufroen"
+  },
+  "quote": {
+    "badge": "Devisufro",
+    "title": "Froe gratis en Devis un",
+    "subtitle": "Fëllt de Formular aus a mir mellen eis bannent engem Werkdag mat engem perséinleche Virschlag.",
+    "form": {
+      "name": "Numm",
+      "namePlaceholder": "Äre Numm",
+      "email": "E-Mail",
+      "emailPlaceholder": "iech@beispill.lu",
+      "phone": "Telefon",
+      "phonePlaceholder": "+352 621 123 456",
+      "company": "Firma",
+      "companyPlaceholder": "Numm vun Ärer Firma",
+      "businessType": "Branche",
+      "businessTypePlaceholder": "Wielt Är Branche",
+      "businessTypes": {
+        "electrician": "Elektriker",
+        "cleaning": "Botteker",
+        "plumber": "Canalisateur",
+        "gardener": "Jardinier",
+        "restaurant": "Restaurant",
+        "shop": "Botteck / Lued",
+        "construction": "Bau",
+        "other": "Aner"
+      },
+      "plan": "Wéi ee Pak interesséiert Iech?",
+      "planPlaceholder": "Wielt eng Optioun",
+      "plans": {
+        "starter": "Starter (990 €)",
+        "business": "Business (1 490 €)",
+        "premiumMultilingual": "Premium Multilíngue (1 990 €)",
+        "maintenance": "Manutenção (79 €/Mount)",
+        "unsure": "Ech weess nach net"
+      },
+      "languages": "A wéi enge Sproochen?",
+      "languagesHint": "Wielt all d'Sproochen déi Är Websäit soll hunn.",
+      "message": "Erzielt eis méi iwwer Äert Projet",
+      "messagePlaceholder": "Wat fir Servicer bitt Dir un? Hutt Dir schonn Fotoen oder e Logo?...",
+      "submit": "Devis ufroen",
+      "submitting": "Gëtt geschéckt...",
+      "success": "Merci! Mir mellen eis bannent engem Werkdag mat Ärem perséinlechen Devis.",
+      "error": "Et ass eppes schif gaangen. Probéiert w.e.g. nach eng Kéier oder rufft eis un."
+    },
+    "sidebar": {
+      "title": "Wat als Nächst passéiert",
+      "steps": [
+        "Mir kucken Äre Formular a rufen Iech bannent engem Werkdag un",
+        "Mir schécken Iech en perséinleche Devis ouni Verpflichtung",
+        "No Ärer Bestätegung ass Är Websäit bannent 24h online"
+      ],
+      "guarantee": "Kee Risiko: den Devis ass gratis an ouni Verpflichtung."
+    }
+  },
+  "testimonialsPage": {
+    "badge": "Kritiken",
+    "title": "Betriber déi eis vertrauen",
+    "subtitle": "Echte Feedback vu Kunden aus dem ganze Land.",
+    "items": [
+      {
+        "quote": "Eis nei Websäit huet eis Ufroe verduebelt. Séier, professionell an op Lëtzebuergesch — genau wat mir gebraucht hunn.",
+        "author": "Nadia S.",
+        "role": "Botteksbesëtzerin, Lëtzebuerg-Stad",
+        "rating": 5
+      },
+      {
+        "quote": "Endlech eng Agence déi versteet wéi de lëtzebuergeschen Maart funktionéiert. Top Aarbecht!",
+        "author": "Marco R.",
+        "role": "Elektriker, Diddeleng",
+        "rating": 5
+      },
+      {
+        "quote": "Vum éischte Kontakt bis zum Online-Goen war alles séier a professionell.",
+        "author": "Sophie L.",
+        "role": "Restaurant-Besëtzerin, Iechternach",
+        "rating": 5
+      },
+      {
+        "quote": "Séier, professionell an zu engem faire Präis. Ganz zefridden mat der Zesummenaarbecht.",
+        "author": "Carlos P.",
+        "role": "Bauënternehmer, Diddeleng",
+        "rating": 5
+      },
+      {
+        "quote": "Eng Websäit an 4 Sproochen ouni Kappwéi — genau wat mir gebraucht hunn fir eis international Clientèle.",
+        "author": "Elena M.",
+        "role": "Botteksbesëtzerin, Esch-sur-Alzette",
+        "rating": 5
+      },
+      {
+        "quote": "Vu Kontakt bis Online-Goen an ënner 24 Stonnen. Onerwaart séier!",
+        "author": "Jérôme K.",
+        "role": "Jardinier, Ettelbréck",
+        "rating": 5
+      }
+    ]
+  },
+  "portugueseCommunity": {
+    "badge": "🇵🇹 Portugisesch Communautéit",
+    "title": "Websäiten fir portugisesch Betriber zu Lëtzebuerg",
+    "subtitle": "Mir schwätzen Är Sprooch — a verstinn den Handwierker- a Familljebetrib deen dohannert steet.",
+    "intro": "D'Portugisen sinn déi gréisst auslännesch Communautéit zu Lëtzebuerg — vill dovu féieren hiren eegene Betrib: Elektriker, Botteker, Bauënternehmer, Restauranten. LuxWeb Pro bitt Iech eng Websäit op Portugisesch, Lëtzebuergesch, Franséisch a méi, fir all Är Clientèle z'erreechen.",
+    "stats": [
+      {
+        "value": "🇵🇹",
+        "label": "Gréisst auslännesch Communautéit vu Lëtzebuerg"
+      },
+      {
+        "value": "5",
+        "label": "Sproochen abegraff, och Portugisesch"
+      },
+      {
+        "value": "<24h",
+        "label": "Vun der Ufro bis zur Online-Websäit"
+      }
+    ],
+    "sectorsTitle": "Mir kennen Är Branche",
+    "sectors": [
+      "Elektriker",
+      "Botteker",
+      "Bau & Renovatioun",
+      "Restauranten & Cafés"
+    ],
+    "testimonials": [
+      {
+        "quote": "Endlech eng Agence déi och Portugisesch schwätzt. Alles war einfach a séier.",
+        "author": "João R.",
+        "role": "Bauënternehmer, Lëtzebuerg-Stad"
+      },
+      {
+        "quote": "Eis Websäit op Portugisesch an Franséisch huet eis nei Clientèle bruecht.",
+        "author": "Fátima S.",
+        "role": "Botteksbesëtzerin, Esch-sur-Alzette"
+      }
+    ],
+    "ctaTitle": "Loosst eis op Portugisesch schwätzen",
+    "ctaSubtitle": "Rufft eis un oder schreift op WhatsApp — mir äntweren op Portugisesch, Franséisch oder Lëtzebuergesch.",
+    "ctaButton": "Gratis Devis ufroen"
+  },
+  "cities": {
+    "badge": "SEO Lokal",
+    "title": "Websäiten fir Betriber zu {city}",
+    "subtitle": "Mir hëllefen lokale Betriber zu {city} online sichtbar ze ginn — mat enger moderner, séierer a méisproocheger Websäit.",
+    "highlights": [
+      "Lokal SEO fir zu {city} fonnt ze ginn",
+      "Websäit op Lëtzebuergesch, Franséisch, Däitsch, Englesch a Portugisesch",
+      "Online an ënner 24 Stonnen",
+      "Google Maps mat Ärer genauer Adress"
+    ],
+    "ctaTitle": "Bereet fir Är Websäit zu {city}?",
+    "ctaSubtitle": "Froe gratis en Devis un a kritt eng perséinlech Maquette.",
+    "ctaButton": "Gratis Devis ufroen",
+    "indexTitle": "Mir schaffen am ganze Land",
+    "indexSubtitle": "Vun der Stad bis an den Norden — LuxWeb Pro baut Websäiten fir Betriber an dëse Regiounen.",
+    "indexCta": "Regioun kucken",
+    "blurbs": {
+      "luxembourg-ville": "D'Haaptstad an d'Wirtschaftszentrum vum Land — mat der héchster Konkurrenz online.",
+      "esch-sur-alzette": "Déi zweetgréisst Stad vu Lëtzebuerg, mat enger staarker Handwierker- a Botteksszen.",
+      "differdange": "En wichtege Wirtschaftsstandort am Süden, no bei der franséischer Grenz.",
+      "dudelange": "Eng aktiv Stad mat vill lokale Betriber am Handel a Servicer.",
+      "ettelbruck": "D'Häerz vum Norden — zentral fir Betriber déi de ganzen Norden bedeenen wëllen."
+    }
+  },
+  "cookieConsent": {
+    "message": "Mir benotzen Cookies fir eis Websäit ze analyséieren an ze verbesseren.",
+    "accept": "Akzeptéieren",
+    "decline": "Ofleenen"
+  }
+}

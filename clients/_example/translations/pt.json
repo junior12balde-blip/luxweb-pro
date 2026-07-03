@@ -1,0 +1,8 @@
+{
+  "tagline": "Breve descrição da empresa em português",
+  "services": ["Serviço 1", "Serviço 2", "Serviço 3", "Serviço 4"],
+  "testimonials": [
+    { "quote": "Testemunho de um cliente real.", "author": "Nome", "role": "Função, Cidade" },
+    { "quote": "Outro testemunho.", "author": "Nome", "role": "Função, Cidade" }
+  ]
+}

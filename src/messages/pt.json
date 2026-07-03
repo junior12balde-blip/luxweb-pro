@@ -1,0 +1,696 @@
+{
+  "meta": {
+    "siteName": "LuxWeb Pro",
+    "slogan": "A sua empresa online. Moderna. Local. Rápida.",
+    "title": "LuxWeb Pro — Websites modernos para empresas no Luxemburgo",
+    "description": "A LuxWeb Pro cria websites modernos, rápidos e multilingues para pequenas e médias empresas no Luxemburgo. Design, SEO local, manutenção e alojamento, tudo num só lugar."
+  },
+  "nav": {
+    "home": "Início",
+    "services": "Serviços",
+    "portfolio": "Portfólio",
+    "contact": "Contacto",
+    "cta": "Orçamento grátis",
+    "templates": "Templates",
+    "pricing": "Preços"
+  },
+  "hero": {
+    "badge": "🇱🇺 Agência digital no Luxemburgo",
+    "title": "A sua empresa online.",
+    "titleHighlight": "Moderna. Local. Rápida.",
+    "subtitle": "Criamos websites modernos, rápidos e multilingues para pequenas e médias empresas no Luxemburgo — do design ao lançamento.",
+    "cta1": "Pedir orçamento grátis",
+    "cta2": "Ver os nossos trabalhos",
+    "trustLine": "A confiança de artesãos, comércios e restaurantes em todo o país"
+  },
+  "stats": {
+    "projects": "Websites entregues",
+    "languages": "Idiomas suportados",
+    "responsive": "Design responsivo",
+    "speed": "Pontuação Google PageSpeed"
+  },
+  "services": {
+    "badge": "Os nossos serviços",
+    "title": "Tudo para a sua presença digital",
+    "subtitle": "Do primeiro esboço até ao lançamento — nós tratamos de tudo.",
+    "items": [
+      {
+        "title": "Design & desenvolvimento web",
+        "description": "Websites modernos, rápidos e otimizados para telemóvel, construídos com Next.js para máxima performance."
+      },
+      {
+        "title": "Websites multilingues",
+        "description": "O seu site em luxemburguês, francês, alemão, inglês e português — perfeito para o mercado luxemburguês."
+      },
+      {
+        "title": "SEO local para o Luxemburgo",
+        "description": "Visibilidade no Google Maps e nos resultados de pesquisa para ser encontrado por clientes da sua região."
+      },
+      {
+        "title": "Formulário de contacto & WhatsApp",
+        "description": "Formas simples dos seus clientes falarem consigo — formulário, telefone, e-mail e chat direto no WhatsApp."
+      },
+      {
+        "title": "Manutenção & alojamento",
+        "description": "Alojamento fiável na Vercel, atualizações automáticas e segurança, sem que precise de se preocupar."
+      },
+      {
+        "title": "Branding & logótipo",
+        "description": "Uma identidade visual moderna adaptada à sua empresa e ao público luxemburguês."
+      }
+    ]
+  },
+  "process": {
+    "badge": "O nosso método",
+    "title": "Da ideia ao website online",
+    "steps": [
+      {
+        "title": "Conversa inicial",
+        "description": "Conhecemos a sua empresa e o seu público-alvo."
+      },
+      {
+        "title": "Design",
+        "description": "Criamos um design moderno adaptado ao seu setor."
+      },
+      {
+        "title": "Desenvolvimento",
+        "description": "Construção com Next.js, rápido e seguro, em todos os dispositivos."
+      },
+      {
+        "title": "Lançamento",
+        "description": "Publicação, configuração de SEO e formação para a sua equipa."
+      }
+    ]
+  },
+  "testimonials": {
+    "badge": "Testemunhos",
+    "title": "Empresas que confiam em nós",
+    "items": [
+      {
+        "quote": "O nosso novo website duplicou os nossos pedidos. Rápido, profissional e em luxemburguês — exatamente o que precisávamos.",
+        "author": "Nadia S.",
+        "role": "Comerciante, Cidade do Luxemburgo"
+      },
+      {
+        "quote": "Finalmente uma agência que entende o mercado luxemburguês. Excelente trabalho!",
+        "author": "Marco R.",
+        "role": "Eletricista, Dudelange"
+      },
+      {
+        "quote": "Do primeiro contacto ao lançamento, tudo foi rápido e profissional.",
+        "author": "Sophie L.",
+        "role": "Dona de restaurante, Echternach"
+      }
+    ]
+  },
+  "portfolio": {
+    "badge": "Os nossos trabalhos",
+    "title": "Alguns dos nossos projetos",
+    "subtitle": "Exemplos de websites que criámos para empresas locais.",
+    "viewProject": "Ver projeto",
+    "categories": {
+      "all": "Todos",
+      "electrician": "Eletricistas",
+      "cleaning": "Limpeza",
+      "restaurant": "Restaurantes",
+      "other": "Outros"
+    },
+    "items": [
+      {
+        "title": "Elektro Muller",
+        "category": "electrician",
+        "description": "Website para uma empresa de eletricidade luxemburguesa com pedido de orçamento online."
+      },
+      {
+        "title": "CleanLux Services",
+        "category": "cleaning",
+        "description": "Presença moderna para uma empresa de limpeza com visão geral de serviços e formulário de marcação."
+      },
+      {
+        "title": "Restaurant Al Dente",
+        "category": "restaurant",
+        "description": "Website apetitoso com menu, reservas e galeria de fotos."
+      },
+      {
+        "title": "Artesão Independente Pro",
+        "category": "electrician",
+        "description": "Website de uma página com portfólio e formulário de contacto para um trabalhador independente."
+      },
+      {
+        "title": "Sauber & Prope",
+        "category": "cleaning",
+        "description": "Website multilingue para uma equipa de limpeza que atua em todo o país."
+      },
+      {
+        "title": "Chez Marie Bistro",
+        "category": "restaurant",
+        "description": "Website elegante de bistrô com menu digital e integração com Google Maps."
+      }
+    ]
+  },
+  "contact": {
+    "badge": "Contacto",
+    "title": "Vamos falar sobre o seu projeto",
+    "subtitle": "Escreva-nos ou ligue-nos — normalmente respondemos dentro de um dia útil.",
+    "form": {
+      "name": "Nome",
+      "namePlaceholder": "O seu nome",
+      "email": "E-mail",
+      "emailPlaceholder": "voce@exemplo.lu",
+      "phone": "Telefone",
+      "phonePlaceholder": "+352 621 123 456",
+      "company": "Empresa (opcional)",
+      "companyPlaceholder": "Nome da sua empresa",
+      "service": "Que serviços lhe interessam?",
+      "servicePlaceholder": "Selecione uma opção",
+      "message": "A sua mensagem",
+      "messagePlaceholder": "Conte-nos brevemente sobre o seu projeto...",
+      "submit": "Enviar mensagem",
+      "submitting": "A enviar...",
+      "success": "Obrigado! Entraremos em contacto em breve.",
+      "error": "Algo correu mal. Por favor, tente novamente."
+    },
+    "info": {
+      "addressTitle": "Morada",
+      "address": "12 Rue de la Poste, L-2346 Luxemburgo",
+      "phoneTitle": "Telefone",
+      "emailTitle": "E-mail",
+      "hoursTitle": "Horário",
+      "hours": "Segunda – Sexta: 9h00 – 18h00"
+    },
+    "whatsappCta": "Escrever diretamente no WhatsApp"
+  },
+  "footer": {
+    "description": "A LuxWeb Pro é a sua agência digital local no Luxemburgo. Criamos websites modernos, rápidos e multilingues para PMEs.",
+    "quickLinks": "Links rápidos",
+    "services": "Serviços",
+    "contact": "Contacto",
+    "rights": "Todos os direitos reservados.",
+    "madeIn": "Feito com ❤️ no Luxemburgo",
+    "whyUs": "Porquê Nós",
+    "testimonials": "Testemunhos",
+    "portugueseCommunity": "Comunidade Portuguesa",
+    "locations": "Localidades",
+    "pricing": "Preços",
+    "templates": "Templates"
+  },
+  "whatsapp": {
+    "message": "Olá! Gostaria de mais informações sobre os vossos serviços."
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "A página que procura não existe.",
+    "cta": "Voltar ao início"
+  },
+  "templatesShared": {
+    "galleryTitle": "Os nossos trabalhos",
+    "gallerySubtitle": "Algumas imagens dos nossos projetos recentes.",
+    "testimonialsTitle": "O que dizem os nossos clientes"
+  },
+  "templates": {
+    "electrician": {
+      "badge": "Template — Eletricista",
+      "name": "Elektro Pro Luxemburgo",
+      "tagline": "Instalações elétricas com segurança e precisão",
+      "servicesTitle": "Os nossos serviços",
+      "services": [
+        "Instalação elétrica",
+        "Urgências 24/7",
+        "Inspeções de segurança",
+        "Domótica / Smart Home"
+      ],
+      "testimonials": [
+        {
+          "quote": "Urgência resolvida rapidamente, preços transparentes. Muito satisfeito!",
+          "author": "Paul K.",
+          "role": "Proprietário, Esch-sur-Alzette"
+        },
+        {
+          "quote": "Instalação profissional da nossa casa inteligente.",
+          "author": "Anne D.",
+          "role": "Empresária, Cidade do Luxemburgo"
+        }
+      ],
+      "ctaEmergency": "Emergência? Ligue-nos",
+      "ctaQuote": "Pedir orçamento"
+    },
+    "cleaning": {
+      "badge": "Template — Limpeza",
+      "name": "CleanLux Services",
+      "tagline": "Limpeza profissional para escritórios e habitações",
+      "servicesTitle": "Os nossos serviços",
+      "services": [
+        "Limpeza de escritórios",
+        "Limpeza de habitações",
+        "Limpeza de vidros",
+        "Limpeza pós-obra"
+      ],
+      "testimonials": [
+        {
+          "quote": "Sempre pontuais, minuciosos e simpáticos. Recomendo vivamente.",
+          "author": "Georges M.",
+          "role": "Administração, Luxemburgo"
+        },
+        {
+          "quote": "Finalmente uma empresa de limpeza em quem se pode confiar.",
+          "author": "Julie F.",
+          "role": "Gestão imobiliária, Dudelange"
+        }
+      ],
+      "ctaEmergency": "Visita gratuita",
+      "ctaQuote": "Pedir orçamento"
+    },
+    "plumber": {
+      "badge": "Template — Canalizador",
+      "name": "Aqua Fix Luxemburgo",
+      "tagline": "Reparações de canalização fiáveis e rápidas",
+      "servicesTitle": "Os nossos serviços",
+      "services": [
+        "Reparação de canos",
+        "Urgências 24/7",
+        "Instalação de casas de banho",
+        "Deteção de fugas de água"
+      ],
+      "testimonials": [
+        {
+          "quote": "Dano de água resolvido rápido e profissionalmente — obrigado!",
+          "author": "Michel W.",
+          "role": "Proprietário, Ettelbruck"
+        },
+        {
+          "quote": "Nova casa de banho instalada na perfeição.",
+          "author": "Claire B.",
+          "role": "Proprietária, Esch-sur-Alzette"
+        }
+      ],
+      "ctaEmergency": "Emergência? Ligue-nos",
+      "ctaQuote": "Pedir orçamento"
+    },
+    "gardener": {
+      "badge": "Template — Jardinagem",
+      "name": "GreenLux Jardins",
+      "tagline": "O seu jardim, sempre no seu melhor",
+      "servicesTitle": "Os nossos serviços",
+      "services": [
+        "Manutenção de relva",
+        "Poda de árvores e sebes",
+        "Design de jardins",
+        "Serviço de inverno"
+      ],
+      "testimonials": [
+        {
+          "quote": "O nosso jardim agora parece saído de uma revista!",
+          "author": "Tom S.",
+          "role": "Proprietário, Mamer"
+        },
+        {
+          "quote": "Serviço de inverno fiável, nunca falharam um horário.",
+          "author": "Isabelle R.",
+          "role": "Gestão de edifício, Sandweiler"
+        }
+      ],
+      "ctaEmergency": "Visita gratuita",
+      "ctaQuote": "Pedir orçamento"
+    },
+    "restaurant": {
+      "badge": "Template — Restaurante",
+      "name": "Le Bon Goût",
+      "tagline": "Cozinha tradicional com um toque moderno",
+      "servicesTitle": "A nossa carta",
+      "services": [
+        "Almoço",
+        "Jantar",
+        "Catering",
+        "Eventos privados"
+      ],
+      "testimonials": [
+        {
+          "quote": "Excelente comida e um acolhimento caloroso — voltaremos!",
+          "author": "Laurent D.",
+          "role": "Cliente, Echternach"
+        },
+        {
+          "quote": "Organização perfeita para o nosso evento de empresa.",
+          "author": "Céline V.",
+          "role": "Organizadora de eventos, Cidade do Luxemburgo"
+        }
+      ],
+      "ctaEmergency": "Reservar agora",
+      "ctaQuote": "Ver menu"
+    },
+    "shop": {
+      "badge": "Template — Loja",
+      "name": "La Belle Boutique",
+      "tagline": "Produtos de qualidade, aconselhamento pessoal",
+      "servicesTitle": "A nossa oferta",
+      "services": [
+        "Roupa & acessórios",
+        "Artigos de presente",
+        "Aconselhamento pessoal",
+        "Click & Collect"
+      ],
+      "testimonials": [
+        {
+          "quote": "Aconselhamento pessoal e uma ótima seleção — a minha loja preferida!",
+          "author": "Sarah L.",
+          "role": "Cliente, Cidade do Luxemburgo"
+        },
+        {
+          "quote": "Sempre novas coleções e um serviço simpático.",
+          "author": "Marc T.",
+          "role": "Cliente, Esch-sur-Alzette"
+        }
+      ],
+      "ctaEmergency": "Horário de funcionamento",
+      "ctaQuote": "Descobrir a loja"
+    },
+    "construction": {
+      "badge": "Template — Construção",
+      "name": "BauFest Luxemburgo",
+      "tagline": "Da fundação ao telhado",
+      "servicesTitle": "Os nossos serviços",
+      "services": [
+        "Construção nova",
+        "Renovação",
+        "Ampliação & remodelação",
+        "Gestão de projeto"
+      ],
+      "testimonials": [
+        {
+          "quote": "Do primeiro orçamento à entrega de chaves, tudo perfeitamente organizado.",
+          "author": "Nicolas H.",
+          "role": "Dono de obra, Bertrange"
+        },
+        {
+          "quote": "Renovação concluída no prazo e dentro do orçamento.",
+          "author": "Élodie P.",
+          "role": "Proprietária, Strassen"
+        }
+      ],
+      "ctaEmergency": "Discutir o projeto",
+      "ctaQuote": "Pedir orçamento"
+    }
+  },
+  "pricing": {
+    "badge": "Preços",
+    "title": "Preços claros e transparentes",
+    "subtitle": "Sem custos escondidos — escolha o plano certo para a sua empresa.",
+    "billingNote": "Todos os preços são sem IVA. Domínio e alojamento base na Vercel incluídos no primeiro ano.",
+    "plans": [
+      {
+        "id": "starter",
+        "name": "Starter",
+        "price": "990 €",
+        "priceNote": "pagamento único",
+        "description": "Perfeito para trabalhadores independentes e pequenas empresas que querem estar online rapidamente.",
+        "features": [
+          "Website one-page (Início, Serviços, Contacto)",
+          "Até 2 idiomas",
+          "Formulário de contacto & botão WhatsApp",
+          "Integração com Google Maps",
+          "Design responsivo em todos os dispositivos",
+          "Configuração de SEO básico"
+        ],
+        "cta": "Pedir Starter",
+        "highlight": false
+      },
+      {
+        "id": "business",
+        "name": "Business",
+        "price": "1 490 €",
+        "priceNote": "pagamento único",
+        "badge": "Mais popular",
+        "description": "Para empresas que querem levar a sério a sua presença digital.",
+        "features": [
+          "Tudo o que está incluído no Starter",
+          "Até 4 idiomas",
+          "Galeria & referências de clientes",
+          "SEO local avançado (JSON-LD, sitemap)",
+          "Design & branding personalizados",
+          "Apoio prioritário no lançamento"
+        ],
+        "cta": "Pedir Business",
+        "highlight": true
+      },
+      {
+        "id": "premiumMultilingual",
+        "name": "Premium Multilíngue",
+        "price": "1 990 €",
+        "priceNote": "pagamento único",
+        "description": "A solução completa para alcançar toda a sua clientela na sua própria língua.",
+        "features": [
+          "Tudo o que está incluído no Business",
+          "Os 5 idiomas (luxemburguês, francês, alemão, inglês, português)",
+          "Página de SEO local dedicada à sua cidade",
+          "Página de Testemunhos dedicada",
+          "Chamada de onboarding personalizada",
+          "3 meses de pequenas atualizações grátis incluídos"
+        ],
+        "cta": "Pedir Premium Multilíngue",
+        "highlight": false
+      }
+    ],
+    "maintenanceAddon": {
+      "title": "Add-on opcional",
+      "name": "Manutenção Mensal",
+      "price": "79 €",
+      "priceNote": "/mês",
+      "description": "Para que o seu website esteja sempre atualizado, rápido e seguro — pode ser adicionado a qualquer plano.",
+      "features": [
+        "Alojamento & manutenção técnica",
+        "Atualizações de texto/fotos (até 2/mês)",
+        "Monitorização de segurança & performance",
+        "Suporte por e-mail"
+      ],
+      "cta": "Adicionar manutenção"
+    },
+    "faq": {
+      "title": "Perguntas frequentes",
+      "items": [
+        {
+          "q": "O que está incluído no preço?",
+          "a": "Design, desenvolvimento, tradução para os idiomas escolhidos, formulário de contacto, Google Maps, integração com WhatsApp e lançamento. O alojamento na Vercel está incluído no primeiro ano."
+        },
+        {
+          "q": "Quanto tempo demora até o meu website estar online?",
+          "a": "Para qualquer um dos nossos planos, normalmente menos de 24 horas depois de termos todas as suas informações (textos, fotos, logótipo)."
+        },
+        {
+          "q": "Preciso de adicionar a manutenção?",
+          "a": "Não, a manutenção é um add-on opcional. Recomendamos para atualizações de segurança e alterações sem que precise de se preocupar com a parte técnica."
+        },
+        {
+          "q": "Posso adicionar um idioma ou mudar de plano mais tarde?",
+          "a": "Sim, a qualquer momento — adaptamos o seu website à medida que a sua empresa cresce."
+        }
+      ]
+    }
+  },
+  "whyUs": {
+    "badge": "Porquê nós",
+    "title": "Porquê escolher a LuxWeb Pro?",
+    "subtitle": "Somos uma agência local que compreende verdadeiramente aquilo que as pequenas empresas no Luxemburgo precisam.",
+    "reasons": [
+      {
+        "icon": "🇱🇺",
+        "title": "100% de conhecimento local",
+        "description": "Conhecemos o mercado luxemburguês, os seus idiomas e os seus clientes — porque trabalhamos aqui mesmo."
+      },
+      {
+        "icon": "🌍",
+        "title": "Multilingue desde o início",
+        "description": "Cada website é construído em luxemburguês, francês, alemão, inglês e português — não é acrescentado depois."
+      },
+      {
+        "icon": "⚡",
+        "title": "Online em menos de 24 horas",
+        "description": "Graças aos nossos templates prontos a usar, o seu website fica pronto rápida e profissionalmente."
+      },
+      {
+        "icon": "💶",
+        "title": "Preços transparentes",
+        "description": "Preços claros por plano, sem custos escondidos e sem compromissos longos desnecessários."
+      },
+      {
+        "icon": "🚀",
+        "title": "Tecnologia moderna",
+        "description": "Next.js, tempos de carregamento rápidos e excelentes pontuações no Google PageSpeed — nada de temas WordPress antigos."
+      },
+      {
+        "icon": "💬",
+        "title": "Apoio direto",
+        "description": "Ligue-nos ou escreva no WhatsApp — respondemos rápido, sem sistemas de tickets complicados."
+      }
+    ],
+    "ctaTitle": "Pronto para começar?",
+    "ctaSubtitle": "Peça um orçamento grátis e receba uma maquete personalizada em 24h.",
+    "ctaButton": "Pedir orçamento grátis"
+  },
+  "quote": {
+    "badge": "Pedido de orçamento",
+    "title": "Peça um orçamento grátis",
+    "subtitle": "Preencha o formulário e respondemos dentro de um dia útil com uma proposta personalizada.",
+    "form": {
+      "name": "Nome",
+      "namePlaceholder": "O seu nome",
+      "email": "E-mail",
+      "emailPlaceholder": "voce@exemplo.lu",
+      "phone": "Telefone",
+      "phonePlaceholder": "+352 621 123 456",
+      "company": "Empresa",
+      "companyPlaceholder": "Nome da sua empresa",
+      "businessType": "Setor de atividade",
+      "businessTypePlaceholder": "Selecione o seu setor",
+      "businessTypes": {
+        "electrician": "Eletricista",
+        "cleaning": "Limpeza",
+        "plumber": "Canalizador",
+        "gardener": "Jardineiro",
+        "restaurant": "Restaurante",
+        "shop": "Loja / Boutique",
+        "construction": "Construção civil",
+        "other": "Outro"
+      },
+      "plan": "Que plano lhe interessa?",
+      "planPlaceholder": "Selecione uma opção",
+      "plans": {
+        "starter": "Starter (990 €)",
+        "business": "Business (1 490 €)",
+        "premiumMultilingual": "Premium Multilíngue (1 990 €)",
+        "maintenance": "Manutenção (79 €/mês)",
+        "unsure": "Ainda não sei"
+      },
+      "languages": "Em que idiomas?",
+      "languagesHint": "Selecione todos os idiomas que o seu website deve ter.",
+      "message": "Conte-nos mais sobre o seu projeto",
+      "messagePlaceholder": "Que serviços oferece? Já tem fotos ou um logótipo?...",
+      "submit": "Pedir orçamento",
+      "submitting": "A enviar...",
+      "success": "Obrigado! Respondemos dentro de um dia útil com o seu orçamento personalizado.",
+      "error": "Algo correu mal. Tente novamente ou ligue-nos."
+    },
+    "sidebar": {
+      "title": "O que acontece a seguir",
+      "steps": [
+        "Analisamos o seu formulário e ligamos-lhe dentro de um dia útil",
+        "Enviamos um orçamento personalizado, sem compromisso",
+        "Depois da sua confirmação, o seu website fica online em 24h"
+      ],
+      "guarantee": "Sem risco: o orçamento é grátis e sem compromisso."
+    }
+  },
+  "testimonialsPage": {
+    "badge": "Testemunhos",
+    "title": "Empresas que confiam em nós",
+    "subtitle": "Feedback genuíno de clientes por todo o país.",
+    "items": [
+      {
+        "quote": "O nosso novo website duplicou os nossos pedidos. Rápido, profissional e em luxemburguês — exatamente o que precisávamos.",
+        "author": "Nadia S.",
+        "role": "Comerciante, Cidade do Luxemburgo",
+        "rating": 5
+      },
+      {
+        "quote": "Finalmente uma agência que entende o mercado luxemburguês. Excelente trabalho!",
+        "author": "Marco R.",
+        "role": "Eletricista, Dudelange",
+        "rating": 5
+      },
+      {
+        "quote": "Do primeiro contacto ao lançamento, tudo foi rápido e profissional.",
+        "author": "Sophie L.",
+        "role": "Dona de restaurante, Echternach",
+        "rating": 5
+      },
+      {
+        "quote": "Rápido, profissional e a um preço justo. Muito satisfeito com a colaboração.",
+        "author": "Carlos P.",
+        "role": "Empreiteiro de construção, Dudelange",
+        "rating": 5
+      },
+      {
+        "quote": "Um website em 4 idiomas sem complicações — exatamente o que precisávamos para a nossa clientela internacional.",
+        "author": "Elena M.",
+        "role": "Comerciante, Esch-sur-Alzette",
+        "rating": 5
+      },
+      {
+        "quote": "Do contacto ao lançamento em menos de 24 horas. Surpreendentemente rápido!",
+        "author": "Jérôme K.",
+        "role": "Jardineiro, Ettelbruck",
+        "rating": 5
+      }
+    ]
+  },
+  "portugueseCommunity": {
+    "badge": "🇵🇹 Comunidade Portuguesa",
+    "title": "Websites para empresas portuguesas no Luxemburgo",
+    "subtitle": "Falamos a sua língua — e entendemos o negócio artesanal e familiar por trás dela.",
+    "intro": "Os portugueses formam a maior comunidade estrangeira do Luxemburgo — muitos têm o seu próprio negócio: eletricistas, empresas de limpeza, empreiteiros de construção, restaurantes. A LuxWeb Pro oferece-lhe um website em português, luxemburguês, francês e mais, para alcançar toda a sua clientela.",
+    "stats": [
+      {
+        "value": "🇵🇹",
+        "label": "Maior comunidade estrangeira do Luxemburgo"
+      },
+      {
+        "value": "5",
+        "label": "Idiomas incluídos, incluindo português"
+      },
+      {
+        "value": "<24h",
+        "label": "Do pedido ao website online"
+      }
+    ],
+    "sectorsTitle": "Conhecemos o seu setor",
+    "sectors": [
+      "Eletricistas",
+      "Limpeza",
+      "Construção & renovação",
+      "Restaurantes & cafés"
+    ],
+    "testimonials": [
+      {
+        "quote": "Finalmente uma agência que também fala português. Tudo foi simples e rápido.",
+        "author": "João R.",
+        "role": "Empreiteiro de construção, Cidade do Luxemburgo"
+      },
+      {
+        "quote": "O nosso website em português e francês trouxe-nos novos clientes.",
+        "author": "Fátima S.",
+        "role": "Comerciante, Esch-sur-Alzette"
+      }
+    ],
+    "ctaTitle": "Vamos falar em português",
+    "ctaSubtitle": "Ligue-nos ou escreva no WhatsApp — respondemos em português, francês ou luxemburguês.",
+    "ctaButton": "Pedir orçamento grátis"
+  },
+  "cities": {
+    "badge": "SEO Local",
+    "title": "Websites para empresas em {city}",
+    "subtitle": "Ajudamos empresas locais em {city} a serem visíveis online — com um website moderno, rápido e multilingue.",
+    "highlights": [
+      "SEO local para ser encontrado em {city}",
+      "Website em luxemburguês, francês, alemão, inglês e português",
+      "Online em menos de 24 horas",
+      "Google Maps com a sua morada exata"
+    ],
+    "ctaTitle": "Pronto para o seu website em {city}?",
+    "ctaSubtitle": "Peça um orçamento grátis e receba uma maquete personalizada.",
+    "ctaButton": "Pedir orçamento grátis",
+    "indexTitle": "Trabalhamos em todo o país",
+    "indexSubtitle": "Da capital até ao norte — a LuxWeb Pro cria websites para empresas nestas regiões.",
+    "indexCta": "Ver região",
+    "blurbs": {
+      "luxembourg-ville": "A capital e centro económico do país — com a maior concorrência online.",
+      "esch-sur-alzette": "A segunda maior cidade do Luxemburgo, com um forte tecido artesanal e comercial.",
+      "differdange": "Um importante polo económico do sul, perto da fronteira francesa.",
+      "dudelange": "Uma cidade ativa com muitas empresas locais no comércio e serviços.",
+      "ettelbruck": "O coração do norte — central para empresas que querem servir toda a região."
+    }
+  },
+  "cookieConsent": {
+    "message": "Utilizamos cookies para analisar e melhorar o nosso website.",
+    "accept": "Aceitar",
+    "decline": "Recusar"
+  }
+}

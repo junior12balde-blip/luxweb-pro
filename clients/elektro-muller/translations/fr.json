@@ -1,0 +1,8 @@
+{
+  "tagline": "Votre électricien à Esch-sur-Alzette — fiable depuis 2009",
+  "services": ["Installation électrique", "Dépannage 24/7", "Installation photovoltaïque", "Contrôle de sécurité électrique"],
+  "testimonials": [
+    { "quote": "Travail rapide, soigné et à prix juste. Nous sommes clients depuis des années.", "author": "Famille Weber", "role": "Propriétaires, Esch-sur-Alzette" },
+    { "quote": "Notre installation photovoltaïque parfaitement planifiée et installée.", "author": "Roger T.", "role": "Propriétaire, Sanem" }
+  ]
+}

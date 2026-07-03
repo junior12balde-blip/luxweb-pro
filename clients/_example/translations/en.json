@@ -1,0 +1,8 @@
+{
+  "tagline": "Short description of the business in English",
+  "services": ["Service 1", "Service 2", "Service 3", "Service 4"],
+  "testimonials": [
+    { "quote": "Quote from a real client.", "author": "Name", "role": "Role, City" },
+    { "quote": "Another quote.", "author": "Name", "role": "Role, City" }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "tagline": "Ihr Elektriker in Esch-sur-Alzette — zuverlässig seit 2009",
+  "services": ["Elektroinstallation", "Notdienst 24/7", "Photovoltaik-Installation", "Elektrische Sicherheitsprüfung"],
+  "testimonials": [
+    { "quote": "Schnelle, saubere Arbeit zu fairen Preisen. Wir sind seit Jahren Kunden.", "author": "Familie Weber", "role": "Hausbesitzer, Esch-sur-Alzette" },
+    { "quote": "Unsere Photovoltaikanlage perfekt geplant und installiert.", "author": "Roger T.", "role": "Hausbesitzer, Sanem" }
+  ]
+}

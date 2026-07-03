@@ -1,0 +1,8 @@
+{
+  "tagline": "Kuerz Beschreiwung vun der Firma op Lëtzebuergesch",
+  "services": ["Service 1", "Service 2", "Service 3", "Service 4"],
+  "testimonials": [
+    { "quote": "Zitat vun engem echte Client.", "author": "Numm", "role": "Roll, Stad" },
+    { "quote": "Nach een Zitat.", "author": "Numm", "role": "Roll, Stad" }
+  ]
+}

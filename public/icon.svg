@@ -1,0 +1,27 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LuxWeb Pro">
+  <defs>
+    <linearGradient id="lwp-favicon-gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1857F5" />
+      <stop offset="100%" stop-color="#00C2A8" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#lwp-favicon-gradient)" />
+  <path
+    d="M20 18 L20 39 C20 41.7 22.2 44 25 44 L34 44"
+    stroke="#FFFFFF"
+    stroke-width="6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+  <path
+    d="M39 18 L47 26 L39 34"
+    stroke="#FFFFFF"
+    stroke-width="5.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+    opacity="0.95"
+  />
+  <circle cx="42" cy="42" r="4.5" fill="#FFFFFF" />
+</svg>
