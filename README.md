@@ -8,7 +8,9 @@ Stack: **Next.js 15** (App Router) · **TypeScript** · **Tailwind CSS** · **ne
 
 Para o processo comercial/operacional completo (prospeção → proposta →
 site → publicação), ver [OPERATIONS.md](OPERATIONS.md). Para o lançamento
-comercial (primeiros 5 clientes), ver [LAUNCH-CHECKLIST.md](LAUNCH-CHECKLIST.md).
+comercial (primeiros 5 clientes), ver [LAUNCH-CHECKLIST.md](LAUNCH-CHECKLIST.md)
+e o [CLIENT-ACQUISITION-PLAN.md](CLIENT-ACQUISITION-PLAN.md) (plano por
+setor). Estado atual do deploy em [DEPLOYMENT-REPORT.md](DEPLOYMENT-REPORT.md).
 
 ## Idiomas
 
