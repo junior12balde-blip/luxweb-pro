@@ -1,0 +1,78 @@
+// Esquema de la Fase 1: usuarios, propiedades y su relación.
+// Fases posteriores añadirán Conversation/Message (Fase 2), ListingDraft
+// (Fase 3), MediaGeneration (Fases 4-5), Automation (Fase 6), etc.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  ROOM
+  STUDIO
+  VILLA
+  OTHER
+}
+
+enum MembershipRole {
+  OWNER
+  EDITOR
+  VIEWER
+}
+
+/// Usuario de la aplicación. Se crea automáticamente en el primer login a
+/// partir del usuario de Supabase Auth (ver src/lib/auth.ts).
+model User {
+  id          String       @id @default(cuid())
+  authId      String       @unique
+  email       String       @unique
+  fullName    String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  memberships Membership[]
+
+  @@map("users")
+}
+
+/// Alojamiento gestionado por uno o más anfitriones.
+model Property {
+  id            String       @id @default(cuid())
+  name          String
+  type          PropertyType @default(APARTMENT)
+  address       String
+  city          String
+  country       String
+  maxGuests     Int          @default(1)
+  bedrooms      Int          @default(1)
+  bathrooms     Int          @default(1)
+  nightlyPrice  Decimal      @db.Decimal(10, 2)
+  currency      String       @default("EUR")
+  description   String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  memberships   Membership[]
+
+  @@map("properties")
+}
+
+/// Relación usuario↔propiedad con rol. Un usuario puede gestionar varias
+/// propiedades y una propiedad puede tener varios anfitriones (equipo).
+model Membership {
+  id         String         @id @default(cuid())
+  role       MembershipRole @default(OWNER)
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  property   Property       @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String
+  createdAt  DateTime       @default(now())
+
+  @@unique([userId, propertyId])
+  @@map("memberships")
+}

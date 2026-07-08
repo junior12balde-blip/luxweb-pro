@@ -1,0 +1,53 @@
+name: AIbnb Studio CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/aibnb-studio/**"
+      - ".github/workflows/aibnb-studio-ci.yml"
+  pull_request:
+    paths:
+      - "apps/aibnb-studio/**"
+      - ".github/workflows/aibnb-studio-ci.yml"
+
+defaults:
+  run:
+    working-directory: apps/aibnb-studio
+
+env:
+  DATABASE_URL: "postgresql://aibnb:aibnb@localhost:5432/aibnb_studio"
+  DIRECT_URL: "postgresql://aibnb:aibnb@localhost:5432/aibnb_studio"
+  NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: "placeholder-anon-key"
+  SUPABASE_SERVICE_ROLE_KEY: "placeholder-service-role-key"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: apps/aibnb-studio/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate Prisma client
+        run: npm run db:generate
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: Build
+        run: npm run build
