@@ -4,6 +4,10 @@
 > Plataforma digital para criar e operar websites modernos para pequenas
 > empresas no Luxemburgo — do primeiro contacto à publicação, em menos de 24h.
 
+> Este repositório é um monorepo: este README documenta o LuxWeb Pro (raiz
+> do repo). Um segundo projeto independente, **AIbnb Studio** (SaaS de IA
+> para anfitriões de Airbnb), vive em [`apps/aibnb-studio/`](apps/aibnb-studio/README.md).
+
 Stack: **Next.js 15** (App Router) · **TypeScript** · **Tailwind CSS** · **next-intl** (i18n) · deploy na **Vercel**.
 
 Para o processo comercial/operacional completo (prospeção → proposta →
