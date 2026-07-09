@@ -1,13 +1,7 @@
 import Link from "next/link";
 import { LoginForm } from "./LoginForm";
 
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ registered?: string }>;
-}) {
-  const { registered } = await searchParams;
-
+export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
       <div className="w-full max-w-sm">
@@ -18,13 +12,13 @@ export default async function LoginPage({
           </p>
         </div>
 
-        {registered && (
-          <p className="mb-4 rounded-lg bg-green-50 px-3 py-2 text-sm text-green-700">
-            Cuenta creada. Revisa tu email para confirmarla e inicia sesión.
-          </p>
-        )}
-
         <LoginForm />
+
+        <div className="mt-4 text-center text-sm">
+          <Link href="/forgot-password" className="font-medium text-brand-600 hover:underline">
+            ¿Olvidaste tu contraseña?
+          </Link>
+        </div>
 
         <p className="mt-6 text-center text-sm text-slate-500">
           ¿No tienes cuenta?{" "}

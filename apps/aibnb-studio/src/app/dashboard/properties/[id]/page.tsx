@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/auth";
 import { serializeProperty } from "@/lib/serializers";
 import { PropertyForm } from "@/components/properties/PropertyForm";
 import { DeletePropertyButton } from "@/components/properties/DeletePropertyButton";
+import { PhotoGallery } from "@/components/properties/PhotoGallery";
 
 export default async function EditPropertyPage({
   params,
@@ -15,11 +16,14 @@ export default async function EditPropertyPage({
 
   const property = await prisma.property.findFirst({
     where: { id, memberships: { some: { userId: user.id } } },
+    include: { photos: { orderBy: { position: "asc" } } },
   });
 
   if (!property) {
     notFound();
   }
+
+  const serialized = serializeProperty(property);
 
   return (
     <div className="max-w-2xl">
@@ -27,8 +31,14 @@ export default async function EditPropertyPage({
         <h1 className="text-2xl font-bold text-slate-900">Editar propiedad</h1>
         <DeletePropertyButton propertyId={property.id} />
       </div>
+
       <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6">
-        <PropertyForm property={serializeProperty(property)} />
+        <h2 className="mb-4 text-lg font-semibold text-slate-900">Fotos</h2>
+        <PhotoGallery propertyId={property.id} photos={serialized.photos} />
+      </div>
+
+      <div className="mt-6 rounded-xl border border-slate-200 bg-white p-6">
+        <PropertyForm property={serialized} />
       </div>
     </div>
   );

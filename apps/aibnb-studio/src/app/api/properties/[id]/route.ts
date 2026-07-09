@@ -3,12 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { propertyUpdateSchema } from "@/lib/validations/property";
 import { serializeProperty } from "@/lib/serializers";
-
-async function findOwnedProperty(userId: string, propertyId: string) {
-  return prisma.property.findFirst({
-    where: { id: propertyId, memberships: { some: { userId } } },
-  });
-}
+import { findOwnedProperty } from "@/lib/properties";
 
 export async function GET(
   _request: Request,
@@ -57,10 +52,15 @@ export async function PATCH(
     data: {
       ...parsed.data,
       description:
-        parsed.data.description === undefined
-          ? undefined
-          : parsed.data.description || null,
+        parsed.data.description === undefined ? undefined : parsed.data.description || null,
+      houseRules:
+        parsed.data.houseRules === undefined ? undefined : parsed.data.houseRules || null,
+      checkInTime:
+        parsed.data.checkInTime === undefined ? undefined : parsed.data.checkInTime || null,
+      checkOutTime:
+        parsed.data.checkOutTime === undefined ? undefined : parsed.data.checkOutTime || null,
     },
+    include: { photos: { orderBy: { position: "asc" } } },
   });
 
   return NextResponse.json({ property: serializeProperty(property) });

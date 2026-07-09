@@ -9,6 +9,28 @@ export const PROPERTY_TYPES = [
   "OTHER",
 ] as const;
 
+/** Sugerencias mostradas como chips de un clic en el formulario — el anfitrión puede añadir cualquier otra. */
+export const SUGGESTED_AMENITIES = [
+  "WiFi",
+  "Cocina",
+  "Parking gratis",
+  "Aire acondicionado",
+  "Calefacción",
+  "Lavadora",
+  "TV",
+  "Espacio de trabajo",
+  "Piscina",
+  "Se admiten mascotas",
+] as const;
+
+const TIME_REGEX = /^([01]\d|2[0-3]):([0-5]\d)$/;
+const timeSchema = z
+  .string()
+  .trim()
+  .regex(TIME_REGEX, "Usa el formato HH:mm (ej. 15:00)")
+  .optional()
+  .or(z.literal(""));
+
 export const propertySchema = z.object({
   name: z
     .string()
@@ -44,9 +66,30 @@ export const propertySchema = z.object({
     .max(5000, "La descripción no puede superar 5000 caracteres")
     .optional()
     .or(z.literal("")),
+  active: z.boolean().default(true),
+  amenities: z
+    .array(z.string().trim().min(1).max(40))
+    .max(40, "Como máximo 40 servicios")
+    .default([]),
+  houseRules: z
+    .string()
+    .trim()
+    .max(3000, "Las normas de la casa no pueden superar 3000 caracteres")
+    .optional()
+    .or(z.literal("")),
+  checkInTime: timeSchema,
+  checkOutTime: timeSchema,
 });
 
 export type PropertyInput = z.infer<typeof propertySchema>;
 
 export const propertyUpdateSchema = propertySchema.partial();
 export type PropertyUpdateInput = z.infer<typeof propertyUpdateSchema>;
+
+export const propertyPhotoSchema = z.object({
+  alt: z.string().trim().max(200).optional(),
+});
+
+export const reorderPhotosSchema = z.object({
+  photoIds: z.array(z.string().min(1)).min(1),
+});

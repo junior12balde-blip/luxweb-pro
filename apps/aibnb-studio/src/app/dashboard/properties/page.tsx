@@ -11,6 +11,7 @@ export default async function PropertiesPage() {
   const properties = await prisma.property.findMany({
     where: { memberships: { some: { userId: user.id } } },
     orderBy: { createdAt: "desc" },
+    include: { photos: { orderBy: { position: "asc" }, take: 1 } },
   });
 
   return (

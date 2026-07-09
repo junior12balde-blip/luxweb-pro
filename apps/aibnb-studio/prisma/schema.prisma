@@ -1,6 +1,8 @@
-// Esquema de la Fase 1: usuarios, propiedades y su relación.
-// Fases posteriores añadirán Conversation/Message (Fase 2), ListingDraft
-// (Fase 3), MediaGeneration (Fases 4-5), Automation (Fase 6), etc.
+// Esquema de la Fase 1 (usuarios, propiedades, membresías) + Fase 2 (perfil
+// de usuario, propiedades avanzadas con fotos). Fases posteriores añadirán
+// Conversation/Message (Fase 3 — asistente IA), ListingDraft (Fase 3 —
+// generador de anuncios), MediaGeneration (Fases 4-5 — vídeo/imagen),
+// Automation (Fase 6), todas referenciando Property.id por FK.
 
 generator client {
   provider = "prisma-client-js"
@@ -34,6 +36,21 @@ model User {
   authId      String       @unique
   email       String       @unique
   fullName    String?
+  avatarUrl   String?
+  /// Código de idioma preferido (es, en, fr, de, pt) — ver LOCALES en
+  /// src/lib/validations/profile.ts.
+  locale      String       @default("es")
+  /// Nombre de zona horaria IANA (ej. "Europe/Madrid").
+  timezone    String       @default("UTC")
+  /// Preferencias de notificaciones — forma definida por
+  /// NotificationPreferences en src/lib/validations/profile.ts. `null`
+  /// significa "usar los valores por defecto".
+  notificationPrefs Json?
+  /// Preferencias de IA del anfitrión (proveedor por defecto, tono, etc.) —
+  /// forma definida por AIPreferences en src/lib/ai/types.ts. Reservado
+  /// para las Fases 3+; en la Fase 2 solo se guarda la preferencia de
+  /// proveedor, sin hacer ninguna llamada real a IA.
+  aiPreferences     Json?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   memberships Membership[]
@@ -55,11 +72,36 @@ model Property {
   nightlyPrice  Decimal      @db.Decimal(10, 2)
   currency      String       @default("EUR")
   description   String?
+  /// Si es `false`, la propiedad se conserva pero se trata como archivada
+  /// (no se muestra como activa en listados/analítica futura).
+  active        Boolean      @default(true)
+  amenities     String[]     @default([])
+  houseRules    String?
+  /// Hora local en formato "HH:mm" (ej. "15:00"). No es un horario por día
+  /// de la semana — eso pertenece a una fase futura de disponibilidad.
+  checkInTime   String?
+  checkOutTime  String?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   memberships   Membership[]
+  photos        PropertyPhoto[]
 
   @@map("properties")
+}
+
+/// Fotografía de una propiedad, subida a Supabase Storage (bucket
+/// `property-photos`). `position` controla el orden de la galería.
+model PropertyPhoto {
+  id         String   @id @default(cuid())
+  url        String
+  alt        String?
+  position   Int      @default(0)
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String
+  createdAt  DateTime @default(now())
+
+  @@index([propertyId])
+  @@map("property_photos")
 }
 
 /// Relación usuario↔propiedad con rol. Un usuario puede gestionar varias

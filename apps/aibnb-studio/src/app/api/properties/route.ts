@@ -13,6 +13,7 @@ export async function GET() {
   const properties = await prisma.property.findMany({
     where: { memberships: { some: { userId: session.user.id } } },
     orderBy: { createdAt: "desc" },
+    include: { photos: { orderBy: { position: "asc" } } },
   });
 
   return NextResponse.json({ properties: properties.map(serializeProperty) });
@@ -37,10 +38,14 @@ export async function POST(request: Request) {
     data: {
       ...parsed.data,
       description: parsed.data.description || null,
+      houseRules: parsed.data.houseRules || null,
+      checkInTime: parsed.data.checkInTime || null,
+      checkOutTime: parsed.data.checkOutTime || null,
       memberships: {
         create: { userId: session.user.id, role: "OWNER" },
       },
     },
+    include: { photos: true },
   });
 
   return NextResponse.json({ property: serializeProperty(property) }, { status: 201 });

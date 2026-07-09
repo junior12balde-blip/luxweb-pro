@@ -8,13 +8,15 @@ Vive dentro del monorepo `luxweb-pro`, en `apps/aibnb-studio/`, como proyecto
 independiente de LuxWeb Pro (la agencia de sitios web, en la raíz del repo).
 
 Ver [`DEVELOPMENT_PLAN.md`](./DEVELOPMENT_PLAN.md) para el plan completo de
-fases y [`PHASE-1.md`](./PHASE-1.md) para el detalle de lo implementado en la
-Fase 1 y cómo probarlo.
+fases, [`ARCHITECTURE.md`](./ARCHITECTURE.md) para las decisiones de
+arquitectura y los puntos de extensión de las fases futuras, y
+[`PHASE-1.md`](./PHASE-1.md) / [`PHASE-2.md`](./PHASE-2.md) para el detalle
+de lo implementado en cada fase y cómo probarlo.
 
 ## Stack
 
 Next.js 15 (App Router) · TypeScript · Tailwind CSS · Supabase (Auth +
-Postgres) · Prisma · Docker (Postgres local) · Vitest.
+Postgres + Storage) · Prisma · Docker (Postgres local) · Vitest.
 
 ## Empezar
 
@@ -24,7 +26,7 @@ npm install
 cp .env.example .env.local   # rellenar según la sección "Configuración"
 docker compose up -d          # Postgres local
 npm run db:generate
-npm run db:migrate            # crea las tablas
+npm run db:migrate            # aplica las migraciones versionadas
 npm run db:seed               # datos de ejemplo (opcional)
 npm run dev
 ```
@@ -44,12 +46,17 @@ Copiar `.env.example` a `.env.local` y rellenar:
   funcionen (sin esto, las páginas cargan pero las llamadas a Supabase
   fallarán).
 - `SUPABASE_SERVICE_ROLE_KEY` — **Settings → API → `service_role`**. Clave
-  privada, no usada todavía en la Fase 1 pero reservada para operaciones de
-  servidor futuras. Nunca exponerla al cliente.
+  privada, reservada para operaciones de servidor futuras. Nunca exponerla
+  al cliente.
+- Buckets de Supabase Storage (`avatars`, `property-photos`) — necesarios
+  para subir foto de perfil y fotos de propiedad (Fase 2). SQL de creación
+  y políticas de RLS en [`PHASE-2.md`](./PHASE-2.md).
+- `NEXT_PUBLIC_SITE_URL` (opcional) — ver `.env.example`.
 
-Las claves de IA (Anthropic/OpenAI/Google), Higgsfield y Stripe **no son
-necesarias en la Fase 1** — se documentan y se piden en las fases donde se
-usan (ver `DEVELOPMENT_PLAN.md`).
+Las claves de IA (Anthropic/OpenAI/Google), Higgsfield y Stripe **no
+disparan ninguna llamada real todavía** — la arquitectura para conectarlas
+ya existe desde la Fase 2 (`src/lib/ai/`), pero se piden explícitamente
+solo cuando la fase que las usa de verdad llega (ver `DEVELOPMENT_PLAN.md`).
 
 ## Scripts
 
@@ -70,22 +77,31 @@ usan (ver `DEVELOPMENT_PLAN.md`).
 apps/aibnb-studio/
   src/
     app/
-      (auth)/login, (auth)/signup   → páginas de autenticación
-      auth/callback/route.ts        → callback de confirmación de email de Supabase
+      (auth)/login, signup, forgot-password, reset-password, verify-email
+      auth/callback/route.ts        → callback de Supabase (confirmación y recuperación)
       dashboard/                    → layout protegido (sidebar + topbar)
         page.tsx                    → resumen con estadísticas
-        properties/                 → listado, alta y edición de propiedades
-      api/properties/               → API REST de propiedades (CRUD)
+        properties/                 → listado, alta y edición (fotos, amenities, normas...)
+        settings/profile/           → perfil (nombre, avatar, idioma, zona horaria, notificaciones)
+        settings/integrations/      → estado de proveedores de IA + preferencia del anfitrión
+      api/properties/               → API REST de propiedades (CRUD + fotos)
+      api/settings/                 → API REST de perfil, avatar y preferencias de IA
     components/
       dashboard/                    → Sidebar, Topbar, StatCard
-      properties/                   → PropertyForm, PropertyCard, DeletePropertyButton
+      properties/                   → PropertyForm, PropertyCard, PhotoGallery, AmenitiesInput...
+      settings/                     → ProfileForm, AvatarUploader, IntegrationsForm, SettingsTabs
       ui/                           → Button, Input, Label, Card, FormError
     lib/
+      ai/                           → Provider Manager (Anthropic/OpenAI/Google) — ver ARCHITECTURE.md
       supabase/                     → clientes browser/server + middleware de sesión
       prisma.ts                     → cliente Prisma (singleton)
-      auth.ts                       → helpers de sesión (requireUser / getCurrentUser)
-      validations/                  → esquemas Zod (auth, property)
-      serializers.ts                → conversión Decimal/Date → JSON
-  prisma/schema.prisma               → User, Property, Membership
-  tests/unit/                        → Vitest
+      auth.ts / auth-errors.ts      → sesión + mensajes de error consistentes
+      properties.ts                 → comprobación de pertenencia (Membership)
+      storage.ts                    → validación de subidas a Supabase Storage
+      validations/                  → esquemas Zod (auth, profile, property, ai)
+      serializers.ts                → conversión Decimal/Date/relaciones → JSON
+  prisma/
+    schema.prisma                   → User, Property, PropertyPhoto, Membership
+    migrations/                     → migraciones versionadas
+  tests/unit/                       → Vitest (37 tests)
 ```
