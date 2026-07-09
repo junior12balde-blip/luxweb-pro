@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { FormError } from "@/components/ui/FormError";
+import { AmenitiesInput } from "@/components/properties/AmenitiesInput";
 
 const TYPE_LABELS: Record<(typeof PROPERTY_TYPES)[number], string> = {
   APARTMENT: "Apartamento",
@@ -26,6 +27,7 @@ export function PropertyForm({ property }: PropertyFormProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  const [amenities, setAmenities] = useState<string[]>(property?.amenities ?? []);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -45,6 +47,11 @@ export function PropertyForm({ property }: PropertyFormProps) {
       nightlyPrice: formData.get("nightlyPrice"),
       currency: formData.get("currency"),
       description: formData.get("description"),
+      active: formData.get("active") === "on",
+      amenities,
+      houseRules: formData.get("houseRules"),
+      checkInTime: formData.get("checkInTime"),
+      checkOutTime: formData.get("checkOutTime"),
     };
 
     const url = property ? `/api/properties/${property.id}` : "/api/properties";
@@ -177,6 +184,51 @@ export function PropertyForm({ property }: PropertyFormProps) {
           className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
         />
       </div>
+
+      <AmenitiesInput value={amenities} onChange={setAmenities} />
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="checkInTime">Check-in</Label>
+          <Input
+            id="checkInTime"
+            name="checkInTime"
+            type="time"
+            defaultValue={property?.checkInTime ?? ""}
+          />
+        </div>
+        <div>
+          <Label htmlFor="checkOutTime">Check-out</Label>
+          <Input
+            id="checkOutTime"
+            name="checkOutTime"
+            type="time"
+            defaultValue={property?.checkOutTime ?? ""}
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label htmlFor="houseRules">Normas de la casa</Label>
+        <textarea
+          id="houseRules"
+          name="houseRules"
+          rows={3}
+          defaultValue={property?.houseRules ?? ""}
+          placeholder="Ej. No fiestas, no fumar, silencio a partir de las 22:00..."
+          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
+        />
+      </div>
+
+      <label className="flex items-center gap-2 text-sm text-slate-700">
+        <input
+          type="checkbox"
+          name="active"
+          defaultChecked={property?.active ?? true}
+          className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+        />
+        Propiedad activa (visible en tus listados)
+      </label>
 
       <FormError message={error} />
 

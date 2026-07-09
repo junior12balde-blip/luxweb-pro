@@ -13,6 +13,13 @@ const eslintConfig = [
   {
     ignores: ["tests/**"],
   },
+  {
+    rules: {
+      // Los stubs de proveedores de IA (src/lib/ai/providers/*) implementan
+      // una interfaz común y reciben parámetros que aún no usan.
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    },
+  },
 ];
 
 export default eslintConfig;

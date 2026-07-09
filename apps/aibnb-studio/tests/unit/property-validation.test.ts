@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { propertySchema, propertyUpdateSchema } from "@/lib/validations/property";
+import {
+  propertySchema,
+  propertyUpdateSchema,
+  reorderPhotosSchema,
+} from "@/lib/validations/property";
 
 const validInput = {
   name: "Loft Cornavin",
@@ -58,6 +62,32 @@ describe("propertySchema", () => {
     const result = propertySchema.safeParse({ ...validInput, description: "" });
     expect(result.success).toBe(true);
   });
+
+  it("defaults active to true and amenities to an empty array", () => {
+    const result = propertySchema.parse(validInput);
+    expect(result.active).toBe(true);
+    expect(result.amenities).toEqual([]);
+  });
+
+  it("accepts a valid HH:mm check-in/check-out time", () => {
+    const result = propertySchema.safeParse({
+      ...validInput,
+      checkInTime: "15:00",
+      checkOutTime: "11:00",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a malformed check-in time", () => {
+    const result = propertySchema.safeParse({ ...validInput, checkInTime: "3pm" });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects more than 40 amenities", () => {
+    const amenities = Array.from({ length: 41 }, (_, i) => `Amenity ${i}`);
+    const result = propertySchema.safeParse({ ...validInput, amenities });
+    expect(result.success).toBe(false);
+  });
 });
 
 describe("propertyUpdateSchema", () => {
@@ -68,6 +98,18 @@ describe("propertyUpdateSchema", () => {
 
   it("still validates fields that are present", () => {
     const result = propertyUpdateSchema.safeParse({ nightlyPrice: -5 });
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("reorderPhotosSchema", () => {
+  it("accepts a non-empty list of photo ids", () => {
+    const result = reorderPhotosSchema.safeParse({ photoIds: ["a", "b", "c"] });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects an empty list", () => {
+    const result = reorderPhotosSchema.safeParse({ photoIds: [] });
     expect(result.success).toBe(false);
   });
 });
