@@ -14,6 +14,10 @@ export default async function DashboardOverviewPage({
     where: { userId: user.id },
   });
 
+  const messageCount = await prisma.message.count({
+    where: { conversation: { property: { memberships: { some: { userId: user.id } } } } },
+  });
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-slate-900">Resumen</h1>
@@ -39,11 +43,7 @@ export default async function DashboardOverviewPage({
           value="—"
           hint="Disponible en la Fase 7 (Analítica)"
         />
-        <StatCard
-          label="Mensajes automatizados"
-          value="—"
-          hint="Disponible en la Fase 3 (Asistente de IA)"
-        />
+        <StatCard label="Mensajes con huéspedes" value={String(messageCount)} />
       </div>
     </div>
   );

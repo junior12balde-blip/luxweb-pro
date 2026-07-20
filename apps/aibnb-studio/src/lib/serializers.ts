@@ -1,5 +1,11 @@
-import type { Property as PrismaProperty, PropertyPhoto as PrismaPropertyPhoto } from "@prisma/client";
+import type {
+  Property as PrismaProperty,
+  PropertyPhoto as PrismaPropertyPhoto,
+  Conversation as PrismaConversation,
+  Message as PrismaMessage,
+} from "@prisma/client";
 import type { Property } from "@/types/property";
+import type { Conversation } from "@/types/conversation";
 
 type PrismaPropertyWithPhotos = PrismaProperty & { photos?: PrismaPropertyPhoto[] };
 
@@ -19,5 +25,24 @@ export function serializeProperty(property: PrismaPropertyWithPhotos): Property 
         alt: photo.alt,
         position: photo.position,
       })),
+  };
+}
+
+type PrismaConversationWithMessages = PrismaConversation & { messages: PrismaMessage[] };
+
+export function serializeConversation(conversation: PrismaConversationWithMessages): Conversation {
+  return {
+    id: conversation.id,
+    guestName: conversation.guestName,
+    status: conversation.status,
+    createdAt: conversation.createdAt.toISOString(),
+    updatedAt: conversation.updatedAt.toISOString(),
+    messages: conversation.messages.map((message) => ({
+      id: message.id,
+      sender: message.sender,
+      content: message.content,
+      isStyleExample: message.isStyleExample,
+      createdAt: message.createdAt.toISOString(),
+    })),
   };
 }

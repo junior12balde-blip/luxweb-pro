@@ -31,6 +31,8 @@ export interface Property {
   houseRules: string | null;
   checkInTime: string | null;
   checkOutTime: string | null;
+  aiAssistantEnabled: boolean;
+  aiAssistantTone: string | null;
   photos: PropertyPhoto[];
   createdAt: string;
   updatedAt: string;

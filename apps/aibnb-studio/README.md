@@ -10,8 +10,9 @@ independiente de LuxWeb Pro (la agencia de sitios web, en la raíz del repo).
 Ver [`DEVELOPMENT_PLAN.md`](./DEVELOPMENT_PLAN.md) para el plan completo de
 fases, [`ARCHITECTURE.md`](./ARCHITECTURE.md) para las decisiones de
 arquitectura y los puntos de extensión de las fases futuras, y
-[`PHASE-1.md`](./PHASE-1.md) / [`PHASE-2.md`](./PHASE-2.md) para el detalle
-de lo implementado en cada fase y cómo probarlo.
+[`PHASE-1.md`](./PHASE-1.md) / [`PHASE-2.md`](./PHASE-2.md) /
+[`PHASE-3.md`](./PHASE-3.md) para el detalle de lo implementado en cada
+fase y cómo probarlo.
 
 ## Stack
 
@@ -53,10 +54,16 @@ Copiar `.env.example` a `.env.local` y rellenar:
   y políticas de RLS en [`PHASE-2.md`](./PHASE-2.md).
 - `NEXT_PUBLIC_SITE_URL` (opcional) — ver `.env.example`.
 
-Las claves de IA (Anthropic/OpenAI/Google), Higgsfield y Stripe **no
-disparan ninguna llamada real todavía** — la arquitectura para conectarlas
-ya existe desde la Fase 2 (`src/lib/ai/`), pero se piden explícitamente
-solo cuando la fase que las usa de verdad llega (ver `DEVELOPMENT_PLAN.md`).
+- `ANTHROPIC_API_KEY` — **necesaria desde la Fase 3** para que el botón
+  "Sugerir respuesta" del asistente de huéspedes funcione. Crear en
+  [console.anthropic.com](https://console.anthropic.com/) → API Keys. Sin
+  ella, la app funciona igual pero ese botón muestra un error claro
+  ("proveedor no configurado") en vez de fallar de forma confusa.
+
+Las claves de OpenAI/Google, Higgsfield y Stripe **no disparan ninguna
+llamada real todavía** — la arquitectura para conectarlas ya existe desde
+la Fase 2 (`src/lib/ai/`), pero se piden explícitamente solo cuando la
+fase que las usa de verdad llega (ver `DEVELOPMENT_PLAN.md`).
 
 ## Scripts
 
@@ -84,24 +91,26 @@ apps/aibnb-studio/
         properties/                 → listado, alta y edición (fotos, amenities, normas...)
         settings/profile/           → perfil (nombre, avatar, idioma, zona horaria, notificaciones)
         settings/integrations/      → estado de proveedores de IA + preferencia del anfitrión
-      api/properties/               → API REST de propiedades (CRUD + fotos)
+        properties/[id]/messages/   → conversaciones con huéspedes + sugerencias de IA
+      api/properties/               → API REST de propiedades (CRUD + fotos + conversaciones/mensajes/sugerencias)
       api/settings/                 → API REST de perfil, avatar y preferencias de IA
     components/
       dashboard/                    → Sidebar, Topbar, StatCard
       properties/                   → PropertyForm, PropertyCard, PhotoGallery, AmenitiesInput...
+      messages/                     → NewConversationForm, MessageThread
       settings/                     → ProfileForm, AvatarUploader, IntegrationsForm, SettingsTabs
       ui/                           → Button, Input, Label, Card, FormError
     lib/
-      ai/                           → Provider Manager (Anthropic/OpenAI/Google) — ver ARCHITECTURE.md
+      ai/                           → Provider Manager + guestAssistant.ts (Fase 3) — ver ARCHITECTURE.md
       supabase/                     → clientes browser/server + middleware de sesión
       prisma.ts                     → cliente Prisma (singleton)
       auth.ts / auth-errors.ts      → sesión + mensajes de error consistentes
-      properties.ts                 → comprobación de pertenencia (Membership)
+      properties.ts / conversations.ts → comprobación de pertenencia (Membership) y de conversaciones
       storage.ts                    → validación de subidas a Supabase Storage
-      validations/                  → esquemas Zod (auth, profile, property, ai)
+      validations/                  → esquemas Zod (auth, profile, property, ai, conversation)
       serializers.ts                → conversión Decimal/Date/relaciones → JSON
   prisma/
-    schema.prisma                   → User, Property, PropertyPhoto, Membership
+    schema.prisma                   → User, Property, PropertyPhoto, Membership, Conversation, Message
     migrations/                     → migraciones versionadas
-  tests/unit/                       → Vitest (37 tests)
+  tests/unit/                       → Vitest (47 tests)
 ```

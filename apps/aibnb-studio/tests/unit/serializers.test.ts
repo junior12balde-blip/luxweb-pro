@@ -20,6 +20,8 @@ const baseProperty = {
   houseRules: null,
   checkInTime: "15:00",
   checkOutTime: "11:00",
+  aiAssistantEnabled: false,
+  aiAssistantTone: null,
   createdAt: new Date("2026-01-01T00:00:00.000Z"),
   updatedAt: new Date("2026-01-02T00:00:00.000Z"),
 };

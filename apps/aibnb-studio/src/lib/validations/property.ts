@@ -79,6 +79,13 @@ export const propertySchema = z.object({
     .or(z.literal("")),
   checkInTime: timeSchema,
   checkOutTime: timeSchema,
+  aiAssistantEnabled: z.boolean().default(false),
+  aiAssistantTone: z
+    .string()
+    .trim()
+    .max(300, "El tono no puede superar 300 caracteres")
+    .optional()
+    .or(z.literal("")),
 });
 
 export type PropertyInput = z.infer<typeof propertySchema>;

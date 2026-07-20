@@ -59,6 +59,8 @@ export async function PATCH(
         parsed.data.checkInTime === undefined ? undefined : parsed.data.checkInTime || null,
       checkOutTime:
         parsed.data.checkOutTime === undefined ? undefined : parsed.data.checkOutTime || null,
+      aiAssistantTone:
+        parsed.data.aiAssistantTone === undefined ? undefined : parsed.data.aiAssistantTone || null,
     },
     include: { photos: { orderBy: { position: "asc" } } },
   });

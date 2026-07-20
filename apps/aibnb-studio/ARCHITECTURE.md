@@ -1,10 +1,10 @@
 # Arquitectura de AIbnb Studio
 
 Este documento describe las decisiones de arquitectura vigentes y, sobre
-todo, **los puntos de extensión pensados para que las Fases 3-9 se
+todo, **los puntos de extensión pensados para que las Fases 4-9 se
 conecten sin reescribir lo ya construido**. Para el detalle de qué se
-implementó en cada fase, ver `PHASE-1.md` / `PHASE-2.md`. Para el plan de
-fases completo, ver `DEVELOPMENT_PLAN.md`.
+implementó en cada fase, ver `PHASE-1.md` / `PHASE-2.md` / `PHASE-3.md`.
+Para el plan de fases completo, ver `DEVELOPMENT_PLAN.md`.
 
 ## Capas
 
@@ -35,28 +35,33 @@ src/lib/ai/
   errors.ts            AIProviderNotConfiguredError, AIProviderNotImplementedError
   providerManager.ts   registro + resolveProvider(preferencia) + getDefaultProviderId()
   providers/
-    anthropic.ts       implementa AIProvider (stub en Fase 2)
-    openai.ts          implementa AIProvider (stub en Fase 2)
-    google.ts          implementa AIProvider (stub en Fase 2)
+    anthropic.ts       implementa AIProvider — llamada real (Fase 3, @anthropic-ai/sdk, modelo claude-opus-4-8)
+    openai.ts          implementa AIProvider (stub — no activado, nadie lo ha pedido)
+    google.ts          implementa AIProvider (stub — no activado, nadie lo ha pedido)
+  guestAssistant.ts    dominio de la Fase 3: construcción del prompt (property + tono + few-shot) y suggestReply()
 ```
 
-**Cómo se conectará la Fase 3 (Asistente de IA para huéspedes) sin tocar el
-resto de la app:**
+**Cómo se conectó la Fase 3 (Asistente de IA para huéspedes) sin tocar el
+resto de la app — ya hecho, como referencia del patrón:**
 
-1. Implementar de verdad `generateText()` en `providers/anthropic.ts`
-   (llamada real al SDK de Anthropic), quitando el
-   `throw new AIProviderNotImplementedError(...)`. Los otros proveedores
-   pueden implementarse en paralelo o dejarse como stub — el resto del
-   código no lo nota porque programa contra la interfaz `AIProvider`.
-2. Añadir `Conversation` / `Message` a `prisma/schema.prisma`, cada uno con
-   `propertyId` (FK a `Property`, ya existente).
-3. La UI de sugerencia/respuesta llama a
+1. Se implementó `generateText()` de verdad en `providers/anthropic.ts`
+   (SDK oficial de Anthropic), quitando el
+   `throw new AIProviderNotImplementedError(...)`. `openai.ts` y
+   `google.ts` siguen como stubs — el resto del código no lo nota porque
+   programa contra la interfaz `AIProvider`.
+2. Se añadieron `Conversation` / `Message` a `prisma/schema.prisma`, cada
+   uno colgando de `propertyId` (FK a `Property`, ya existente).
+3. `src/lib/ai/guestAssistant.ts` llama a
    `providerManager.resolveProvider(user.aiPreferences.defaultProvider)`
    y luego a `.generateText(...)` — ni la UI ni la API route necesitan
    saber qué proveedor es.
-4. La página `/dashboard/settings/integrations` (Fase 2) ya expone qué
-   proveedor está configurado y cuál prefiere el anfitrión — se reutiliza
+4. La página `/dashboard/settings/integrations` (Fase 2) ya exponía qué
+   proveedor está configurado y cuál prefiere el anfitrión — se reutilizó
    sin cambios.
+
+El mismo patrón (interfaz común + Provider Manager + módulo de dominio que
+construye el prompt) es el que debe seguir la Fase 4 (generador de
+anuncios) y cualquier fase futura que necesite IA de texto.
 
 **Cómo añadir un proveedor nuevo (p. ej. Mistral) en cualquier fase
 futura:**
@@ -71,7 +76,6 @@ Ningún otro archivo cambia — ese es el punto del Provider Manager.
 
 | Fase | Qué añade | Dónde se conecta (ya existe) |
 |---|---|---|
-| 3 — Asistente de IA | `Conversation`/`Message` (Prisma), llamadas reales en `providers/*` | `providerManager`, `Property.id`, `User.aiPreferences` |
 | 4 — Generador de anuncios | `ListingDraft` (Prisma, FK a `Property`), usa `providerManager.resolveProvider(...).generateText(...)` para título/descripción/SEO | `providerManager`, formularios de `properties/` |
 | 5 — Vídeos (Higgsfield) | `MediaGeneration` (Prisma: tipo `VIDEO`, estado `pending/processing/ready/failed`, FK a `Property`) + cola de trabajo | `PropertyPhoto` ya establece el patrón "media con `propertyId` + `position`"; se puede generalizar o añadir un modelo hermano |
 | 6 — Generador de imágenes | Mismo modelo `MediaGeneration` que la Fase 5 con tipo `IMAGE`, reutilizando la misma cola | igual que arriba |
