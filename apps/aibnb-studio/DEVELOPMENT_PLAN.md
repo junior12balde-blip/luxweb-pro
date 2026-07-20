@@ -68,16 +68,20 @@ Estructura del monorepo, plan de fases, decisiones de arquitectura.
 - **Estado: hecho** (PR #2 — ver `PHASE-2.md`).
 
 ### Fase 3 — Asistente de IA para huéspedes
-- Modelo `Conversation` / `Message` en Prisma (FK a `Property`).
-- Implementación real de `generateText()` en `src/lib/ai/providers/*`
-  (sustituye el stub de la Fase 2), seleccionado vía Provider Manager.
-- Sugerencia de respuestas + respuesta automática configurable por el
-  anfitrión (tono, idioma, reglas).
-- Detección de idioma del huésped y respuesta en el mismo idioma.
-- "Aprendizaje del estilo": el anfitrión marca respuestas pasadas como
+- Modelo `Conversation` / `Message` en Prisma (FK a `Property`); campos
+  `Property.aiAssistantEnabled` / `aiAssistantTone`.
+- Implementación real de `generateText()` en `src/lib/ai/providers/anthropic.ts`
+  (sustituye el stub de la Fase 2, vía SDK oficial `@anthropic-ai/sdk`),
+  seleccionado a través del Provider Manager.
+- Sugerencia de respuestas (revisada y confirmada por el anfitrión antes de
+  guardarse como enviada — sin canal externo conectado todavía, ver
+  `PHASE-3.md`).
+- Detección de idioma del huésped y respuesta en el mismo idioma (delegada
+  en el propio modelo vía system prompt).
+- "Aprendizaje del estilo": el anfitrión marca mensajes propios como
   ejemplo de su estilo; se usan como *few-shot examples* en el prompt.
-- Requiere que definas `ANTHROPIC_API_KEY` y/o `OPENAI_API_KEY` (ya
-  soportadas por la arquitectura desde la Fase 2 — ver sección APIs abajo).
+- Requiere que definas `ANTHROPIC_API_KEY` (ver sección APIs abajo).
+- **Estado: hecho** (PR #3 — ver `PHASE-3.md`).
 
 ### Fase 4 — Generador de anuncios
 - Modelo `ListingDraft` (Prisma, FK a `Property`) con historial de versiones.
@@ -137,9 +141,9 @@ correspondiente las necesite. Cuando llegue el momento, se indicará aquí y en
 | `DATABASE_URL` / `DIRECT_URL` | Conexión Postgres para Prisma (pooler / directa) | Supabase → Settings → Database → Connection string | 1 |
 | `NEXT_PUBLIC_SITE_URL` | URL pública del sitio, para los enlaces de los emails de Supabase | Tu dominio de producción (opcional; sin ella se deriva de la petición) | 2 |
 | `AI_DEFAULT_PROVIDER` | Proveedor de IA por defecto de la instancia (no secreta) | `anthropic` \| `openai` \| `google` | 2 |
-| `ANTHROPIC_API_KEY` | Respuestas IA a huéspedes / generación de anuncios (Claude) | https://console.anthropic.com/ → API Keys | arquitectura lista desde la 2; primer uso real en la 3 |
-| `OPENAI_API_KEY` | Alternativa/fallback de proveedor de IA de texto | https://platform.openai.com/api-keys | arquitectura lista desde la 2; primer uso real en la 3 |
-| `GOOGLE_AI_API_KEY` | Alternativa adicional de proveedor de IA de texto (Gemini) | https://aistudio.google.com/apikey | arquitectura lista desde la 2; primer uso real en la 3 |
+| `ANTHROPIC_API_KEY` | Respuestas IA a huéspedes (Claude) — **en uso real desde la Fase 3** | https://console.anthropic.com/ → API Keys | 3 |
+| `OPENAI_API_KEY` | Alternativa de proveedor de IA de texto (arquitectura lista, no activada) | https://platform.openai.com/api-keys | arquitectura lista desde la 2 |
+| `GOOGLE_AI_API_KEY` | Alternativa adicional de proveedor de IA de texto (Gemini; arquitectura lista, no activada) | https://aistudio.google.com/apikey | arquitectura lista desde la 2 |
 | Supabase Storage (buckets `avatars`, `property-photos`) | Fotos de perfil y de propiedad | SQL de configuración en `PHASE-2.md` | 2 |
 | Higgsfield (vídeo) | Generación de vídeos cinematográficos y verticales | Ya disponible como servidor MCP en este entorno; en producción, ver https://higgsfield.ai para credenciales de API equivalentes | 5 |
 | Proveedor de imágenes | Fotos promocionales, banners | A decidir en Fase 6 | 6 |
@@ -163,8 +167,8 @@ apps/
     docker-compose.yml
     .env.example
     DEVELOPMENT_PLAN.md        (este archivo)
-    ARCHITECTURE.md            (puntos de extensión para las Fases 3+)
-    PHASE-1.md / PHASE-2.md    (detalle + cómo probar cada fase)
+    ARCHITECTURE.md            (puntos de extensión para las Fases 4+)
+    PHASE-1.md / PHASE-2.md / PHASE-3.md    (detalle + cómo probar cada fase)
     README.md
 .github/workflows/aibnb-studio-ci.yml
 ```

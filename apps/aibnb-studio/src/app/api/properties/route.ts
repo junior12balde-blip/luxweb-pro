@@ -41,6 +41,7 @@ export async function POST(request: Request) {
       houseRules: parsed.data.houseRules || null,
       checkInTime: parsed.data.checkInTime || null,
       checkOutTime: parsed.data.checkOutTime || null,
+      aiAssistantTone: parsed.data.aiAssistantTone || null,
       memberships: {
         create: { userId: session.user.id, role: "OWNER" },
       },

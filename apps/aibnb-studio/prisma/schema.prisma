@@ -1,8 +1,9 @@
 // Esquema de la Fase 1 (usuarios, propiedades, membresías) + Fase 2 (perfil
-// de usuario, propiedades avanzadas con fotos). Fases posteriores añadirán
-// Conversation/Message (Fase 3 — asistente IA), ListingDraft (Fase 3 —
-// generador de anuncios), MediaGeneration (Fases 4-5 — vídeo/imagen),
-// Automation (Fase 6), todas referenciando Property.id por FK.
+// de usuario, propiedades avanzadas con fotos) + Fase 3 (asistente de IA
+// para huéspedes: Conversation/Message). Fases posteriores añadirán
+// ListingDraft (Fase 4 — generador de anuncios), MediaGeneration
+// (Fases 5-6 — vídeo/imagen), Automation (Fase 7), todas referenciando
+// Property.id por FK.
 
 generator client {
   provider = "prisma-client-js"
@@ -27,6 +28,17 @@ enum MembershipRole {
   OWNER
   EDITOR
   VIEWER
+}
+
+enum ConversationStatus {
+  OPEN
+  CLOSED
+}
+
+enum MessageSender {
+  GUEST
+  HOST
+  ASSISTANT
 }
 
 /// Usuario de la aplicación. Se crea automáticamente en el primer login a
@@ -81,12 +93,57 @@ model Property {
   /// de la semana — eso pertenece a una fase futura de disponibilidad.
   checkInTime   String?
   checkOutTime  String?
+  /// Activa el asistente de IA (sugerencia de respuestas) para esta
+  /// propiedad. Apagado por defecto — el anfitrión debe activarlo a
+  /// propósito.
+  aiAssistantEnabled Boolean @default(false)
+  /// Descripción libre del tono deseado (ej. "cercano y profesional, con
+  /// algo de humor"), usada como instrucción del sistema al generar
+  /// sugerencias. `null` usa un tono neutro por defecto.
+  aiAssistantTone    String?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   memberships   Membership[]
   photos        PropertyPhoto[]
+  conversations Conversation[]
 
   @@map("properties")
+}
+
+/// Hilo de mensajes con un huésped de una propiedad. En esta fase no hay
+/// integración con ningún canal externo (Airbnb/email/WhatsApp): el
+/// anfitrión registra manualmente los mensajes del huésped.
+model Conversation {
+  id          String             @id @default(cuid())
+  property    Property           @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId  String
+  guestName   String?
+  status      ConversationStatus @default(OPEN)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  messages    Message[]
+
+  @@index([propertyId])
+  @@map("conversations")
+}
+
+/// Un mensaje dentro de una Conversation. `ASSISTANT` son sugerencias
+/// generadas por IA que el anfitrión aún no ha confirmado como enviadas;
+/// al confirmarlas se guardan como un mensaje `HOST` nuevo.
+model Message {
+  id             String        @id @default(cuid())
+  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  sender         MessageSender
+  content        String
+  /// El anfitrión marcó este mensaje (solo tiene sentido si sender = HOST)
+  /// como ejemplo de su estilo de escritura — se usa como *few-shot
+  /// example* al generar sugerencias futuras en la misma propiedad.
+  isStyleExample Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+
+  @@index([conversationId])
+  @@map("messages")
 }
 
 /// Fotografía de una propiedad, subida a Supabase Storage (bucket

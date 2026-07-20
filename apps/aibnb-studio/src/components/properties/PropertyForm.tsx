@@ -52,6 +52,8 @@ export function PropertyForm({ property }: PropertyFormProps) {
       houseRules: formData.get("houseRules"),
       checkInTime: formData.get("checkInTime"),
       checkOutTime: formData.get("checkOutTime"),
+      aiAssistantEnabled: formData.get("aiAssistantEnabled") === "on",
+      aiAssistantTone: formData.get("aiAssistantTone"),
     };
 
     const url = property ? `/api/properties/${property.id}` : "/api/properties";
@@ -229,6 +231,30 @@ export function PropertyForm({ property }: PropertyFormProps) {
         />
         Propiedad activa (visible en tus listados)
       </label>
+
+      <div className="rounded-lg border border-slate-200 p-4">
+        <label className="flex items-center gap-2 text-sm font-medium text-slate-900">
+          <input
+            type="checkbox"
+            name="aiAssistantEnabled"
+            defaultChecked={property?.aiAssistantEnabled ?? false}
+            className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+          />
+          Activar asistente de IA para huéspedes
+        </label>
+        <p className="mt-1 text-xs text-slate-500">
+          Sugiere respuestas a los mensajes de tus huéspedes. Tú siempre revisas y confirmas antes de que se registre como enviada.
+        </p>
+        <div className="mt-3">
+          <Label htmlFor="aiAssistantTone">Tono deseado (opcional)</Label>
+          <Input
+            id="aiAssistantTone"
+            name="aiAssistantTone"
+            placeholder="Ej. cercano y profesional, con algo de humor"
+            defaultValue={property?.aiAssistantTone ?? ""}
+          />
+        </div>
+      </div>
 
       <FormError message={error} />
 
