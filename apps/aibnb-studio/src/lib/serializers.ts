@@ -4,10 +4,12 @@ import type {
   Conversation as PrismaConversation,
   Message as PrismaMessage,
   ListingDraft as PrismaListingDraft,
+  MediaGeneration as PrismaMediaGeneration,
 } from "@prisma/client";
 import type { Property } from "@/types/property";
 import type { Conversation } from "@/types/conversation";
 import type { ListingDraft } from "@/types/listing";
+import type { MediaGeneration } from "@/types/media";
 
 type PrismaPropertyWithPhotos = PrismaProperty & { photos?: PrismaPropertyPhoto[] };
 
@@ -60,5 +62,19 @@ export function serializeListingDraft(draft: PrismaListingDraft): ListingDraft {
     model: draft.model,
     isApplied: draft.isApplied,
     createdAt: draft.createdAt.toISOString(),
+  };
+}
+
+export function serializeMediaGeneration(generation: PrismaMediaGeneration): MediaGeneration {
+  return {
+    id: generation.id,
+    type: generation.type,
+    status: generation.status,
+    prompt: generation.prompt,
+    provider: generation.provider,
+    model: generation.model,
+    resultUrl: generation.resultUrl,
+    errorMessage: generation.errorMessage,
+    createdAt: generation.createdAt.toISOString(),
   };
 }

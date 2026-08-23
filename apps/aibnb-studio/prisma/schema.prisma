@@ -1,8 +1,10 @@
 // Esquema de la Fase 1 (usuarios, propiedades, membresías) + Fase 2 (perfil
 // de usuario, propiedades avanzadas con fotos) + Fase 3 (asistente de IA
 // para huéspedes: Conversation/Message) + Fase 4 (generador de anuncios:
-// ListingDraft). Fases posteriores añadirán MediaGeneration (Fases 5-6 —
-// vídeo/imagen), Automation (Fase 7), todas referenciando Property.id por FK.
+// ListingDraft) + Fase 5 (generador de vídeos: MediaGeneration). Fases
+// posteriores añadirán Automation (Fase 7), referenciando Property.id por FK.
+// MediaGeneration ya está preparado para tipo IMAGE (Fase 6) reutilizando
+// el mismo modelo y la misma cola de estado.
 
 generator client {
   provider = "prisma-client-js"
@@ -38,6 +40,18 @@ enum MessageSender {
   GUEST
   HOST
   ASSISTANT
+}
+
+enum MediaType {
+  VIDEO
+  IMAGE
+}
+
+enum MediaGenerationStatus {
+  PENDING
+  PROCESSING
+  READY
+  FAILED
 }
 
 /// Usuario de la aplicación. Se crea automáticamente en el primer login a
@@ -106,8 +120,36 @@ model Property {
   photos        PropertyPhoto[]
   conversations Conversation[]
   listingDrafts ListingDraft[]
+  mediaGenerations MediaGeneration[]
 
   @@map("properties")
+}
+
+/// Un vídeo (Fase 5) o imagen (Fase 6, mismo modelo con `type: IMAGE`)
+/// generado por IA para una propiedad. La generación es asíncrona: se crea
+/// en `PENDING`, pasa a `PROCESSING` al confirmar el proveedor que empezó a
+/// trabajar, y termina en `READY` (con `resultUrl`) o `FAILED` (con
+/// `errorMessage`). `providerJobId` es el identificador que da el
+/// proveedor (ej. el nombre de la operación de Veo) para poder consultar
+/// su estado más tarde.
+model MediaGeneration {
+  id            String                 @id @default(cuid())
+  property      Property               @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId    String
+  type          MediaType
+  status        MediaGenerationStatus  @default(PENDING)
+  prompt        String
+  /// Proveedor y modelo que generan este medio (ej. "google" / "veo-3.0-generate-001").
+  provider      String
+  model         String
+  providerJobId String?
+  resultUrl     String?
+  errorMessage  String?
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+
+  @@index([propertyId])
+  @@map("media_generations")
 }
 
 /// Versión generada (o editada) de la copia del anuncio de una propiedad:
