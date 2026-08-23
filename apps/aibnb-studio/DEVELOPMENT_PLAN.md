@@ -35,7 +35,7 @@ LuxWeb Pro (que sigue intacto en la raíz del repo).
 | Contenedores | Docker / docker-compose (Postgres local) |
 | CI/CD | GitHub Actions |
 | IA texto | Anthropic API / OpenAI API / Google AI, vía Provider Manager |
-| IA vídeo | Higgsfield (Fase 5) |
+| IA vídeo | Google Gemini API (Veo), vía `@google/genai` (Fase 5 — cambiado de Higgsfield, ver `PHASE-5.md`) |
 | IA imagen | A definir en la Fase 6 |
 
 ## Fases
@@ -97,18 +97,29 @@ Estructura del monorepo, plan de fases, decisiones de arquitectura.
 - No requiere ninguna clave nueva — reutiliza `ANTHROPIC_API_KEY`.
 - **Estado: hecho** (PR #4 — ver `PHASE-4.md`).
 
-### Fase 5 — Generador de vídeos (Higgsfield)
-- Integración con Higgsfield para vídeos cinematográficos, verticales
-  (TikTok/Reels/Shorts) y anuncios publicitarios automáticos.
-- Modelo `MediaGeneration` (Prisma, FK a `Property`) con cola y estado
-  (`pending`, `processing`, `ready`, `failed`).
-- Requiere: acceso a Higgsfield (ya disponible como MCP en este entorno de
-  desarrollo; en producción se documentará el endpoint/API key equivalente).
+### Fase 5 — Generador de vídeos (Google Gemini/Veo)
+- Proveedor cambiado de Higgsfield a **Google Gemini API (Veo)** por
+  decisión explícita del cliente — ver `PHASE-5.md` para el detalle.
+- Modelo `MediaGeneration` (Prisma, FK a `Property`) con estado
+  (`PENDING`, `PROCESSING`, `READY`, `FAILED`) — reutilizable para
+  imágenes en la Fase 6.
+- `src/lib/video/`: arquitectura de proveedores de vídeo separada de la de
+  texto (trabajo asíncrono con sondeo, no una llamada síncrona), con SDK
+  oficial `@google/genai` verificado directamente contra sus tipos
+  TypeScript instalados.
+- Vídeos cinematográficos (16:9) y verticales (9:16, TikTok/Reels/Shorts).
+- Sondeo de estado desde el navegador cada 10s — sin *worker* en segundo
+  plano, apto para despliegue serverless.
+- Requiere: `GOOGLE_AI_API_KEY` (ver sección APIs abajo).
+- **Estado: hecho** (PR #5 — ver `PHASE-5.md`).
 
 ### Fase 6 — Generador de imágenes
 - Fotos promocionales, imágenes para redes sociales, banners.
-- Reutiliza el modelo `MediaGeneration` de la Fase 5 (tipo `IMAGE`).
-- Requiere: proveedor de generación de imágenes (a decidir en esta fase).
+- Reutiliza el modelo `MediaGeneration` de la Fase 5 (tipo `IMAGE`) y muy
+  probablemente `src/lib/video/` como plantilla de arquitectura (o su
+  equivalente para imágenes sin sondeo, al ser síncrono).
+- Requiere: proveedor de generación de imágenes (a decidir en esta fase —
+  candidato natural: mismo SDK `@google/genai`, modelos Imagen).
 
 ### Fase 7 — Automatizaciones
 - Programación de mensajes (check-in, check-out, bienvenida), recordatorios,
@@ -151,9 +162,9 @@ correspondiente las necesite. Cuando llegue el momento, se indicará aquí y en
 | `AI_DEFAULT_PROVIDER` | Proveedor de IA por defecto de la instancia (no secreta) | `anthropic` \| `openai` \| `google` | 2 |
 | `ANTHROPIC_API_KEY` | Respuestas IA a huéspedes (Claude) — **en uso real desde la Fase 3** | https://console.anthropic.com/ → API Keys | 3 |
 | `OPENAI_API_KEY` | Alternativa de proveedor de IA de texto (arquitectura lista, no activada) | https://platform.openai.com/api-keys | arquitectura lista desde la 2 |
-| `GOOGLE_AI_API_KEY` | Alternativa adicional de proveedor de IA de texto (Gemini; arquitectura lista, no activada) | https://aistudio.google.com/apikey | arquitectura lista desde la 2 |
-| Supabase Storage (buckets `avatars`, `property-photos`) | Fotos de perfil y de propiedad | SQL de configuración en `PHASE-2.md` | 2 |
-| Higgsfield (vídeo) | Generación de vídeos cinematográficos y verticales | Ya disponible como servidor MCP en este entorno; en producción, ver https://higgsfield.ai para credenciales de API equivalentes | 5 |
+| `GOOGLE_AI_API_KEY` | Alternativa de proveedor de IA de texto (arquitectura lista, no activada) **y generación real de vídeo (Veo) desde la Fase 5** | https://aistudio.google.com/apikey | texto: arquitectura lista desde la 2; vídeo: en uso real desde la 5 |
+| `GEMINI_VIDEO_MODEL` | Fijar una versión de Veo distinta a la por defecto (no secreta, opcional) | `veo-2.0-generate-001` u otra vigente | 5 |
+| Supabase Storage (buckets `avatars`, `property-photos`, `generated-videos`) | Fotos de perfil, de propiedad y vídeos generados | SQL de configuración en `PHASE-2.md` / `PHASE-5.md` | 2 / 5 |
 | Proveedor de imágenes | Fotos promocionales, banners | A decidir en Fase 6 | 6 |
 | `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` / `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Pagos y suscripciones | https://dashboard.stripe.com/apikeys y https://dashboard.stripe.com/webhooks | 9 |
 

@@ -1,10 +1,11 @@
 # Arquitectura de AIbnb Studio
 
 Este documento describe las decisiones de arquitectura vigentes y, sobre
-todo, **los puntos de extensión pensados para que las Fases 5-9 se
+todo, **los puntos de extensión pensados para que las Fases 6-9 se
 conecten sin reescribir lo ya construido**. Para el detalle de qué se
 implementó en cada fase, ver `PHASE-1.md` / `PHASE-2.md` / `PHASE-3.md` /
-`PHASE-4.md`. Para el plan de fases completo, ver `DEVELOPMENT_PLAN.md`.
+`PHASE-4.md` / `PHASE-5.md`. Para el plan de fases completo, ver
+`DEVELOPMENT_PLAN.md`.
 
 ## Capas
 
@@ -12,7 +13,8 @@ implementó en cada fase, ver `PHASE-1.md` / `PHASE-2.md` / `PHASE-3.md` /
 src/app/            Rutas (App Router): páginas + Route Handlers (API)
 src/components/      UI, organizada por dominio (dashboard/, properties/, settings/, ui/)
 src/lib/             Lógica de dominio y clientes de infraestructura
-  ai/                Arquitectura de proveedores de IA (ver abajo)
+  ai/                Arquitectura de proveedores de IA de texto (ver abajo)
+  video/             Arquitectura de proveedores de vídeo (Fase 5, ver abajo)
   supabase/          Clientes de Supabase (browser/server/middleware)
   validations/       Esquemas Zod — única fuente de verdad de "qué es válido"
   auth.ts            Sesión + upsert de usuario de dominio a partir de Supabase Auth
@@ -79,20 +81,52 @@ futura:**
 
 Ningún otro archivo cambia — ese es el punto del Provider Manager.
 
+## Arquitectura de proveedores de vídeo (Fase 5)
+
+```
+src/lib/video/
+  types.ts                  VideoProvider, VideoJobHandle, VideoJobResult, GenerateVideoParams
+  errors.ts                 VideoProviderNotConfiguredError
+  providers/
+    google.ts                implementa VideoProvider — llamada real a Google Gemini API
+                              (modelos Veo) vía el SDK oficial @google/genai
+  videoProviderManager.ts    registro + resolveVideoProvider(), mismo patrón que providerManager.ts
+  propertyVideoGenerator.ts  dominio: construye el prompt a partir de la propiedad y
+                              orquesta el inicio de la generación
+```
+
+Deliberadamente **no** es el mismo Provider Manager que `src/lib/ai/`: la
+generación de vídeo es un trabajo asíncrono de varios minutos con sondeo de
+estado (`isConfigured` / `startGeneration` / `checkStatus`), mientras que la
+generación de texto es una llamada síncrona (`generateText`) — forzar la
+misma interfaz habría sido una abstracción incorrecta. Ambas comparten el
+mismo principio: el dominio y la API solo hablan con el manager
+correspondiente, nunca con un proveedor concreto (`google.ts`) directamente.
+
+El proveedor de vídeo persiste solo `providerJobId` (el nombre de la
+operación) en `MediaGeneration.providerJobId` entre peticiones HTTP, porque
+la app es *stateless* entre peticiones — no hay proceso en segundo plano
+manteniendo el trabajo en memoria; cada consulta de estado reconstruye lo
+mínimo necesario para seguir el sondeo.
+
+**Cómo añadir un proveedor de vídeo nuevo:** igual que con `src/lib/ai/` —
+un archivo nuevo en `src/lib/video/providers/` implementando `VideoProvider`
+más una línea de registro en `videoProviderManager.ts`. Ningún otro archivo
+cambia.
+
 ## Puntos de extensión por fase futura
 
 | Fase | Qué añade | Dónde se conecta (ya existe) |
 |---|---|---|
-| 5 — Vídeos (Higgsfield) | `MediaGeneration` (Prisma: tipo `VIDEO`, estado `pending/processing/ready/failed`, FK a `Property`) + cola de trabajo | `PropertyPhoto` ya establece el patrón "media con `propertyId` + `position`"; se puede generalizar o añadir un modelo hermano |
-| 6 — Generador de imágenes | Mismo modelo `MediaGeneration` que la Fase 5 con tipo `IMAGE`, reutilizando la misma cola | igual que arriba |
+| 6 — Generador de imágenes | Mismo modelo `MediaGeneration` de la Fase 5 con tipo `IMAGE`; muy probablemente reutilizando `src/lib/video/` como plantilla de arquitectura (o su equivalente síncrono, al no requerir sondeo) | `src/lib/video/`, `MediaGeneration` |
 | 7 — Automatizaciones | `Automation`/`ScheduledMessage` (Prisma, FK a `Property`), scheduler (cron de GitHub Actions o `pg-boss` sobre el mismo Postgres — decisión pendiente, ver `DEVELOPMENT_PLAN.md`) | `notificationPrefs` de `User` (Fase 2) ya modela "qué quiere recibir el anfitrión" |
 | 8 — Analítica | Lee de `Property`, `Membership`, y de los modelos de reservas que se añadan; los `StatCard` del dashboard (Fase 1) ya tienen placeholders explícitos esperando estos datos | `src/components/dashboard/StatCard.tsx` |
 | 9 — Stripe | `Subscription`/`Plan` (Prisma, FK a `User` u organización), webhooks en `src/app/api/stripe/webhook/route.ts` (patrón ya usado por `auth/callback`) | Route Handlers existentes como plantilla |
 
 ## Multi-tenancy y permisos
 
-Todo objeto de dominio (`Property`, `Conversation`, `ListingDraft`, y en el
-futuro `MediaGeneration`, `Automation`...) cuelga de `Property.id`,
+Todo objeto de dominio (`Property`, `Conversation`, `ListingDraft`,
+`MediaGeneration`, y en el futuro `Automation`...) cuelga de `Property.id`,
 y el acceso de un usuario a una propiedad siempre se resuelve por
 `Membership` (`src/lib/properties.ts`). Esto ya soporta equipos (varios
 usuarios por propiedad, con rol `OWNER`/`EDITOR`/`VIEWER`) aunque la UI
@@ -102,18 +136,23 @@ datos.
 
 ## Almacenamiento de ficheros
 
-Todas las subidas (avatar, fotos de propiedad, y en el futuro vídeos/
-imágenes generadas) pasan por una API route propia — nunca directamente
-del navegador a Supabase Storage — para poder validar tipo/tamaño y
-comprobar pertenencia en el servidor antes de escribir. `src/lib/storage.ts`
-centraliza los nombres de bucket y esa validación; un bucket nuevo (p. ej.
-`generated-videos` en la Fase 5) sigue el mismo patrón.
+Todas las subidas (avatar, fotos de propiedad, y desde la Fase 5 los vídeos
+generados) pasan por el servidor — nunca directamente del navegador a
+Supabase Storage — para poder validar tipo/tamaño y comprobar pertenencia
+antes de escribir. `src/lib/storage.ts` centraliza los nombres de bucket y
+esa validación. El caso del bucket `generated-videos` (Fase 5) es
+ligeramente distinto al de fotos: el propio servidor descarga el vídeo
+terminado del proveedor de IA a un archivo temporal y lo sube a Storage
+él mismo (no hay subida directa del navegador en absoluto, ni siquiera
+mediada) — incluso así sigue el mismo principio de nunca confiar en el
+cliente para escribir en Storage. Un futuro bucket de imágenes (Fase 6)
+seguirá el mismo patrón.
 
 ## Por qué no hay más "preparación" que esta
 
 Se evitó a propósito añadir columnas, tablas o módulos vacíos "por si
 acaso" (p. ej. una tabla `Automation` sin ningún campo real, o un
-`videoProvider.ts` sin implementación). Cada pieza construida en la Fase 2
+`videoProvider.ts` sin implementación real). Cada pieza construida en la Fase 2
 tiene un consumidor real hoy (la preferencia de proveedor de IA se guarda y
 se lee desde `/dashboard/settings/integrations`, aunque no dispare
 llamadas). La preparación para el futuro es **arquitectónica** (interfaces,
