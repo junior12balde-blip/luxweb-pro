@@ -3,9 +3,11 @@ import type {
   PropertyPhoto as PrismaPropertyPhoto,
   Conversation as PrismaConversation,
   Message as PrismaMessage,
+  ListingDraft as PrismaListingDraft,
 } from "@prisma/client";
 import type { Property } from "@/types/property";
 import type { Conversation } from "@/types/conversation";
+import type { ListingDraft } from "@/types/listing";
 
 type PrismaPropertyWithPhotos = PrismaProperty & { photos?: PrismaPropertyPhoto[] };
 
@@ -44,5 +46,19 @@ export function serializeConversation(conversation: PrismaConversationWithMessag
       isStyleExample: message.isStyleExample,
       createdAt: message.createdAt.toISOString(),
     })),
+  };
+}
+
+export function serializeListingDraft(draft: PrismaListingDraft): ListingDraft {
+  return {
+    id: draft.id,
+    title: draft.title,
+    description: draft.description,
+    highlights: draft.highlights,
+    seoKeywords: draft.seoKeywords,
+    provider: draft.provider,
+    model: draft.model,
+    isApplied: draft.isApplied,
+    createdAt: draft.createdAt.toISOString(),
   };
 }

@@ -84,10 +84,18 @@ Estructura del monorepo, plan de fases, decisiones de arquitectura.
 - **Estado: hecho** (PR #3 — ver `PHASE-3.md`).
 
 ### Fase 4 — Generador de anuncios
-- Modelo `ListingDraft` (Prisma, FK a `Property`) con historial de versiones.
-- Generación de títulos, descripciones optimizadas y listas de servicios
-  usando el mismo Provider Manager de la Fase 2/3.
-- Sugerencias de optimización SEO (palabras clave, longitud, estructura).
+- Modelo `ListingDraft` (Prisma, FK a `Property`) con historial de versiones
+  (`isApplied` marca cuál usa el anfitrión; nunca se sobrescribe una
+  versión anterior).
+- `src/lib/ai/listingGenerator.ts`: genera título, descripción optimizada,
+  puntos destacados y palabras clave SEO, usando el mismo Provider Manager
+  de la Fase 2/3 — el modelo responde en JSON estricto (parseado y
+  validado con Zod) en vez de depender de "structured outputs" específicos
+  de un proveedor.
+- El anfitrión puede generar varias versiones, compararlas, y aplicar una
+  como descripción de la propiedad.
+- No requiere ninguna clave nueva — reutiliza `ANTHROPIC_API_KEY`.
+- **Estado: hecho** (PR #4 — ver `PHASE-4.md`).
 
 ### Fase 5 — Generador de vídeos (Higgsfield)
 - Integración con Higgsfield para vídeos cinematográficos, verticales
@@ -167,8 +175,8 @@ apps/
     docker-compose.yml
     .env.example
     DEVELOPMENT_PLAN.md        (este archivo)
-    ARCHITECTURE.md            (puntos de extensión para las Fases 4+)
-    PHASE-1.md / PHASE-2.md / PHASE-3.md    (detalle + cómo probar cada fase)
+    ARCHITECTURE.md            (puntos de extensión para las Fases 5+)
+    PHASE-1.md / PHASE-2.md / PHASE-3.md / PHASE-4.md    (detalle + cómo probar cada fase)
     README.md
 .github/workflows/aibnb-studio-ci.yml
 ```

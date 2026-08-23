@@ -32,6 +32,9 @@ export default async function EditPropertyPage({
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-slate-900">Editar propiedad</h1>
         <div className="flex gap-2">
+          <Link href={`/dashboard/properties/${property.id}/listing`}>
+            <Button variant="secondary">✨ Generador de anuncios</Button>
+          </Link>
           <Link href={`/dashboard/properties/${property.id}/messages`}>
             <Button variant="secondary">💬 Mensajes de huéspedes</Button>
           </Link>
