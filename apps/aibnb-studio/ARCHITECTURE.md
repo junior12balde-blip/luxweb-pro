@@ -1,10 +1,10 @@
 # Arquitectura de AIbnb Studio
 
 Este documento describe las decisiones de arquitectura vigentes y, sobre
-todo, **los puntos de extensión pensados para que las Fases 4-9 se
+todo, **los puntos de extensión pensados para que las Fases 5-9 se
 conecten sin reescribir lo ya construido**. Para el detalle de qué se
-implementó en cada fase, ver `PHASE-1.md` / `PHASE-2.md` / `PHASE-3.md`.
-Para el plan de fases completo, ver `DEVELOPMENT_PLAN.md`.
+implementó en cada fase, ver `PHASE-1.md` / `PHASE-2.md` / `PHASE-3.md` /
+`PHASE-4.md`. Para el plan de fases completo, ver `DEVELOPMENT_PLAN.md`.
 
 ## Capas
 
@@ -39,6 +39,7 @@ src/lib/ai/
     openai.ts          implementa AIProvider (stub — no activado, nadie lo ha pedido)
     google.ts          implementa AIProvider (stub — no activado, nadie lo ha pedido)
   guestAssistant.ts    dominio de la Fase 3: construcción del prompt (property + tono + few-shot) y suggestReply()
+  listingGenerator.ts  dominio de la Fase 4: prompt + parseo/validación del JSON de título/descripción/SEO
 ```
 
 **Cómo se conectó la Fase 3 (Asistente de IA para huéspedes) sin tocar el
@@ -59,9 +60,15 @@ resto de la app — ya hecho, como referencia del patrón:**
    proveedor está configurado y cuál prefiere el anfitrión — se reutilizó
    sin cambios.
 
-El mismo patrón (interfaz común + Provider Manager + módulo de dominio que
-construye el prompt) es el que debe seguir la Fase 4 (generador de
-anuncios) y cualquier fase futura que necesite IA de texto.
+El mismo patrón se reutilizó en la Fase 4 (`listingGenerator.ts`) sin tocar
+`providerManager.ts` ni la interfaz `AIProvider`: cuando el texto generado
+debe tener una forma concreta (título/descripción/highlights/SEO), la
+instrucción de "responde solo con este JSON" va en el prompt del módulo de
+dominio, y el propio módulo parsea y valida la respuesta con Zod — así se
+sigue funcionando con cualquier proveedor que devuelva texto plano, sin
+depender de una función de "structured output" específica de un proveedor
+concreto. Cualquier fase futura que necesite IA de texto con una forma de
+salida concreta debe seguir este mismo patrón.
 
 **Cómo añadir un proveedor nuevo (p. ej. Mistral) en cualquier fase
 futura:**
@@ -76,7 +83,6 @@ Ningún otro archivo cambia — ese es el punto del Provider Manager.
 
 | Fase | Qué añade | Dónde se conecta (ya existe) |
 |---|---|---|
-| 4 — Generador de anuncios | `ListingDraft` (Prisma, FK a `Property`), usa `providerManager.resolveProvider(...).generateText(...)` para título/descripción/SEO | `providerManager`, formularios de `properties/` |
 | 5 — Vídeos (Higgsfield) | `MediaGeneration` (Prisma: tipo `VIDEO`, estado `pending/processing/ready/failed`, FK a `Property`) + cola de trabajo | `PropertyPhoto` ya establece el patrón "media con `propertyId` + `position`"; se puede generalizar o añadir un modelo hermano |
 | 6 — Generador de imágenes | Mismo modelo `MediaGeneration` que la Fase 5 con tipo `IMAGE`, reutilizando la misma cola | igual que arriba |
 | 7 — Automatizaciones | `Automation`/`ScheduledMessage` (Prisma, FK a `Property`), scheduler (cron de GitHub Actions o `pg-boss` sobre el mismo Postgres — decisión pendiente, ver `DEVELOPMENT_PLAN.md`) | `notificationPrefs` de `User` (Fase 2) ya modela "qué quiere recibir el anfitrión" |
@@ -85,8 +91,8 @@ Ningún otro archivo cambia — ese es el punto del Provider Manager.
 
 ## Multi-tenancy y permisos
 
-Todo objeto de dominio (`Property`, y en el futuro `Conversation`,
-`ListingDraft`, `MediaGeneration`, `Automation`...) cuelga de `Property.id`,
+Todo objeto de dominio (`Property`, `Conversation`, `ListingDraft`, y en el
+futuro `MediaGeneration`, `Automation`...) cuelga de `Property.id`,
 y el acceso de un usuario a una propiedad siempre se resuelve por
 `Membership` (`src/lib/properties.ts`). Esto ya soporta equipos (varios
 usuarios por propiedad, con rol `OWNER`/`EDITOR`/`VIEWER`) aunque la UI

@@ -1,9 +1,8 @@
 // Esquema de la Fase 1 (usuarios, propiedades, membresías) + Fase 2 (perfil
 // de usuario, propiedades avanzadas con fotos) + Fase 3 (asistente de IA
-// para huéspedes: Conversation/Message). Fases posteriores añadirán
-// ListingDraft (Fase 4 — generador de anuncios), MediaGeneration
-// (Fases 5-6 — vídeo/imagen), Automation (Fase 7), todas referenciando
-// Property.id por FK.
+// para huéspedes: Conversation/Message) + Fase 4 (generador de anuncios:
+// ListingDraft). Fases posteriores añadirán MediaGeneration (Fases 5-6 —
+// vídeo/imagen), Automation (Fase 7), todas referenciando Property.id por FK.
 
 generator client {
   provider = "prisma-client-js"
@@ -106,8 +105,32 @@ model Property {
   memberships   Membership[]
   photos        PropertyPhoto[]
   conversations Conversation[]
+  listingDrafts ListingDraft[]
 
   @@map("properties")
+}
+
+/// Versión generada (o editada) de la copia del anuncio de una propiedad:
+/// título, descripción, puntos destacados y palabras clave SEO. Cada
+/// generación crea una fila nueva — nunca se sobrescribe una anterior — para
+/// conservar el historial. `isApplied` marca cuál usa el anfitrión ahora.
+model ListingDraft {
+  id          String   @id @default(cuid())
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId  String
+  title       String
+  description String
+  highlights  String[] @default([])
+  seoKeywords String[] @default([])
+  /// Proveedor y modelo de IA que generaron esta versión (ej. "anthropic" /
+  /// "claude-opus-4-8") — trazabilidad, no afecta el comportamiento.
+  provider    String
+  model       String
+  isApplied   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([propertyId])
+  @@map("listing_drafts")
 }
 
 /// Hilo de mensajes con un huésped de una propiedad. En esta fase no hay
