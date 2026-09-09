@@ -38,6 +38,9 @@ export default async function EditPropertyPage({
           <Link href={`/dashboard/properties/${property.id}/videos`}>
             <Button variant="secondary">🎬 Generador de vídeos</Button>
           </Link>
+          <Link href={`/dashboard/properties/${property.id}/images`}>
+            <Button variant="secondary">🖼️ Generador de imágenes</Button>
+          </Link>
           <Link href={`/dashboard/properties/${property.id}/messages`}>
             <Button variant="secondary">💬 Mensajes de huéspedes</Button>
           </Link>

@@ -1,11 +1,11 @@
 # Arquitectura de AIbnb Studio
 
 Este documento describe las decisiones de arquitectura vigentes y, sobre
-todo, **los puntos de extensión pensados para que las Fases 6-9 se
+todo, **los puntos de extensión pensados para que las Fases 7-9 se
 conecten sin reescribir lo ya construido**. Para el detalle de qué se
 implementó en cada fase, ver `PHASE-1.md` / `PHASE-2.md` / `PHASE-3.md` /
-`PHASE-4.md` / `PHASE-5.md`. Para el plan de fases completo, ver
-`DEVELOPMENT_PLAN.md`.
+`PHASE-4.md` / `PHASE-5.md` / `PHASE-6.md`. Para el plan de fases
+completo, ver `DEVELOPMENT_PLAN.md`.
 
 ## Capas
 
@@ -15,6 +15,7 @@ src/components/      UI, organizada por dominio (dashboard/, properties/, settin
 src/lib/             Lógica de dominio y clientes de infraestructura
   ai/                Arquitectura de proveedores de IA de texto (ver abajo)
   video/             Arquitectura de proveedores de vídeo (Fase 5, ver abajo)
+  image/             Arquitectura de proveedores de imagen (Fase 6, ver abajo)
   supabase/          Clientes de Supabase (browser/server/middleware)
   validations/       Esquemas Zod — única fuente de verdad de "qué es válido"
   auth.ts            Sesión + upsert de usuario de dominio a partir de Supabase Auth
@@ -114,11 +115,38 @@ un archivo nuevo en `src/lib/video/providers/` implementando `VideoProvider`
 más una línea de registro en `videoProviderManager.ts`. Ningún otro archivo
 cambia.
 
+## Arquitectura de proveedores de imagen (Fase 6)
+
+```
+src/lib/image/
+  types.ts                  ImageProvider, ImageGenerationRequest, ImageGenerationResult
+  errors.ts                 ImageProviderNotConfiguredError
+  providers/
+    google.ts                implementa ImageProvider — llamada real a Google Gemini API
+                              (modelo Imagen) vía el SDK oficial @google/genai
+  imageProviderManager.ts    registro + resolveImageProvider(), mismo patrón que los otros managers
+  propertyImageGenerator.ts  dominio: construye el prompt a partir de la propiedad y
+                              orquesta la generación
+```
+
+Estructuralmente idéntica a `src/lib/video/`, pero **más simple**: Imagen
+devuelve el resultado en la misma llamada HTTP (`ai.models.generateImages`
+es síncrona), así que `ImageProvider` no tiene un equivalente a
+`checkStatus`/`VideoJobHandle` — `generate()` devuelve directamente los
+bytes de la imagen. Esto significa que la API route de imágenes no
+necesita un endpoint de estado separado (a diferencia de
+`media-generations/[mediaId]/status` para vídeo): todo ocurre en el POST.
+
+Ambas arquitecturas (`video/`, `image/`) comparten el mismo principio que
+`ai/`: el dominio solo habla con su manager, nunca con un proveedor
+concreto directamente. Añadir un proveedor de imagen nuevo sigue el mismo
+patrón — un archivo en `providers/` + una línea de registro.
+
 ## Puntos de extensión por fase futura
 
 | Fase | Qué añade | Dónde se conecta (ya existe) |
 |---|---|---|
-| 6 — Generador de imágenes | Mismo modelo `MediaGeneration` de la Fase 5 con tipo `IMAGE`; muy probablemente reutilizando `src/lib/video/` como plantilla de arquitectura (o su equivalente síncrono, al no requerir sondeo) | `src/lib/video/`, `MediaGeneration` |
+| 7 — Automatizaciones | Programación de mensajes/recordatorios usando `User.notificationPrefs` | `User.notificationPrefs` (Fase 2) |
 | 7 — Automatizaciones | `Automation`/`ScheduledMessage` (Prisma, FK a `Property`), scheduler (cron de GitHub Actions o `pg-boss` sobre el mismo Postgres — decisión pendiente, ver `DEVELOPMENT_PLAN.md`) | `notificationPrefs` de `User` (Fase 2) ya modela "qué quiere recibir el anfitrión" |
 | 8 — Analítica | Lee de `Property`, `Membership`, y de los modelos de reservas que se añadan; los `StatCard` del dashboard (Fase 1) ya tienen placeholders explícitos esperando estos datos | `src/components/dashboard/StatCard.tsx` |
 | 9 — Stripe | `Subscription`/`Plan` (Prisma, FK a `User` u organización), webhooks en `src/app/api/stripe/webhook/route.ts` (patrón ya usado por `auth/callback`) | Route Handlers existentes como plantilla |
@@ -126,7 +154,8 @@ cambia.
 ## Multi-tenancy y permisos
 
 Todo objeto de dominio (`Property`, `Conversation`, `ListingDraft`,
-`MediaGeneration`, y en el futuro `Automation`...) cuelga de `Property.id`,
+`MediaGeneration` — vídeo e imagen, mismo modelo —, y en el futuro
+`Automation`...) cuelga de `Property.id`,
 y el acceso de un usuario a una propiedad siempre se resuelve por
 `Membership` (`src/lib/properties.ts`). Esto ya soporta equipos (varios
 usuarios por propiedad, con rol `OWNER`/`EDITOR`/`VIEWER`) aunque la UI
@@ -136,17 +165,17 @@ datos.
 
 ## Almacenamiento de ficheros
 
-Todas las subidas (avatar, fotos de propiedad, y desde la Fase 5 los vídeos
-generados) pasan por el servidor — nunca directamente del navegador a
-Supabase Storage — para poder validar tipo/tamaño y comprobar pertenencia
-antes de escribir. `src/lib/storage.ts` centraliza los nombres de bucket y
-esa validación. El caso del bucket `generated-videos` (Fase 5) es
-ligeramente distinto al de fotos: el propio servidor descarga el vídeo
-terminado del proveedor de IA a un archivo temporal y lo sube a Storage
-él mismo (no hay subida directa del navegador en absoluto, ni siquiera
-mediada) — incluso así sigue el mismo principio de nunca confiar en el
-cliente para escribir en Storage. Un futuro bucket de imágenes (Fase 6)
-seguirá el mismo patrón.
+Todas las subidas (avatar, fotos de propiedad, y desde la Fase 5 los
+vídeos e imágenes generados) pasan por el servidor — nunca directamente
+del navegador a Supabase Storage — para poder validar tipo/tamaño y
+comprobar pertenencia antes de escribir. `src/lib/storage.ts` centraliza
+los nombres de bucket y esa validación. Los buckets `generated-videos`
+(Fase 5) y `generated-images` (Fase 6) son ligeramente distintos al de
+fotos: el propio servidor obtiene el archivo del proveedor de IA
+(descargándolo a un temporal para vídeo; los bytes ya vienen en la
+respuesta para imagen) y lo sube a Storage él mismo — no hay subida
+directa del navegador en absoluto, ni siquiera mediada — pero sigue el
+mismo principio de nunca confiar en el cliente para escribir en Storage.
 
 ## Por qué no hay más "preparación" que esta
 
