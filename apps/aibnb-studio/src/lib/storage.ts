@@ -7,6 +7,8 @@ export const AVATAR_BUCKET = "avatars";
 export const PROPERTY_PHOTOS_BUCKET = "property-photos";
 /** Vídeos generados por IA (Fase 5) — subidos por el servidor, no por el usuario. */
 export const GENERATED_VIDEOS_BUCKET = "generated-videos";
+/** Imágenes generadas por IA (Fase 6) — subidas por el servidor, no por el usuario. */
+export const GENERATED_IMAGES_BUCKET = "generated-images";
 
 export const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 export const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;

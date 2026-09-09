@@ -36,7 +36,7 @@ LuxWeb Pro (que sigue intacto en la raíz del repo).
 | CI/CD | GitHub Actions |
 | IA texto | Anthropic API / OpenAI API / Google AI, vía Provider Manager |
 | IA vídeo | Google Gemini API (Veo), vía `@google/genai` (Fase 5 — cambiado de Higgsfield, ver `PHASE-5.md`) |
-| IA imagen | A definir en la Fase 6 |
+| IA imagen | Google Gemini API (Imagen), vía `@google/genai` (Fase 6, mismo SDK que el vídeo) |
 
 ## Fases
 
@@ -114,12 +114,16 @@ Estructura del monorepo, plan de fases, decisiones de arquitectura.
 - **Estado: hecho** (PR #5 — ver `PHASE-5.md`).
 
 ### Fase 6 — Generador de imágenes
-- Fotos promocionales, imágenes para redes sociales, banners.
-- Reutiliza el modelo `MediaGeneration` de la Fase 5 (tipo `IMAGE`) y muy
-  probablemente `src/lib/video/` como plantilla de arquitectura (o su
-  equivalente para imágenes sin sondeo, al ser síncrono).
-- Requiere: proveedor de generación de imágenes (a decidir en esta fase —
-  candidato natural: mismo SDK `@google/genai`, modelos Imagen).
+- Fotos promocionales (4:3), imágenes para redes sociales (1:1) y banners
+  panorámicos (16:9).
+- Reutiliza el modelo `MediaGeneration` de la Fase 5 (tipo `IMAGE`) sin
+  ninguna migración nueva.
+- `src/lib/image/`: arquitectura de proveedores de imagen paralela a
+  `src/lib/video/`, pero sin sondeo — Imagen (`@google/genai`) devuelve el
+  resultado en la misma llamada, así que las generaciones se crean
+  directamente en estado `READY` (o no se crean si fallan).
+- No requiere ninguna clave nueva — reutiliza `GOOGLE_AI_API_KEY` (Fase 5).
+- **Estado: hecho** (PR #6 — ver `PHASE-6.md`).
 
 ### Fase 7 — Automatizaciones
 - Programación de mensajes (check-in, check-out, bienvenida), recordatorios,
@@ -162,10 +166,10 @@ correspondiente las necesite. Cuando llegue el momento, se indicará aquí y en
 | `AI_DEFAULT_PROVIDER` | Proveedor de IA por defecto de la instancia (no secreta) | `anthropic` \| `openai` \| `google` | 2 |
 | `ANTHROPIC_API_KEY` | Respuestas IA a huéspedes (Claude) — **en uso real desde la Fase 3** | https://console.anthropic.com/ → API Keys | 3 |
 | `OPENAI_API_KEY` | Alternativa de proveedor de IA de texto (arquitectura lista, no activada) | https://platform.openai.com/api-keys | arquitectura lista desde la 2 |
-| `GOOGLE_AI_API_KEY` | Alternativa de proveedor de IA de texto (arquitectura lista, no activada) **y generación real de vídeo (Veo) desde la Fase 5** | https://aistudio.google.com/apikey | texto: arquitectura lista desde la 2; vídeo: en uso real desde la 5 |
+| `GOOGLE_AI_API_KEY` | Alternativa de proveedor de IA de texto (arquitectura lista, no activada) **y generación real de vídeo (Veo, Fase 5) e imagen (Imagen, Fase 6)** | https://aistudio.google.com/apikey | texto: arquitectura lista desde la 2; vídeo: en uso real desde la 5; imagen: en uso real desde la 6 |
 | `GEMINI_VIDEO_MODEL` | Fijar una versión de Veo distinta a la por defecto (no secreta, opcional) | `veo-2.0-generate-001` u otra vigente | 5 |
-| Supabase Storage (buckets `avatars`, `property-photos`, `generated-videos`) | Fotos de perfil, de propiedad y vídeos generados | SQL de configuración en `PHASE-2.md` / `PHASE-5.md` | 2 / 5 |
-| Proveedor de imágenes | Fotos promocionales, banners | A decidir en Fase 6 | 6 |
+| `GEMINI_IMAGE_MODEL` | Fijar una versión de Imagen distinta a la por defecto (no secreta, opcional) | `imagen-4.0-generate-001` u otra vigente | 6 |
+| Supabase Storage (buckets `avatars`, `property-photos`, `generated-videos`, `generated-images`) | Fotos de perfil, de propiedad, vídeos e imágenes generados | SQL de configuración en `PHASE-2.md` / `PHASE-5.md` / `PHASE-6.md` | 2 / 5 / 6 |
 | `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` / `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Pagos y suscripciones | https://dashboard.stripe.com/apikeys y https://dashboard.stripe.com/webhooks | 9 |
 
 ## Estructura del monorepo
@@ -187,7 +191,8 @@ apps/
     .env.example
     DEVELOPMENT_PLAN.md        (este archivo)
     ARCHITECTURE.md            (puntos de extensión para las Fases 5+)
-    PHASE-1.md / PHASE-2.md / PHASE-3.md / PHASE-4.md    (detalle + cómo probar cada fase)
+    PHASE-1.md / PHASE-2.md / PHASE-3.md / PHASE-4.md /
+    PHASE-5.md / PHASE-6.md    (detalle + cómo probar cada fase)
     README.md
 .github/workflows/aibnb-studio-ci.yml
 ```
