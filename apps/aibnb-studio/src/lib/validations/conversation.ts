@@ -1,10 +1,26 @@
 import { z } from "zod";
 
+/** Fecha en formato "YYYY-MM-DD" (input HTML date) o cadena vacía/ausente. */
+const optionalDateSchema = z
+  .string()
+  .trim()
+  .refine((value) => value === "" || !Number.isNaN(Date.parse(value)), "Fecha no válida")
+  .optional()
+  .or(z.literal(""));
+
 export const createConversationSchema = z.object({
   guestName: z.string().trim().max(120).optional().or(z.literal("")),
   guestMessage: z.string().trim().min(1, "Escribe el mensaje del huésped").max(4000),
+  checkInDate: optionalDateSchema,
+  checkOutDate: optionalDateSchema,
 });
 export type CreateConversationInput = z.infer<typeof createConversationSchema>;
+
+export const updateConversationSchema = z.object({
+  checkInDate: optionalDateSchema,
+  checkOutDate: optionalDateSchema,
+});
+export type UpdateConversationInput = z.infer<typeof updateConversationSchema>;
 
 export const MESSAGE_SENDERS = ["GUEST", "HOST"] as const;
 

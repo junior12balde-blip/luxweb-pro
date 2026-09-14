@@ -54,6 +54,8 @@ export async function POST(
     data: {
       propertyId,
       guestName: parsed.data.guestName || null,
+      checkInDate: parsed.data.checkInDate ? new Date(parsed.data.checkInDate) : null,
+      checkOutDate: parsed.data.checkOutDate ? new Date(parsed.data.checkOutDate) : null,
       messages: {
         create: { sender: "GUEST", content: parsed.data.guestMessage },
       },

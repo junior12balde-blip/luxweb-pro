@@ -126,12 +126,28 @@ Estructura del monorepo, plan de fases, decisiones de arquitectura.
 - **Estado: hecho** (PR #6 — ver `PHASE-6.md`).
 
 ### Fase 7 — Automatizaciones
-- Programación de mensajes (check-in, check-out, bienvenida), recordatorios,
-  seguimiento post-estancia, solicitud automática de reseñas.
-- Usa `User.notificationPrefs` (Fase 2) para saber qué quiere recibir cada
-  anfitrión.
-- Requiere un *scheduler* (cron de GitHub Actions o `pg-boss` sobre el mismo
-  Postgres — se decidirá en la fase con justificación de coste/complejidad).
+- Recordatorios para el anfitrión (no mensajes autoenviados a ningún canal
+  externo): bienvenida, check-in, check-out, seguimiento post-estancia,
+  solicitud de reseña — 5 tipos, activables y configurables por propiedad.
+- `Conversation.checkInDate`/`checkOutDate` (Fase 3 extendida) dan la fecha
+  ancla de cada recordatorio — decisión tomada junto al cliente tras
+  detectar que no existía ningún modelo de reserva con fechas reales, ver
+  `PHASE-7.md`.
+- Modelos `Automation`/`AutomationRun` (Prisma, FK a `Property`/
+  `Conversation`).
+- `src/lib/automations/`: cálculo de vencimientos + plantillas simples
+  (sin IA) con placeholders `{{guestName}}`/`{{propertyName}}`.
+- Scheduler: **cron de GitHub Actions** llamando a un endpoint propio
+  protegido (`/api/cron/automations`) — decisión justificada en
+  `PHASE-7.md` (cero infraestructura nueva, coherente con el despliegue
+  serverless ya asumido desde la Fase 5; `pg-boss` habría exigido un
+  *worker* persistente).
+- Sienta las bases para conectar `User.notificationPrefs.emailOnBookingReminder`
+  (Fase 2) a un envío de email real en una fase futura — no incluido aquí
+  porque no hay ningún proveedor de email configurado (ver `PHASE-7.md`).
+- Requiere: `CRON_SECRET` (ver sección APIs abajo) + dos secretos de
+  GitHub Actions (`AIBNB_SITE_URL`, `AIBNB_CRON_SECRET`).
+- **Estado: hecho** (PR #7 — ver `PHASE-7.md`).
 
 ### Fase 8 — Analítica
 - Ocupación, ingresos, rendimiento por propiedad y agregados. Informes
@@ -170,6 +186,8 @@ correspondiente las necesite. Cuando llegue el momento, se indicará aquí y en
 | `GEMINI_VIDEO_MODEL` | Fijar una versión de Veo distinta a la por defecto (no secreta, opcional) | `veo-2.0-generate-001` u otra vigente | 5 |
 | `GEMINI_IMAGE_MODEL` | Fijar una versión de Imagen distinta a la por defecto (no secreta, opcional) | `imagen-4.0-generate-001` u otra vigente | 6 |
 | Supabase Storage (buckets `avatars`, `property-photos`, `generated-videos`, `generated-images`) | Fotos de perfil, de propiedad, vídeos e imágenes generados | SQL de configuración en `PHASE-2.md` / `PHASE-5.md` / `PHASE-6.md` | 2 / 5 / 6 |
+| `CRON_SECRET` | Autentica el cron de automatizaciones (`/api/cron/automations`) — no es la clave de ningún proveedor externo, se genera uno mismo | `openssl rand -hex 32` (o similar) | 7 |
+| Secretos de GitHub Actions `AIBNB_SITE_URL` / `AIBNB_CRON_SECRET` | El workflow de cron necesita la URL pública del despliegue y el mismo valor de `CRON_SECRET` | Settings → Secrets and variables → Actions del repositorio | 7 |
 | `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` / `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Pagos y suscripciones | https://dashboard.stripe.com/apikeys y https://dashboard.stripe.com/webhooks | 9 |
 
 ## Estructura del monorepo
@@ -192,9 +210,10 @@ apps/
     DEVELOPMENT_PLAN.md        (este archivo)
     ARCHITECTURE.md            (puntos de extensión para las Fases 5+)
     PHASE-1.md / PHASE-2.md / PHASE-3.md / PHASE-4.md /
-    PHASE-5.md / PHASE-6.md    (detalle + cómo probar cada fase)
+    PHASE-5.md / PHASE-6.md / PHASE-7.md    (detalle + cómo probar cada fase)
     README.md
 .github/workflows/aibnb-studio-ci.yml
+.github/workflows/aibnb-studio-automations-cron.yml   (Fase 7)
 ```
 
 Nota: no existe todavía un `Dockerfile` de producción — está planificado

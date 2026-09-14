@@ -1,0 +1,43 @@
+name: AIbnb Studio — Automations Cron
+
+# Dispara /api/cron/automations en el despliegue de producción cada 15
+# minutos. No hay ningún worker en segundo plano corriendo dentro de la
+# propia app (encaja con el despliegue serverless en Vercel usado desde la
+# Fase 5) — este workflow es el "reloj" externo. Ver PHASE-7.md para la
+# justificación de por qué se eligió esto en vez de pg-boss.
+#
+# Requiere dos secretos del repositorio (Settings → Secrets and variables →
+# Actions):
+#   AIBNB_SITE_URL    — URL pública del despliegue (ej. https://tu-app.vercel.app)
+#   AIBNB_CRON_SECRET — el mismo valor que la variable de entorno CRON_SECRET
+#                       configurada en el despliegue (genera uno con
+#                       `openssl rand -hex 32`)
+# Sin estos secretos configurados, el job falla explícitamente en vez de
+# fallar en silencio.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  trigger-automations:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check required secrets
+        run: |
+          if [ -z "${{ secrets.AIBNB_SITE_URL }}" ] || [ -z "${{ secrets.AIBNB_CRON_SECRET }}" ]; then
+            echo "::error::Faltan los secretos AIBNB_SITE_URL y/o AIBNB_CRON_SECRET — configúralos en Settings > Secrets and variables > Actions. Ver PHASE-7.md."
+            exit 1
+          fi
+
+      - name: Call automations cron endpoint
+        run: |
+          response=$(curl -sS -o /tmp/response.json -w "%{http_code}" -X POST \
+            "${{ secrets.AIBNB_SITE_URL }}/api/cron/automations" \
+            -H "Authorization: Bearer ${{ secrets.AIBNB_CRON_SECRET }}")
+          cat /tmp/response.json
+          if [ "$response" -ge 400 ]; then
+            echo "::error::El endpoint respondió $response"
+            exit 1
+          fi

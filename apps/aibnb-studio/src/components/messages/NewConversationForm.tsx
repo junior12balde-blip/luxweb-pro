@@ -24,6 +24,8 @@ export function NewConversationForm({ propertyId }: { propertyId: string }) {
       body: JSON.stringify({
         guestName: formData.get("guestName"),
         guestMessage: formData.get("guestMessage"),
+        checkInDate: formData.get("checkInDate"),
+        checkOutDate: formData.get("checkOutDate"),
       }),
     });
 
@@ -50,6 +52,19 @@ export function NewConversationForm({ propertyId }: { propertyId: string }) {
         <Label htmlFor="guestName">Nombre del huésped (opcional)</Label>
         <Input id="guestName" name="guestName" placeholder="Ej. María" />
       </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label htmlFor="checkInDate">Check-in (opcional)</Label>
+          <Input id="checkInDate" name="checkInDate" type="date" />
+        </div>
+        <div>
+          <Label htmlFor="checkOutDate">Check-out (opcional)</Label>
+          <Input id="checkOutDate" name="checkOutDate" type="date" />
+        </div>
+      </div>
+      <p className="text-xs text-slate-400">
+        Si las conoces, activan los recordatorios automáticos de la propiedad (Automatizaciones).
+      </p>
       <div>
         <Label htmlFor="guestMessage">Mensaje del huésped</Label>
         <textarea

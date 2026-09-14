@@ -5,11 +5,14 @@ import type {
   Message as PrismaMessage,
   ListingDraft as PrismaListingDraft,
   MediaGeneration as PrismaMediaGeneration,
+  Automation as PrismaAutomation,
+  AutomationRun as PrismaAutomationRun,
 } from "@prisma/client";
 import type { Property } from "@/types/property";
 import type { Conversation } from "@/types/conversation";
 import type { ListingDraft } from "@/types/listing";
 import type { MediaGeneration } from "@/types/media";
+import type { AutomationConfig, AutomationRun } from "@/types/automation";
 
 type PrismaPropertyWithPhotos = PrismaProperty & { photos?: PrismaPropertyPhoto[] };
 
@@ -39,6 +42,8 @@ export function serializeConversation(conversation: PrismaConversationWithMessag
     id: conversation.id,
     guestName: conversation.guestName,
     status: conversation.status,
+    checkInDate: conversation.checkInDate?.toISOString() ?? null,
+    checkOutDate: conversation.checkOutDate?.toISOString() ?? null,
     createdAt: conversation.createdAt.toISOString(),
     updatedAt: conversation.updatedAt.toISOString(),
     messages: conversation.messages.map((message) => ({
@@ -76,5 +81,33 @@ export function serializeMediaGeneration(generation: PrismaMediaGeneration): Med
     resultUrl: generation.resultUrl,
     errorMessage: generation.errorMessage,
     createdAt: generation.createdAt.toISOString(),
+  };
+}
+
+export function serializeAutomation(automation: PrismaAutomation): AutomationConfig {
+  return {
+    id: automation.id,
+    type: automation.type,
+    enabled: automation.enabled,
+    offsetHours: automation.offsetHours,
+    messageTemplate: automation.messageTemplate,
+  };
+}
+
+type PrismaAutomationRunWithRelations = PrismaAutomationRun & {
+  automation: PrismaAutomation;
+  conversation: { guestName: string | null };
+};
+
+export function serializeAutomationRun(run: PrismaAutomationRunWithRelations): AutomationRun {
+  return {
+    id: run.id,
+    type: run.automation.type,
+    status: run.status,
+    scheduledFor: run.scheduledFor.toISOString(),
+    message: run.message,
+    conversationId: run.conversationId,
+    guestName: run.conversation.guestName,
+    createdAt: run.createdAt.toISOString(),
   };
 }
