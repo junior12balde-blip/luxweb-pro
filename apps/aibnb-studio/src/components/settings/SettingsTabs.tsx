@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const TABS = [
   { href: "/dashboard/settings/profile", label: "Perfil" },
   { href: "/dashboard/settings/integrations", label: "Integraciones" },
+  { href: "/dashboard/settings/billing", label: "Facturación" },
 ] as const;
 
 export function SettingsTabs() {

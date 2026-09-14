@@ -1,11 +1,11 @@
 # Arquitectura de AIbnb Studio
 
 Este documento describe las decisiones de arquitectura vigentes y, sobre
-todo, **los puntos de extensión pensados para que las Fases 8-9 se
+todo, **los puntos de extensión pensados para que las Fases 8 y 10 se
 conecten sin reescribir lo ya construido**. Para el detalle de qué se
 implementó en cada fase, ver `PHASE-1.md` / `PHASE-2.md` / `PHASE-3.md` /
-`PHASE-4.md` / `PHASE-5.md` / `PHASE-6.md` / `PHASE-7.md`. Para el plan de
-fases completo, ver `DEVELOPMENT_PLAN.md`.
+`PHASE-4.md` / `PHASE-5.md` / `PHASE-6.md` / `PHASE-7.md` / `PHASE-9.md`.
+Para el plan de fases completo, ver `DEVELOPMENT_PLAN.md`.
 
 ## Capas
 
@@ -17,6 +17,7 @@ src/lib/             Lógica de dominio y clientes de infraestructura
   video/             Arquitectura de proveedores de vídeo (Fase 5, ver abajo)
   image/             Arquitectura de proveedores de imagen (Fase 6, ver abajo)
   automations/       Motor de recordatorios (Fase 7, ver abajo)
+  billing/           Suscripciones y Stripe (Fase 9, ver abajo)
   supabase/          Clientes de Supabase (browser/server/middleware)
   validations/       Esquemas Zod — única fuente de verdad de "qué es válido"
   auth.ts            Sesión + upsert de usuario de dominio a partir de Supabase Auth
@@ -171,13 +172,51 @@ anfitrión** (dashboard), no un envío real a ningún canal — ver "Qué NO
 incluye" en `PHASE-7.md` para por qué no se conecta todavía a
 `User.notificationPrefs.emailOnBookingReminder` con un envío de email real.
 
+## Arquitectura de facturación (Fase 9)
+
+```
+src/lib/billing/
+  plans.ts             tablas de planes/límites + mapeo plan de pago ↔ Price ID de Stripe
+  stripeClient.ts       cliente Stripe perezoso (apiVersion fijado al valor del SDK instalado)
+  subscription.ts       getUserSubscription() (FREE implícito) + checkPropertyLimit()
+  errors.ts             StripeNotConfiguredError, PlanNotConfiguredError
+```
+
+Sin Provider Manager (solo hay un proveedor de pagos posible: Stripe, no
+tiene sentido una capa de abstracción para "el único"). El límite de
+propiedades por plan es lógica de dominio pura (`checkPropertyLimit()`),
+completamente independiente de si Stripe está configurado — un despliegue
+sin ninguna clave de Stripe sigue aplicando el límite del plan Gratis con
+normalidad, porque un usuario sin fila en `Subscription` ya se trata como
+Gratis (mismo "valor por defecto sin persistir" que las automatizaciones
+de la Fase 7).
+
+Los tres puntos de entrada externos:
+
+- `POST /api/billing/checkout` y `POST /api/billing/portal` — el usuario
+  autenticado inicia la llamada a Stripe (crear una Checkout Session o una
+  sesión del Customer Portal) y se le redirige a una URL alojada por
+  Stripe. La app nunca ve ni almacena datos de tarjeta.
+- `POST /api/webhooks/stripe` — Stripe llama a la app (dirección
+  contraria), protegido por verificación de firma
+  (`STRIPE_WEBHOOK_SECRET`) sobre el body crudo, no por sesión de usuario
+  — mismo principio que `POST /api/cron/automations` (Fase 7): el llamador
+  no es un navegador, así que la autenticación no puede ser una cookie de
+  sesión.
+
+**Cómo añadir un plan nuevo:** añadir el id a `PlanId` (`@/types/billing`),
+una entrada en `PLAN_PROPERTY_LIMIT`/`PLAN_LABELS`/`PLAN_PRICE_ENV_VAR`
+(`plans.ts`), documentar su variable `STRIPE_PRICE_*` en `.env.example` y
+crear el producto/price correspondiente en el Dashboard de Stripe. Ningún
+otro archivo cambia.
+
 ## Puntos de extensión por fase futura
 
 | Fase | Qué añade | Dónde se conecta (ya existe) |
 |---|---|---|
-| 8 — Analítica | Lee de `Property`, `Membership`, y de los modelos de reservas que se añadan; los `StatCard` del dashboard (Fase 1) ya tienen placeholders explícitos esperando estos datos | `src/components/dashboard/StatCard.tsx` |
-| 9 — Stripe | `Subscription`/`Plan` (Prisma, FK a `User` u organización), webhooks en `src/app/api/stripe/webhook/route.ts` (patrón ya usado por `auth/callback`) | Route Handlers existentes como plantilla |
+| 8 — Analítica (pendiente) | Lee de `Property`, `Membership`, y de los modelos de reservas que se añadan; los `StatCard` del dashboard (Fase 1) ya tienen placeholders explícitos esperando estos datos | `src/components/dashboard/StatCard.tsx` |
 | Envío real de recordatorios por email | Leer `AutomationRun` en estado `DUE` + `User.notificationPrefs.emailOnBookingReminder` y enviar con un proveedor de email (a decidir, sin clave todavía) | `src/lib/automations/engine.ts`, `NotificationPreferences` (Fase 2) |
+| Concepto de "organización" (si hace falta multi-usuario en la factura) | `Subscription` movería su FK de `User` a esa entidad; el resto de `src/lib/billing/` no cambiaría | `src/lib/billing/subscription.ts` |
 
 ## Multi-tenancy y permisos
 

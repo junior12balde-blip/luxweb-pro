@@ -13,15 +13,17 @@ arquitectura y los puntos de extensión de las fases futuras, y
 [`PHASE-1.md`](./PHASE-1.md) / [`PHASE-2.md`](./PHASE-2.md) /
 [`PHASE-3.md`](./PHASE-3.md) / [`PHASE-4.md`](./PHASE-4.md) /
 [`PHASE-5.md`](./PHASE-5.md) / [`PHASE-6.md`](./PHASE-6.md) /
-[`PHASE-7.md`](./PHASE-7.md) para el detalle de lo implementado en cada
-fase y cómo probarlo.
+[`PHASE-7.md`](./PHASE-7.md) / [`PHASE-9.md`](./PHASE-9.md) para el
+detalle de lo implementado en cada fase y cómo probarlo. La Fase 8
+(Analítica) está pendiente — se saltó a la 9 a petición del cliente.
 
 ## Stack
 
 Next.js 15 (App Router) · TypeScript · Tailwind CSS · Supabase (Auth +
 Postgres + Storage) · Prisma · Docker (Postgres local) · Vitest · Anthropic
 API (texto) · Google Gemini API / Veo (vídeo, Fase 5) / Imagen (imagen,
-Fase 6) · cron de GitHub Actions (automatizaciones, Fase 7).
+Fase 6) · cron de GitHub Actions (automatizaciones, Fase 7) · Stripe
+(facturación, Fase 9).
 
 ## Empezar
 
@@ -81,12 +83,22 @@ Copiar `.env.example` a `.env.local` y rellenar:
   en los secretos de GitHub Actions del repositorio
   (`AIBNB_SITE_URL` / `AIBNB_CRON_SECRET`) — ver
   [`PHASE-7.md`](./PHASE-7.md).
+- `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` — **necesarias desde la
+  Fase 9** para "Suscribirse"/"Gestionar facturación". Crear en
+  [dashboard.stripe.com](https://dashboard.stripe.com/apikeys) (clave) y
+  [dashboard.stripe.com/webhooks](https://dashboard.stripe.com/webhooks)
+  (endpoint apuntando a `/api/webhooks/stripe`). Sin ellas, esos botones
+  muestran el mismo tipo de error claro ("Stripe no está configurado") —
+  el límite de propiedades del plan Gratis funciona igual sin Stripe.
+- `STRIPE_PRICE_STARTER` / `STRIPE_PRICE_PRO` / `STRIPE_PRICE_BUSINESS` —
+  Price ID de tu cuenta de Stripe para cada plan de pago (no inventados —
+  se crean en tu Dashboard). Sin uno de ellos, ese plan concreto no se
+  puede contratar. Ver [`PHASE-9.md`](./PHASE-9.md).
 
-Las claves de OpenAI/Google (como proveedor de texto) y Stripe **no
-disparan ninguna llamada real todavía** — la arquitectura para conectarlas
-ya existe desde la Fase 2 (`src/lib/ai/`), pero se piden explícitamente
-solo cuando la fase que las usa de verdad llega (ver
-`DEVELOPMENT_PLAN.md`).
+Las claves de OpenAI/Google (como proveedor de texto) **no disparan
+ninguna llamada real todavía** — la arquitectura para conectarlas ya
+existe desde la Fase 2 (`src/lib/ai/`), pero se piden explícitamente solo
+cuando la fase que las usa de verdad llega (ver `DEVELOPMENT_PLAN.md`).
 
 ## Scripts
 
@@ -114,6 +126,7 @@ apps/aibnb-studio/
         properties/                 → listado, alta y edición (fotos, amenities, normas...)
         settings/profile/           → perfil (nombre, avatar, idioma, zona horaria, notificaciones)
         settings/integrations/      → estado de proveedores de IA + preferencia del anfitrión
+        settings/billing/           → plan actual, uso de propiedades, suscribirse/gestionar pago (Fase 9)
         properties/[id]/messages/   → conversaciones con huéspedes + sugerencias de IA
         properties/[id]/listing/    → generador de anuncios + historial de versiones
         properties/[id]/videos/     → generador de vídeos (Fase 5) + historial de generaciones
@@ -121,6 +134,8 @@ apps/aibnb-studio/
         properties/[id]/automations/ → recordatorios automáticos (Fase 7) + historial
       api/properties/               → API REST de propiedades (CRUD + fotos + conversaciones/mensajes/sugerencias + anuncios + media-generations + image-generations + automations)
       api/cron/automations/         → endpoint protegido (CRON_SECRET) llamado por el cron de GitHub Actions (Fase 7)
+      api/billing/                  → checkout y portal de cliente de Stripe (Fase 9)
+      api/webhooks/stripe/          → recibe eventos de Stripe, firma verificada (Fase 9)
       api/settings/                 → API REST de perfil, avatar y preferencias de IA
     components/
       dashboard/                    → Sidebar, Topbar, StatCard
@@ -130,6 +145,7 @@ apps/aibnb-studio/
       video/                        → VideoGenerator, VideoGenerationCard (Fase 5, con sondeo de estado)
       image/                        → ImageGenerator, ImageGenerationCard (Fase 6, síncrono, sin sondeo)
       automations/                  → AutomationSettings, AutomationRunList (Fase 7)
+      billing/                      → BillingPlans (Fase 9)
       settings/                     → ProfileForm, AvatarUploader, IntegrationsForm, SettingsTabs
       ui/                           → Button, Input, Label, Card, FormError
     lib/
@@ -137,17 +153,18 @@ apps/aibnb-studio/
       video/                        → Provider Manager de vídeo + propertyVideoGenerator.ts (Fase 5) — ver ARCHITECTURE.md
       image/                        → Provider Manager de imagen + propertyImageGenerator.ts (Fase 6) — ver ARCHITECTURE.md
       automations/                  → motor de recordatorios: types.ts, templates.ts, engine.ts (Fase 7) — ver ARCHITECTURE.md
+      billing/                      → planes, cliente Stripe, resolución de suscripción (Fase 9) — ver ARCHITECTURE.md
       supabase/                     → clientes browser/server + middleware de sesión
       prisma.ts                     → cliente Prisma (singleton)
       auth.ts / auth-errors.ts      → sesión + mensajes de error consistentes
       properties.ts / conversations.ts → comprobación de pertenencia (Membership) y de conversaciones
       storage.ts                    → validación de subidas a Supabase Storage
-      validations/                  → esquemas Zod (auth, profile, property, ai, conversation, listing, video, image, automation)
+      validations/                  → esquemas Zod (auth, profile, property, ai, conversation, listing, video, image, automation, billing)
       serializers.ts                → conversión Decimal/Date/relaciones → JSON
   prisma/
-    schema.prisma                   → User, Property, PropertyPhoto, Membership, Conversation, Message, ListingDraft, MediaGeneration, Automation, AutomationRun
+    schema.prisma                   → User, Property, PropertyPhoto, Membership, Conversation, Message, ListingDraft, MediaGeneration, Automation, AutomationRun, Subscription
     migrations/                     → migraciones versionadas
-  tests/unit/                       → Vitest (75 tests)
+  tests/unit/                       → Vitest (83 tests)
 ```
 
 `.github/workflows/aibnb-studio-automations-cron.yml` (Fase 7) — cron cada

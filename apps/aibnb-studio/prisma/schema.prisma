@@ -4,7 +4,10 @@
 // ListingDraft) + Fase 5 (generador de vídeos: MediaGeneration) + Fase 6
 // (generador de imágenes, mismo modelo MediaGeneration con type: IMAGE) +
 // Fase 7 (automatizaciones: Automation/AutomationRun, y checkInDate/
-// checkOutDate en Conversation para saber cuándo dispararlas).
+// checkOutDate en Conversation para saber cuándo dispararlas) + Fase 9
+// (facturación: Subscription, FK 1:1 a User — la Fase 8, Analítica, se
+// dejó pendiente a petición explícita del cliente, que pidió saltar
+// directo a facturación).
 
 generator client {
   provider = "prisma-client-js"
@@ -76,6 +79,31 @@ enum AutomationRunStatus {
   DISMISSED
 }
 
+/// Plan de suscripción — ver src/lib/billing/plans.ts para límites y
+/// etiquetas. `FREE` es el plan implícito: un usuario sin fila en
+/// `Subscription` se trata como FREE (ver src/lib/billing/subscription.ts),
+/// así que no hace falta un backfill al añadir este modelo.
+enum PlanId {
+  FREE
+  STARTER
+  PRO
+  BUSINESS
+}
+
+/// Estado de una suscripción de Stripe — mismo vocabulario que
+/// `Stripe.Subscription.Status` (ver node_modules/stripe), para no tener
+/// que traducir entre dos vocabularios distintos al procesar webhooks.
+enum SubscriptionStatus {
+  ACTIVE
+  TRIALING
+  PAST_DUE
+  CANCELED
+  INCOMPLETE
+  INCOMPLETE_EXPIRED
+  UNPAID
+  PAUSED
+}
+
 /// Usuario de la aplicación. Se crea automáticamente en el primer login a
 /// partir del usuario de Supabase Auth (ver src/lib/auth.ts).
 model User {
@@ -101,8 +129,33 @@ model User {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   memberships Membership[]
+  subscription Subscription?
 
   @@map("users")
+}
+
+/// Suscripción de facturación de un anfitrión (Fase 9). Uno por `User` — no
+/// hay concepto de "organización" en la app, así que quien paga es la
+/// misma persona que gestiona las propiedades. Si no existe fila, el
+/// usuario se trata como plan `FREE` activo (ver
+/// src/lib/billing/subscription.ts) — no se crea una fila hasta que el
+/// usuario se suscribe de verdad vía Stripe Checkout.
+model Subscription {
+  id                   String             @id @default(cuid())
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId               String             @unique
+  plan                 PlanId             @default(FREE)
+  status               SubscriptionStatus @default(ACTIVE)
+  stripeCustomerId     String?            @unique
+  stripeSubscriptionId String?            @unique
+  /// Fin del período de facturación actual — `null` si nunca se ha creado
+  /// una suscripción real en Stripe.
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean            @default(false)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  @@map("subscriptions")
 }
 
 /// Alojamiento gestionado por uno o más anfitriones.
