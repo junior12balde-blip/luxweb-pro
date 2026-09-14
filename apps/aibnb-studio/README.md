@@ -12,15 +12,16 @@ fases, [`ARCHITECTURE.md`](./ARCHITECTURE.md) para las decisiones de
 arquitectura y los puntos de extensión de las fases futuras, y
 [`PHASE-1.md`](./PHASE-1.md) / [`PHASE-2.md`](./PHASE-2.md) /
 [`PHASE-3.md`](./PHASE-3.md) / [`PHASE-4.md`](./PHASE-4.md) /
-[`PHASE-5.md`](./PHASE-5.md) / [`PHASE-6.md`](./PHASE-6.md) para el
-detalle de lo implementado en cada fase y cómo probarlo.
+[`PHASE-5.md`](./PHASE-5.md) / [`PHASE-6.md`](./PHASE-6.md) /
+[`PHASE-7.md`](./PHASE-7.md) para el detalle de lo implementado en cada
+fase y cómo probarlo.
 
 ## Stack
 
 Next.js 15 (App Router) · TypeScript · Tailwind CSS · Supabase (Auth +
 Postgres + Storage) · Prisma · Docker (Postgres local) · Vitest · Anthropic
 API (texto) · Google Gemini API / Veo (vídeo, Fase 5) / Imagen (imagen,
-Fase 6).
+Fase 6) · cron de GitHub Actions (automatizaciones, Fase 7).
 
 ## Empezar
 
@@ -74,6 +75,12 @@ Copiar `.env.example` a `.env.local` y rellenar:
   necesarios para que los vídeos e imágenes generados tengan una URL
   persistente (Fases 5 y 6). SQL de creación y políticas de RLS en
   [`PHASE-5.md`](./PHASE-5.md) / [`PHASE-6.md`](./PHASE-6.md).
+- `CRON_SECRET` — **necesaria desde la Fase 7** para que el cron de
+  automatizaciones funcione. No es la clave de ningún proveedor externo:
+  la generas tú mismo (`openssl rand -hex 32`) y la pones tanto aquí como
+  en los secretos de GitHub Actions del repositorio
+  (`AIBNB_SITE_URL` / `AIBNB_CRON_SECRET`) — ver
+  [`PHASE-7.md`](./PHASE-7.md).
 
 Las claves de OpenAI/Google (como proveedor de texto) y Stripe **no
 disparan ninguna llamada real todavía** — la arquitectura para conectarlas
@@ -111,30 +118,37 @@ apps/aibnb-studio/
         properties/[id]/listing/    → generador de anuncios + historial de versiones
         properties/[id]/videos/     → generador de vídeos (Fase 5) + historial de generaciones
         properties/[id]/images/     → generador de imágenes (Fase 6) + historial de generaciones
-      api/properties/               → API REST de propiedades (CRUD + fotos + conversaciones/mensajes/sugerencias + anuncios + media-generations + image-generations)
+        properties/[id]/automations/ → recordatorios automáticos (Fase 7) + historial
+      api/properties/               → API REST de propiedades (CRUD + fotos + conversaciones/mensajes/sugerencias + anuncios + media-generations + image-generations + automations)
+      api/cron/automations/         → endpoint protegido (CRON_SECRET) llamado por el cron de GitHub Actions (Fase 7)
       api/settings/                 → API REST de perfil, avatar y preferencias de IA
     components/
       dashboard/                    → Sidebar, Topbar, StatCard
       properties/                   → PropertyForm, PropertyCard, PhotoGallery, AmenitiesInput...
-      messages/                     → NewConversationForm, MessageThread
+      messages/                     → NewConversationForm, MessageThread, ConversationDatesForm (Fase 7)
       listing/                      → ListingGenerator
       video/                        → VideoGenerator, VideoGenerationCard (Fase 5, con sondeo de estado)
       image/                        → ImageGenerator, ImageGenerationCard (Fase 6, síncrono, sin sondeo)
+      automations/                  → AutomationSettings, AutomationRunList (Fase 7)
       settings/                     → ProfileForm, AvatarUploader, IntegrationsForm, SettingsTabs
       ui/                           → Button, Input, Label, Card, FormError
     lib/
       ai/                           → Provider Manager de texto + guestAssistant.ts (Fase 3) + listingGenerator.ts (Fase 4) — ver ARCHITECTURE.md
       video/                        → Provider Manager de vídeo + propertyVideoGenerator.ts (Fase 5) — ver ARCHITECTURE.md
       image/                        → Provider Manager de imagen + propertyImageGenerator.ts (Fase 6) — ver ARCHITECTURE.md
+      automations/                  → motor de recordatorios: types.ts, templates.ts, engine.ts (Fase 7) — ver ARCHITECTURE.md
       supabase/                     → clientes browser/server + middleware de sesión
       prisma.ts                     → cliente Prisma (singleton)
       auth.ts / auth-errors.ts      → sesión + mensajes de error consistentes
       properties.ts / conversations.ts → comprobación de pertenencia (Membership) y de conversaciones
       storage.ts                    → validación de subidas a Supabase Storage
-      validations/                  → esquemas Zod (auth, profile, property, ai, conversation, listing, video, image)
+      validations/                  → esquemas Zod (auth, profile, property, ai, conversation, listing, video, image, automation)
       serializers.ts                → conversión Decimal/Date/relaciones → JSON
   prisma/
-    schema.prisma                   → User, Property, PropertyPhoto, Membership, Conversation, Message, ListingDraft, MediaGeneration
+    schema.prisma                   → User, Property, PropertyPhoto, Membership, Conversation, Message, ListingDraft, MediaGeneration, Automation, AutomationRun
     migrations/                     → migraciones versionadas
-  tests/unit/                       → Vitest (69 tests)
+  tests/unit/                       → Vitest (75 tests)
 ```
+
+`.github/workflows/aibnb-studio-automations-cron.yml` (Fase 7) — cron cada
+15 minutos que llama a `/api/cron/automations` en el despliegue.

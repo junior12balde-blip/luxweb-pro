@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { findConversation } from "@/lib/conversations";
 import { serializeConversation } from "@/lib/serializers";
 import { MessageThread } from "@/components/messages/MessageThread";
+import { ConversationDatesForm } from "@/components/messages/ConversationDatesForm";
 
 export default async function ConversationDetailPage({
   params,
@@ -39,6 +40,15 @@ export default async function ConversationDetailPage({
       <h1 className="mt-2 text-2xl font-bold text-slate-900">
         {conversation.guestName || "Huésped sin nombre"}
       </h1>
+
+      <div className="mt-4">
+        <ConversationDatesForm
+          propertyId={propertyId}
+          conversationId={conversationId}
+          checkInDate={serialized.checkInDate}
+          checkOutDate={serialized.checkOutDate}
+        />
+      </div>
 
       <div className="mt-4">
         <MessageThread

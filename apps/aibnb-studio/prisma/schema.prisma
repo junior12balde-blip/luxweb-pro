@@ -1,10 +1,10 @@
 // Esquema de la Fase 1 (usuarios, propiedades, membresías) + Fase 2 (perfil
 // de usuario, propiedades avanzadas con fotos) + Fase 3 (asistente de IA
 // para huéspedes: Conversation/Message) + Fase 4 (generador de anuncios:
-// ListingDraft) + Fase 5 (generador de vídeos: MediaGeneration). Fases
-// posteriores añadirán Automation (Fase 7), referenciando Property.id por FK.
-// MediaGeneration ya está preparado para tipo IMAGE (Fase 6) reutilizando
-// el mismo modelo y la misma cola de estado.
+// ListingDraft) + Fase 5 (generador de vídeos: MediaGeneration) + Fase 6
+// (generador de imágenes, mismo modelo MediaGeneration con type: IMAGE) +
+// Fase 7 (automatizaciones: Automation/AutomationRun, y checkInDate/
+// checkOutDate en Conversation para saber cuándo dispararlas).
 
 generator client {
   provider = "prisma-client-js"
@@ -52,6 +52,28 @@ enum MediaGenerationStatus {
   PROCESSING
   READY
   FAILED
+}
+
+/// Tipo de recordatorio automático. Cada uno se calcula relativo a la fecha
+/// de check-in o de check-out de una Conversation (ver ANCHOR_FIELD en
+/// src/lib/automations/types.ts) — WELCOME_MESSAGE y CHECKIN_REMINDER
+/// respecto a checkInDate; CHECKOUT_REMINDER, POST_STAY_FOLLOWUP y
+/// REVIEW_REQUEST respecto a checkOutDate.
+enum AutomationType {
+  WELCOME_MESSAGE
+  CHECKIN_REMINDER
+  CHECKOUT_REMINDER
+  POST_STAY_FOLLOWUP
+  REVIEW_REQUEST
+}
+
+enum AutomationRunStatus {
+  /// Ya llegó su hora y el anfitrión aún no lo ha marcado como hecho.
+  DUE
+  /// El anfitrión confirmó que ya actuó (envió el mensaje, pidió la reseña...).
+  DONE
+  /// El anfitrión decidió descartarlo para esta conversación.
+  DISMISSED
 }
 
 /// Usuario de la aplicación. Se crea automáticamente en el primer login a
@@ -121,8 +143,56 @@ model Property {
   conversations Conversation[]
   listingDrafts ListingDraft[]
   mediaGenerations MediaGeneration[]
+  automations   Automation[]
 
   @@map("properties")
+}
+
+/// Configuración de un recordatorio automático para una propiedad — a lo
+/// sumo uno por (propiedad, tipo), ver @@unique. No envía nada por sí
+/// mismo (no hay proveedor de email configurado todavía — ver PHASE-7.md):
+/// solo decide cuándo generar un AutomationRun para que el anfitrión lo vea
+/// y actúe desde el dashboard.
+model Automation {
+  id              String              @id @default(cuid())
+  property        Property            @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId      String
+  type            AutomationType
+  enabled         Boolean             @default(false)
+  /// Horas relativas a la fecha ancla del tipo (negativo = antes, positivo
+  /// = después) — ver ANCHOR_FIELD en src/lib/automations/types.ts.
+  offsetHours     Int
+  /// Plantilla con placeholders {{guestName}} / {{propertyName}} — ver
+  /// src/lib/automations/templates.ts.
+  messageTemplate String
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  runs            AutomationRun[]
+
+  @@unique([propertyId, type])
+  @@map("automations")
+}
+
+/// Una ejecución concreta de una Automation para una Conversation (huésped)
+/// específica. Se crea la primera vez que se cumple su hora — @@unique
+/// evita duplicados si el cron se ejecuta más de una vez sobre el mismo
+/// vencimiento.
+model AutomationRun {
+  id             String              @id @default(cuid())
+  automation     Automation          @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  automationId   String
+  conversation   Conversation        @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  status         AutomationRunStatus @default(DUE)
+  scheduledFor   DateTime
+  /// Mensaje ya renderizado (placeholders sustituidos) en el momento de crearse.
+  message        String
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  @@unique([automationId, conversationId])
+  @@index([conversationId])
+  @@map("automation_runs")
 }
 
 /// Un vídeo (Fase 5) o imagen (Fase 6, mismo modelo con `type: IMAGE`)
@@ -184,9 +254,16 @@ model Conversation {
   propertyId  String
   guestName   String?
   status      ConversationStatus @default(OPEN)
+  /// Fechas de la estadia del huésped, introducidas manualmente por el
+  /// anfitrión (no hay integración con ningún canal externo todavía) —
+  /// `null` si no se conocen. Usadas por las automatizaciones de la Fase 7
+  /// para saber cuándo disparar cada recordatorio.
+  checkInDate  DateTime?
+  checkOutDate DateTime?
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
   messages    Message[]
+  automationRuns AutomationRun[]
 
   @@index([propertyId])
   @@map("conversations")

@@ -1,11 +1,11 @@
 # Arquitectura de AIbnb Studio
 
 Este documento describe las decisiones de arquitectura vigentes y, sobre
-todo, **los puntos de extensión pensados para que las Fases 7-9 se
+todo, **los puntos de extensión pensados para que las Fases 8-9 se
 conecten sin reescribir lo ya construido**. Para el detalle de qué se
 implementó en cada fase, ver `PHASE-1.md` / `PHASE-2.md` / `PHASE-3.md` /
-`PHASE-4.md` / `PHASE-5.md` / `PHASE-6.md`. Para el plan de fases
-completo, ver `DEVELOPMENT_PLAN.md`.
+`PHASE-4.md` / `PHASE-5.md` / `PHASE-6.md` / `PHASE-7.md`. Para el plan de
+fases completo, ver `DEVELOPMENT_PLAN.md`.
 
 ## Capas
 
@@ -16,6 +16,7 @@ src/lib/             Lógica de dominio y clientes de infraestructura
   ai/                Arquitectura de proveedores de IA de texto (ver abajo)
   video/             Arquitectura de proveedores de vídeo (Fase 5, ver abajo)
   image/             Arquitectura de proveedores de imagen (Fase 6, ver abajo)
+  automations/       Motor de recordatorios (Fase 7, ver abajo)
   supabase/          Clientes de Supabase (browser/server/middleware)
   validations/       Esquemas Zod — única fuente de verdad de "qué es válido"
   auth.ts            Sesión + upsert de usuario de dominio a partir de Supabase Auth
@@ -142,20 +143,47 @@ Ambas arquitecturas (`video/`, `image/`) comparten el mismo principio que
 concreto directamente. Añadir un proveedor de imagen nuevo sigue el mismo
 patrón — un archivo en `providers/` + una línea de registro.
 
+## Arquitectura de automatizaciones (Fase 7)
+
+```
+src/lib/automations/
+  types.ts             AutomationType (en @/types/automation), ANCHOR_FIELD,
+                        DEFAULT_OFFSET_HOURS, etiquetas
+  templates.ts          DEFAULT_MESSAGE_TEMPLATE por tipo + renderTemplate()
+  engine.ts              runDueAutomations(now) — motor sin estado en memoria,
+                          todo se lee/escribe en Postgres en cada llamada
+```
+
+No hay Provider Manager aquí — no hay proveedor externo que resolver, es
+lógica de dominio pura (comparar fechas, sustituir placeholders) sobre
+datos que ya están en Postgres (`Conversation.checkInDate`/`checkOutDate`,
+`Automation`). El único punto de entrada externo es
+`POST /api/cron/automations`, protegido con un secreto compartido
+(`CRON_SECRET`) en vez de sesión de usuario, porque lo llama un cron de
+GitHub Actions (`.github/workflows/aibnb-studio-automations-cron.yml`), no
+un navegador — mismo principio "sin *worker* en segundo plano dentro de la
+app" que el sondeo de vídeo de la Fase 5, pero resuelto con un disparador
+externo en vez de sondeo desde el cliente, porque aquí no hay ninguna
+pestaña abierta esperando el resultado.
+
+`AutomationRun` es intencionalmente un registro de recordatorios **para el
+anfitrión** (dashboard), no un envío real a ningún canal — ver "Qué NO
+incluye" en `PHASE-7.md` para por qué no se conecta todavía a
+`User.notificationPrefs.emailOnBookingReminder` con un envío de email real.
+
 ## Puntos de extensión por fase futura
 
 | Fase | Qué añade | Dónde se conecta (ya existe) |
 |---|---|---|
-| 7 — Automatizaciones | Programación de mensajes/recordatorios usando `User.notificationPrefs` | `User.notificationPrefs` (Fase 2) |
-| 7 — Automatizaciones | `Automation`/`ScheduledMessage` (Prisma, FK a `Property`), scheduler (cron de GitHub Actions o `pg-boss` sobre el mismo Postgres — decisión pendiente, ver `DEVELOPMENT_PLAN.md`) | `notificationPrefs` de `User` (Fase 2) ya modela "qué quiere recibir el anfitrión" |
 | 8 — Analítica | Lee de `Property`, `Membership`, y de los modelos de reservas que se añadan; los `StatCard` del dashboard (Fase 1) ya tienen placeholders explícitos esperando estos datos | `src/components/dashboard/StatCard.tsx` |
 | 9 — Stripe | `Subscription`/`Plan` (Prisma, FK a `User` u organización), webhooks en `src/app/api/stripe/webhook/route.ts` (patrón ya usado por `auth/callback`) | Route Handlers existentes como plantilla |
+| Envío real de recordatorios por email | Leer `AutomationRun` en estado `DUE` + `User.notificationPrefs.emailOnBookingReminder` y enviar con un proveedor de email (a decidir, sin clave todavía) | `src/lib/automations/engine.ts`, `NotificationPreferences` (Fase 2) |
 
 ## Multi-tenancy y permisos
 
 Todo objeto de dominio (`Property`, `Conversation`, `ListingDraft`,
-`MediaGeneration` — vídeo e imagen, mismo modelo —, y en el futuro
-`Automation`...) cuelga de `Property.id`,
+`MediaGeneration` — vídeo e imagen, mismo modelo —, `Automation`/
+`AutomationRun`) cuelga de `Property.id`,
 y el acceso de un usuario a una propiedad siempre se resuelve por
 `Membership` (`src/lib/properties.ts`). Esto ya soporta equipos (varios
 usuarios por propiedad, con rol `OWNER`/`EDITOR`/`VIEWER`) aunque la UI
@@ -180,7 +208,7 @@ mismo principio de nunca confiar en el cliente para escribir en Storage.
 ## Por qué no hay más "preparación" que esta
 
 Se evitó a propósito añadir columnas, tablas o módulos vacíos "por si
-acaso" (p. ej. una tabla `Automation` sin ningún campo real, o un
+acaso" (p. ej. una tabla vacía sin ningún consumidor real, o un
 `videoProvider.ts` sin implementación real). Cada pieza construida en la Fase 2
 tiene un consumidor real hoy (la preferencia de proveedor de IA se guarda y
 se lee desde `/dashboard/settings/integrations`, aunque no dispare

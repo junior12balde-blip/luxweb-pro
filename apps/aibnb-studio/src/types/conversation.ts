@@ -13,6 +13,8 @@ export interface Conversation {
   id: string;
   guestName: string | null;
   status: ConversationStatus;
+  checkInDate: string | null;
+  checkOutDate: string | null;
   createdAt: string;
   updatedAt: string;
   messages: Message[];
