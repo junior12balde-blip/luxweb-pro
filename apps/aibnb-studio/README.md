@@ -13,17 +13,17 @@ arquitectura y los puntos de extensión de las fases futuras, y
 [`PHASE-1.md`](./PHASE-1.md) / [`PHASE-2.md`](./PHASE-2.md) /
 [`PHASE-3.md`](./PHASE-3.md) / [`PHASE-4.md`](./PHASE-4.md) /
 [`PHASE-5.md`](./PHASE-5.md) / [`PHASE-6.md`](./PHASE-6.md) /
-[`PHASE-7.md`](./PHASE-7.md) / [`PHASE-9.md`](./PHASE-9.md) para el
-detalle de lo implementado en cada fase y cómo probarlo. La Fase 8
-(Analítica) está pendiente — se saltó a la 9 a petición del cliente.
+[`PHASE-7.md`](./PHASE-7.md) / [`PHASE-8.md`](./PHASE-8.md) /
+[`PHASE-9.md`](./PHASE-9.md) para el detalle de lo implementado en cada
+fase y cómo probarlo.
 
 ## Stack
 
 Next.js 15 (App Router) · TypeScript · Tailwind CSS · Supabase (Auth +
 Postgres + Storage) · Prisma · Docker (Postgres local) · Vitest · Anthropic
 API (texto) · Google Gemini API / Veo (vídeo, Fase 5) / Imagen (imagen,
-Fase 6) · cron de GitHub Actions (automatizaciones, Fase 7) · Stripe
-(facturación, Fase 9).
+Fase 6) · cron de GitHub Actions (automatizaciones, Fase 7) · analítica
+propia sin dependencias (Fase 8) · Stripe (facturación, Fase 9).
 
 ## Empezar
 
@@ -122,7 +122,8 @@ apps/aibnb-studio/
       (auth)/login, signup, forgot-password, reset-password, verify-email
       auth/callback/route.ts        → callback de Supabase (confirmación y recuperación)
       dashboard/                    → layout protegido (sidebar + topbar)
-        page.tsx                    → resumen con estadísticas
+        page.tsx                    → resumen con estadísticas (ocupación/ingresos reales desde la Fase 8)
+        analytics/                  → ocupación, ingresos estimados, exportación CSV (Fase 8)
         properties/                 → listado, alta y edición (fotos, amenities, normas...)
         settings/profile/           → perfil (nombre, avatar, idioma, zona horaria, notificaciones)
         settings/integrations/      → estado de proveedores de IA + preferencia del anfitrión
@@ -133,6 +134,7 @@ apps/aibnb-studio/
         properties/[id]/images/     → generador de imágenes (Fase 6) + historial de generaciones
         properties/[id]/automations/ → recordatorios automáticos (Fase 7) + historial
       api/properties/               → API REST de propiedades (CRUD + fotos + conversaciones/mensajes/sugerencias + anuncios + media-generations + image-generations + automations)
+      api/analytics/export/         → exportación CSV de ocupación/ingresos estimados (Fase 8)
       api/cron/automations/         → endpoint protegido (CRON_SECRET) llamado por el cron de GitHub Actions (Fase 7)
       api/billing/                  → checkout y portal de cliente de Stripe (Fase 9)
       api/webhooks/stripe/          → recibe eventos de Stripe, firma verificada (Fase 9)
@@ -153,6 +155,7 @@ apps/aibnb-studio/
       video/                        → Provider Manager de vídeo + propertyVideoGenerator.ts (Fase 5) — ver ARCHITECTURE.md
       image/                        → Provider Manager de imagen + propertyImageGenerator.ts (Fase 6) — ver ARCHITECTURE.md
       automations/                  → motor de recordatorios: types.ts, templates.ts, engine.ts (Fase 7) — ver ARCHITECTURE.md
+      analytics/                    → métricas, CSV, formato: metrics.ts, csv.ts, format.ts (Fase 8) — ver ARCHITECTURE.md
       billing/                      → planes, cliente Stripe, resolución de suscripción (Fase 9) — ver ARCHITECTURE.md
       supabase/                     → clientes browser/server + middleware de sesión
       prisma.ts                     → cliente Prisma (singleton)
@@ -163,8 +166,8 @@ apps/aibnb-studio/
       serializers.ts                → conversión Decimal/Date/relaciones → JSON
   prisma/
     schema.prisma                   → User, Property, PropertyPhoto, Membership, Conversation, Message, ListingDraft, MediaGeneration, Automation, AutomationRun, Subscription
-    migrations/                     → migraciones versionadas
-  tests/unit/                       → Vitest (83 tests)
+    migrations/                     → migraciones versionadas (la Fase 8 no añadió ninguna — analítica calculada al vuelo)
+  tests/unit/                       → Vitest (91 tests)
 ```
 
 `.github/workflows/aibnb-studio-automations-cron.yml` (Fase 7) — cron cada

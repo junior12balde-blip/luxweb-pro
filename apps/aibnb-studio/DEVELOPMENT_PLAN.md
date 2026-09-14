@@ -150,12 +150,20 @@ Estructura del monorepo, plan de fases, decisiones de arquitectura.
 - **Estado: hecho** (PR #7 — ver `PHASE-7.md`).
 
 ### Fase 8 — Analítica
-**Pendiente** — saltada a petición explícita del cliente para pasar
-directo a facturación (ver `PHASE-9.md`, sección "Por qué esta fase,
-saltando la 8"). No cancelada, solo reordenada.
-- Ocupación, ingresos, rendimiento por propiedad y agregados. Informes
-  descargables (CSV/PDF).
-- Conecta los placeholders del dashboard de Fase 1 a datos reales.
+Retomada tras la Fase 9 (se había saltado a petición explícita del
+cliente para pasar directo a facturación, ver `PHASE-9.md`) — sin
+dependencias entre ambas, el orden real no afecta el resultado.
+- Ocupación e ingresos **estimados** (no hay sistema de reservas/pagos —
+  ver `PHASE-8.md`) calculados a partir de
+  `Conversation.checkInDate`/`checkOutDate` (Fase 7) y
+  `Property.nightlyPrice`, sin ninguna migración nueva.
+- `src/lib/analytics/`: `computeUserMetrics()` (agrupa ingresos por
+  moneda, nunca los suma entre monedas distintas), `buildAnalyticsCsv()`.
+- Conecta los placeholders del dashboard de Fase 1 a datos reales; nueva
+  página `/dashboard/analytics` con rango de 7/30/90 días, desglose por
+  propiedad y exportación a CSV (`GET /api/analytics/export`).
+- No requiere ninguna clave nueva.
+- **Estado: hecho** (PR — ver `PHASE-8.md`).
 
 ### Fase 9 — Facturación (Stripe)
 - Plan Gratis (1 propiedad) + 3 planes de pago (Starter/Pro/Business),
@@ -175,7 +183,9 @@ saltando la 8"). No cancelada, solo reordenada.
 - Requiere: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
   `STRIPE_PRICE_STARTER`/`_PRO`/`_BUSINESS` (Price ID de tu cuenta de
   Stripe, no inventados — ver sección APIs abajo).
-- **Estado: hecho** (PR #9 — ver `PHASE-9.md`).
+- **Estado: hecho** (PR #8 — ver `PHASE-9.md`; los números de PR son
+  correlativos en GitHub independientemente del número de fase, y la #9
+  ya estaba ocupada).
 
 ### Fase 10 — Endurecimiento y despliegue
 - Rate limiting, manejo de errores centralizado, logging.
@@ -230,7 +240,8 @@ apps/
     DEVELOPMENT_PLAN.md        (este archivo)
     ARCHITECTURE.md            (puntos de extensión para las Fases 5+)
     PHASE-1.md / PHASE-2.md / PHASE-3.md / PHASE-4.md /
-    PHASE-5.md / PHASE-6.md / PHASE-7.md / PHASE-9.md    (detalle + cómo probar cada fase)
+    PHASE-5.md / PHASE-6.md / PHASE-7.md / PHASE-8.md /
+    PHASE-9.md                (detalle + cómo probar cada fase)
     README.md
 .github/workflows/aibnb-studio-ci.yml
 .github/workflows/aibnb-studio-automations-cron.yml   (Fase 7)

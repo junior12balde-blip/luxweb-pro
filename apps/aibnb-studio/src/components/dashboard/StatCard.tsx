@@ -6,11 +6,7 @@ interface StatCardProps {
   hint?: string;
 }
 
-/**
- * Tarjeta de estadística. En la Fase 1 muestra datos derivados de las
- * propiedades reales cuando es posible; el resto son placeholders que se
- * conectarán a datos reales en la Fase 7 (Analítica).
- */
+/** Tarjeta de estadística del dashboard — valores reales desde la Fase 8 (Analítica). */
 export function StatCard({ label, value, hint }: StatCardProps) {
   return (
     <Card>
