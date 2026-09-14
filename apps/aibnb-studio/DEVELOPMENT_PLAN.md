@@ -163,7 +163,7 @@ dependencias entre ambas, el orden real no afecta el resultado.
   página `/dashboard/analytics` con rango de 7/30/90 días, desglose por
   propiedad y exportación a CSV (`GET /api/analytics/export`).
 - No requiere ninguna clave nueva.
-- **Estado: hecho** (PR — ver `PHASE-8.md`).
+- **Estado: hecho** (PR #9 — ver `PHASE-8.md`).
 
 ### Fase 9 — Facturación (Stripe)
 - Plan Gratis (1 propiedad) + 3 planes de pago (Starter/Pro/Business),
