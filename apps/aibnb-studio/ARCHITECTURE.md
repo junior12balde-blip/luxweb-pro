@@ -1,10 +1,10 @@
 # Arquitectura de AIbnb Studio
 
 Este documento describe las decisiones de arquitectura vigentes y, sobre
-todo, **los puntos de extensión pensados para que las Fases 8 y 10 se
-conecten sin reescribir lo ya construido**. Para el detalle de qué se
-implementó en cada fase, ver `PHASE-1.md` / `PHASE-2.md` / `PHASE-3.md` /
-`PHASE-4.md` / `PHASE-5.md` / `PHASE-6.md` / `PHASE-7.md` / `PHASE-9.md`.
+todo, **los puntos de extensión pensados para que la Fase 10 se conecte
+sin reescribir lo ya construido**. Para el detalle de qué se implementó en
+cada fase, ver `PHASE-1.md` / `PHASE-2.md` / `PHASE-3.md` / `PHASE-4.md` /
+`PHASE-5.md` / `PHASE-6.md` / `PHASE-7.md` / `PHASE-8.md` / `PHASE-9.md`.
 Para el plan de fases completo, ver `DEVELOPMENT_PLAN.md`.
 
 ## Capas
@@ -210,13 +210,38 @@ una entrada en `PLAN_PROPERTY_LIMIT`/`PLAN_LABELS`/`PLAN_PRICE_ENV_VAR`
 crear el producto/price correspondiente en el Dashboard de Stripe. Ningún
 otro archivo cambia.
 
+## Arquitectura de analítica (Fase 8)
+
+```
+src/lib/analytics/
+  metrics.ts    computeUserMetrics(userId, range) + computeNightsOverlap() + getDefaultRange()
+  csv.ts        buildAnalyticsCsv()
+  format.ts     formatCurrency()/formatPercent() (Intl.NumberFormat, sin dependencia nueva)
+```
+
+Sin modelo de Prisma propio ni migración — todo se calcula al vuelo a
+partir de `Property.nightlyPrice` y `Conversation.checkInDate`/
+`checkOutDate` (Fase 7). Es la pieza más simple de las construidas hasta
+ahora: no hay proveedor externo, no hay estado que persistir, solo una
+función pura (`computeUserMetrics`) que una página de servidor y un Route
+Handler (`/api/analytics/export`) reutilizan por igual. Los ingresos se
+agrupan **por moneda** (`revenueByCurrency: Record<string, number>`) y
+nunca se suman monedas distintas entre sí — cualquier vista que consuma
+esto debe respetar esa forma en vez de aplanarla a un solo número.
+
+**Por qué "ingresos" es siempre una estimación:** no existe ningún modelo
+de reservas ni de pagos (decisión explícita de la Fase 7, ver
+`PHASE-7.md`). Si una fase futura añade uno, `computeUserMetrics()` es el
+único lugar que tendría que cambiar — su forma de salida (`UserMetrics`
+en `@/types/analytics`) no tendría por qué cambiar.
+
 ## Puntos de extensión por fase futura
 
 | Fase | Qué añade | Dónde se conecta (ya existe) |
 |---|---|---|
-| 8 — Analítica (pendiente) | Lee de `Property`, `Membership`, y de los modelos de reservas que se añadan; los `StatCard` del dashboard (Fase 1) ya tienen placeholders explícitos esperando estos datos | `src/components/dashboard/StatCard.tsx` |
 | Envío real de recordatorios por email | Leer `AutomationRun` en estado `DUE` + `User.notificationPrefs.emailOnBookingReminder` y enviar con un proveedor de email (a decidir, sin clave todavía) | `src/lib/automations/engine.ts`, `NotificationPreferences` (Fase 2) |
 | Concepto de "organización" (si hace falta multi-usuario en la factura) | `Subscription` movería su FK de `User` a esa entidad; el resto de `src/lib/billing/` no cambiaría | `src/lib/billing/subscription.ts` |
+| Sistema de reservas/pagos real | `computeUserMetrics()` dejaría de estimar y leería importes reales — mismo tipo de salida (`UserMetrics`), no rompería la UI | `src/lib/analytics/metrics.ts` |
 
 ## Multi-tenancy y permisos
 

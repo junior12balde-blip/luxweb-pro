@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
 import { StatCard } from "@/components/dashboard/StatCard";
+import { computeUserMetrics, getDefaultRange } from "@/lib/analytics/metrics";
+import { formatCurrency, formatPercent } from "@/lib/analytics/format";
 
 export default async function DashboardOverviewPage({
   searchParams,
@@ -17,6 +19,15 @@ export default async function DashboardOverviewPage({
   const messageCount = await prisma.message.count({
     where: { conversation: { property: { memberships: { some: { userId: user.id } } } } },
   });
+
+  const metrics = await computeUserMetrics(user.id, getDefaultRange(30));
+  const currencies = Object.keys(metrics.revenueByCurrency);
+  const revenueLabel =
+    currencies.length === 0
+      ? formatCurrency(0, "EUR")
+      : currencies.length === 1
+        ? formatCurrency(metrics.revenueByCurrency[currencies[0]], currencies[0])
+        : "Varias monedas";
 
   return (
     <div>
@@ -35,13 +46,21 @@ export default async function DashboardOverviewPage({
         <StatCard label="Propiedades" value={String(propertyCount)} />
         <StatCard
           label="Ocupación (30 días)"
-          value="—"
-          hint="Disponible en la Fase 7 (Analítica)"
+          value={formatPercent(metrics.overallOccupancyRate)}
+          hint={
+            currencies.length > 1
+              ? undefined
+              : "Estimada a partir de las fechas de check-in/check-out registradas"
+          }
         />
         <StatCard
           label="Ingresos (30 días)"
-          value="—"
-          hint="Disponible en la Fase 7 (Analítica)"
+          value={revenueLabel}
+          hint={
+            currencies.length > 1
+              ? "Ver desglose por propiedad en Analítica"
+              : "Estimado: noches reservadas × precio/noche"
+          }
         />
         <StatCard label="Mensajes con huéspedes" value={String(messageCount)} />
       </div>
