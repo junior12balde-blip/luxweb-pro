@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { propertySchema } from "@/lib/validations/property";
 import { serializeProperty } from "@/lib/serializers";
+import { checkPropertyLimit } from "@/lib/billing/subscription";
+import { PLAN_LABELS } from "@/lib/billing/plans";
 
 export async function GET() {
   const session = await getCurrentUser();
@@ -31,6 +33,16 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: parsed.error.issues[0]?.message ?? "Datos no válidos" },
       { status: 400 },
+    );
+  }
+
+  const limitCheck = await checkPropertyLimit(session.user.id);
+  if (!limitCheck.allowed) {
+    return NextResponse.json(
+      {
+        error: `Has alcanzado el límite de propiedades de tu plan (${PLAN_LABELS[limitCheck.plan]}: ${limitCheck.limit}). Mejora tu plan en Configuración → Facturación para añadir más.`,
+      },
+      { status: 402 },
     );
   }
 

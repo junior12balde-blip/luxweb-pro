@@ -150,15 +150,32 @@ Estructura del monorepo, plan de fases, decisiones de arquitectura.
 - **Estado: hecho** (PR #7 — ver `PHASE-7.md`).
 
 ### Fase 8 — Analítica
+**Pendiente** — saltada a petición explícita del cliente para pasar
+directo a facturación (ver `PHASE-9.md`, sección "Por qué esta fase,
+saltando la 8"). No cancelada, solo reordenada.
 - Ocupación, ingresos, rendimiento por propiedad y agregados. Informes
   descargables (CSV/PDF).
 - Conecta los placeholders del dashboard de Fase 1 a datos reales.
 
 ### Fase 9 — Facturación (Stripe)
-- Planes de suscripción (Starter/Pro/Business), checkout, portal de
-  cliente, webhooks de Stripe, límites por plan.
+- Plan Gratis (1 propiedad) + 3 planes de pago (Starter/Pro/Business),
+  cada uno con su propio límite de propiedades en propiedad (rol OWNER).
+- Modelo `Subscription` (Prisma, FK 1:1 a `User`) — sin fila = plan Gratis
+  implícito, mismo patrón que las automatizaciones de la Fase 7.
+- `src/lib/billing/`: checkout (Stripe Checkout Session), portal de
+  cliente (Stripe Customer Portal), webhooks verificados por firma. Forma
+  exacta de la API verificada contra los tipos TypeScript del SDK oficial
+  `stripe` instalado (mismo método que Google Gemini en las Fases 5-6) —
+  dos detalles de esta versión de la API que habrían sido erróneos si se
+  hubieran adivinado: `current_period_end` vive en
+  `subscription.items.data[]`, no en la suscripción; y la suscripción de
+  una factura vive en `invoice.parent.subscription_details.subscription`.
+- Límite de propiedades del plan aplicado en `POST /api/properties`
+  (402 con mensaje claro al alcanzarlo).
 - Requiere: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
-  `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`.
+  `STRIPE_PRICE_STARTER`/`_PRO`/`_BUSINESS` (Price ID de tu cuenta de
+  Stripe, no inventados — ver sección APIs abajo).
+- **Estado: hecho** (PR #9 — ver `PHASE-9.md`).
 
 ### Fase 10 — Endurecimiento y despliegue
 - Rate limiting, manejo de errores centralizado, logging.
@@ -188,7 +205,10 @@ correspondiente las necesite. Cuando llegue el momento, se indicará aquí y en
 | Supabase Storage (buckets `avatars`, `property-photos`, `generated-videos`, `generated-images`) | Fotos de perfil, de propiedad, vídeos e imágenes generados | SQL de configuración en `PHASE-2.md` / `PHASE-5.md` / `PHASE-6.md` | 2 / 5 / 6 |
 | `CRON_SECRET` | Autentica el cron de automatizaciones (`/api/cron/automations`) — no es la clave de ningún proveedor externo, se genera uno mismo | `openssl rand -hex 32` (o similar) | 7 |
 | Secretos de GitHub Actions `AIBNB_SITE_URL` / `AIBNB_CRON_SECRET` | El workflow de cron necesita la URL pública del despliegue y el mismo valor de `CRON_SECRET` | Settings → Secrets and variables → Actions del repositorio | 7 |
-| `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` / `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Pagos y suscripciones | https://dashboard.stripe.com/apikeys y https://dashboard.stripe.com/webhooks | 9 |
+| `STRIPE_SECRET_KEY` | Llamadas a la API de Stripe (checkout, portal, webhooks) — **en uso real desde la Fase 9** | https://dashboard.stripe.com/apikeys | 9 |
+| `STRIPE_WEBHOOK_SECRET` | Verifica que las notificaciones a `/api/webhooks/stripe` vienen de verdad de Stripe | https://dashboard.stripe.com/webhooks → crear endpoint | 9 |
+| `STRIPE_PRICE_STARTER` / `STRIPE_PRICE_PRO` / `STRIPE_PRICE_BUSINESS` | ID del Price de Stripe de cada plan de pago — específico de tu cuenta, no inventado | Dashboard de Stripe → Product catalog | 9 |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Reservada, no usada todavía (el checkout actual redirige a Stripe, sin Stripe.js en el cliente) | https://dashboard.stripe.com/apikeys | arquitectura lista desde la 9 |
 
 ## Estructura del monorepo
 
@@ -210,7 +230,7 @@ apps/
     DEVELOPMENT_PLAN.md        (este archivo)
     ARCHITECTURE.md            (puntos de extensión para las Fases 5+)
     PHASE-1.md / PHASE-2.md / PHASE-3.md / PHASE-4.md /
-    PHASE-5.md / PHASE-6.md / PHASE-7.md    (detalle + cómo probar cada fase)
+    PHASE-5.md / PHASE-6.md / PHASE-7.md / PHASE-9.md    (detalle + cómo probar cada fase)
     README.md
 .github/workflows/aibnb-studio-ci.yml
 .github/workflows/aibnb-studio-automations-cron.yml   (Fase 7)
