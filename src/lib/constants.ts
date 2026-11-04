@@ -1,9 +1,9 @@
 export const siteConfig = {
   name: "LuxWeb Pro",
   url: "https://luxwebpro.lu",
-  phone: "+352 621 123 456",
-  phoneHref: "tel:+352621123456",
-  whatsappNumber: "352621123456",
+  phone: "+352 661 927 987",
+  phoneHref: "tel:+352661927987",
+  whatsappNumber: "352661927987",
   email: "hello@luxwebpro.lu",
   address: {
     street: "12 Rue de la Poste",
