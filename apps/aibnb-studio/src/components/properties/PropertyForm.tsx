@@ -1,0 +1,197 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { PROPERTY_TYPES } from "@/lib/validations/property";
+import type { Property } from "@/types/property";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Label } from "@/components/ui/Label";
+import { FormError } from "@/components/ui/FormError";
+
+const TYPE_LABELS: Record<(typeof PROPERTY_TYPES)[number], string> = {
+  APARTMENT: "Apartamento",
+  HOUSE: "Casa",
+  ROOM: "Habitación",
+  STUDIO: "Estudio",
+  VILLA: "Villa",
+  OTHER: "Otro",
+};
+
+interface PropertyFormProps {
+  property?: Property;
+}
+
+export function PropertyForm({ property }: PropertyFormProps) {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setPending(true);
+    setError(null);
+
+    const formData = new FormData(event.currentTarget);
+    const payload = {
+      name: formData.get("name"),
+      type: formData.get("type"),
+      address: formData.get("address"),
+      city: formData.get("city"),
+      country: formData.get("country"),
+      maxGuests: formData.get("maxGuests"),
+      bedrooms: formData.get("bedrooms"),
+      bathrooms: formData.get("bathrooms"),
+      nightlyPrice: formData.get("nightlyPrice"),
+      currency: formData.get("currency"),
+      description: formData.get("description"),
+    };
+
+    const url = property ? `/api/properties/${property.id}` : "/api/properties";
+    const method = property ? "PATCH" : "POST";
+
+    const response = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      setError(data.error ?? "Ha ocurrido un error");
+      setPending(false);
+      return;
+    }
+
+    router.push("/dashboard/properties");
+    router.refresh();
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <Label htmlFor="name">Nombre del alojamiento</Label>
+        <Input id="name" name="name" required defaultValue={property?.name} />
+      </div>
+
+      <div>
+        <Label htmlFor="type">Tipo</Label>
+        <select
+          id="type"
+          name="type"
+          defaultValue={property?.type ?? "APARTMENT"}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
+        >
+          {PROPERTY_TYPES.map((type) => (
+            <option key={type} value={type}>
+              {TYPE_LABELS[type]}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <Label htmlFor="address">Dirección</Label>
+        <Input id="address" name="address" required defaultValue={property?.address} />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="city">Ciudad</Label>
+          <Input id="city" name="city" required defaultValue={property?.city} />
+        </div>
+        <div>
+          <Label htmlFor="country">País</Label>
+          <Input id="country" name="country" required defaultValue={property?.country} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <Label htmlFor="maxGuests">Huéspedes máx.</Label>
+          <Input
+            id="maxGuests"
+            name="maxGuests"
+            type="number"
+            min={1}
+            required
+            defaultValue={property?.maxGuests ?? 2}
+          />
+        </div>
+        <div>
+          <Label htmlFor="bedrooms">Habitaciones</Label>
+          <Input
+            id="bedrooms"
+            name="bedrooms"
+            type="number"
+            min={0}
+            required
+            defaultValue={property?.bedrooms ?? 1}
+          />
+        </div>
+        <div>
+          <Label htmlFor="bathrooms">Baños</Label>
+          <Input
+            id="bathrooms"
+            name="bathrooms"
+            type="number"
+            min={0}
+            required
+            defaultValue={property?.bathrooms ?? 1}
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="nightlyPrice">Precio por noche</Label>
+          <Input
+            id="nightlyPrice"
+            name="nightlyPrice"
+            type="number"
+            min={0}
+            step="0.01"
+            required
+            defaultValue={property?.nightlyPrice}
+          />
+        </div>
+        <div>
+          <Label htmlFor="currency">Moneda</Label>
+          <Input
+            id="currency"
+            name="currency"
+            maxLength={3}
+            required
+            defaultValue={property?.currency ?? "EUR"}
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label htmlFor="description">Descripción</Label>
+        <textarea
+          id="description"
+          name="description"
+          rows={4}
+          defaultValue={property?.description ?? ""}
+          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"
+        />
+      </div>
+
+      <FormError message={error} />
+
+      <div className="flex gap-3">
+        <Button type="submit" disabled={pending}>
+          {pending ? "Guardando..." : property ? "Guardar cambios" : "Crear propiedad"}
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => router.push("/dashboard/properties")}
+        >
+          Cancelar
+        </Button>
+      </div>
+    </form>
+  );
+}
