@@ -4,6 +4,8 @@ import { getPathname } from "@/i18n/navigation";
 import type { City } from "./cities";
 
 export function localBusinessJsonLd(locale: Locale) {
+  const sameAs = Object.values(siteConfig.social).filter((url): url is string => Boolean(url));
+
   return {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
@@ -43,11 +45,7 @@ export function localBusinessJsonLd(locale: Locale) {
       opens: "09:00",
       closes: "18:00",
     },
-    sameAs: [
-      siteConfig.social.facebook,
-      siteConfig.social.instagram,
-      siteConfig.social.linkedin,
-    ],
+    ...(sameAs.length > 0 ? { sameAs } : {}),
   };
 }
 

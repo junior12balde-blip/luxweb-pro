@@ -4,22 +4,19 @@ export const siteConfig = {
   phone: "+352 661 927 987",
   phoneHref: "tel:+352661927987",
   whatsappNumber: "352661927987",
-  email: "hello@luxwebpro.lu",
+  email: "junior12balde@gmail.com",
   address: {
-    street: "12 Rue de la Poste",
-    postalCode: "L-2346",
-    city: "Luxembourg",
+    street: "24 Rue de Longwy",
+    postalCode: "L-4610",
+    city: "Niederkorn",
     country: "LU",
   },
   geo: {
     lat: 49.6116,
     lng: 6.1319,
   },
-  social: {
-    facebook: "https://facebook.com/luxwebpro",
-    instagram: "https://instagram.com/luxwebpro",
-    linkedin: "https://linkedin.com/company/luxwebpro",
-  },
+  // No real social profiles yet — fill in here once they exist (see seo.ts, sameAs).
+  social: {} as { facebook?: string; instagram?: string; linkedin?: string },
 } as const;
 
 export function whatsappLink(message: string, number: string = siteConfig.whatsappNumber) {
